@@ -206,6 +206,21 @@
 
   .stars { font-size: 26px; min-height: 32px; margin-top: 6px; letter-spacing: 2px; }
 
+  .progress {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    min-height: 18px;
+  }
+  /* confetti + celebration */
+  .confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .confetti span { position: absolute; top: -8%; will-change: transform; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(115vh) rotate(720deg); opacity: .8; } }
+  #celebStars { font-size: 40px; letter-spacing: 6px; margin: 6px 0; }
+  #celebMsg { font-size: 20px; font-weight: 700; color: var(--ink); }
+
   /* ---------- Recent plays ---------- */
   .recent {
     width: 100%;
@@ -251,6 +266,8 @@
   }
   .overlay.hidden { display: none; }
   .login-card {
+    position: relative;
+    z-index: 1;
     background: #fff;
     border-radius: 26px;
     padding: 26px;
@@ -316,6 +333,18 @@
     </div>
   </div>
 
+  <!-- Celebration overlay -->
+  <div class="overlay hidden" id="celebrate">
+    <div class="confetti" id="confetti"></div>
+    <div class="login-card">
+      <div id="celebEmoji" style="font-size:56px">🏆</div>
+      <h2 id="celebTitle">Round complete!</h2>
+      <div id="celebStars">⭐⭐⭐</div>
+      <p id="celebMsg"></p>
+      <button class="start-btn" id="againBtn">Play again ▶️</button>
+    </div>
+  </div>
+
   <div class="topbar">
     <div class="title" id="title">Learning Adventure</div>
     <div class="top-btns">
@@ -344,6 +373,7 @@
       <button class="mode-btn" data-mode="mix">🎲 <span id="mMix">Both</span></button>
     </div>
 
+    <div class="progress" id="progress"></div>
     <div class="visual" id="visual"></div>
     <div class="question" id="question"></div>
     <div class="hint" id="hint"></div>
@@ -380,6 +410,16 @@ const T = {
     recent: "Recent plays",
     noPlays: "No plays yet — let's start! 🎈",
     switchP: "Switch player",
+    progress: "Question {x} / {n}",
+    celeb: {
+      title: "Round complete!",
+      perfect: "Perfect! You got them all! 🏆",
+      great: "Well done! 🎉",
+      ok: "Good try — keep going! 💪",
+      score: "You got {c} of {n} right!",
+      again: "Play again ▶️",
+      see: "See results 🎉"
+    },
     htmlLang: "en", locale: "en-GB",
     actLabel: { math: "Math 🧮", article: "Articles 🔤" }
   },
@@ -398,6 +438,16 @@ const T = {
     recent: "Letzte Spiele",
     noPlays: "Noch keine Spiele — los geht's! 🎈",
     switchP: "Spieler wechseln",
+    progress: "Frage {x} / {n}",
+    celeb: {
+      title: "Runde geschafft!",
+      perfect: "Perfekt! Alles richtig! 🏆",
+      great: "Gut gemacht! 🎉",
+      ok: "Gut versucht — weiter so! 💪",
+      score: "Du hast {c} von {n} richtig!",
+      again: "Nochmal spielen ▶️",
+      see: "Ergebnis zeigen 🎉"
+    },
     htmlLang: "de", locale: "de-DE",
     actLabel: { math: "Rechnen 🧮", article: "Artikel 🔤" }
   }
@@ -433,12 +483,14 @@ const NOUNS_EN = [
 ];
 
 /* ================= State ================= */
+const ROUND_LEN = 5;            // questions per round
 let lang = localStorage.getItem("gameLang") || "en";
 let activity = "math";          // "math" | "article"
 let mode = "add";
 let score = 0, streak = 0;
 let current = null;             // { answer, options, ... }
 let locked = false;
+let roundOver = false;
 let session = null;             // { id, activity, correct, total }
 
 /* Player database (localStorage) */
@@ -476,6 +528,7 @@ function beep(freqs, dur = 0.14) {
 }
 const happySound = () => beep([523, 659, 784]);
 const oopsSound  = () => beep([311, 247]);
+const fanfare    = () => beep([523, 659, 784, 1047, 1319], 0.16);
 
 /* ================= Helpers ================= */
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -553,7 +606,16 @@ function newRound() {
   feedbackEl.textContent = "";
   starsEl.textContent = "";
   nextBtn.style.display = "none";
+  nextBtn.textContent = t.next;
+  roundOver = false;
+  updateProgress();
   updateScore();
+}
+
+function updateProgress() {
+  if (!session) { el("progress").textContent = ""; return; }
+  const x = Math.min(session.total + 1, ROUND_LEN);
+  el("progress").textContent = T[lang].progress.replace("{x}", x).replace("{n}", ROUND_LEN);
 }
 
 function choose(btn, val) {
@@ -594,8 +656,59 @@ function choose(btn, val) {
 
   updateScore();
   renderRecent();
+
+  if (session.total >= ROUND_LEN) { roundOver = true; nextBtn.textContent = t.celeb.see; }
   nextBtn.style.display = "inline-block";
 }
+
+/* ================= Celebration ================= */
+function advance() { if (roundOver) celebrate(); else newRound(); }
+
+function launchConfetti() {
+  const c = el("confetti");
+  c.innerHTML = "";
+  const pieces = ["🎉","⭐","🎊","🌟","🎈","✨","🍭"];
+  for (let i = 0; i < 42; i++) {
+    const s = document.createElement("span");
+    s.textContent = pick(pieces);
+    s.style.left = (Math.random() * 100) + "%";
+    s.style.fontSize = (16 + Math.random() * 22) + "px";
+    s.style.animationDuration = (2 + Math.random() * 2.2) + "s";
+    s.style.animationDelay = (Math.random() * 0.6) + "s";
+    c.appendChild(s);
+  }
+}
+
+function renderCeleb() {
+  const t = T[lang];
+  const correct = session.correct, total = session.total || ROUND_LEN;
+  const ratio = total ? correct / total : 0;
+  let stars, msg, emoji;
+  if (ratio >= 1)        { stars = 3; emoji = "🏆"; msg = t.celeb.perfect; }
+  else if (ratio >= 0.6) { stars = 2; emoji = "🎉"; msg = t.celeb.great; }
+  else                   { stars = 1; emoji = "💪"; msg = t.celeb.ok; }
+  el("celebEmoji").textContent = emoji;
+  el("celebTitle").textContent = t.celeb.title;
+  el("celebStars").textContent = "⭐".repeat(stars) + "☆".repeat(3 - stars);
+  el("celebMsg").innerHTML = msg + "<br>" + t.celeb.score.replace("{c}", correct).replace("{n}", total);
+  el("againBtn").textContent = t.celeb.again;
+}
+
+function celebrate() {
+  renderCeleb();
+  launchConfetti();
+  fanfare();
+  el("celebrate").classList.remove("hidden");
+}
+
+function playAgain() {
+  el("celebrate").classList.add("hidden");
+  el("confetti").innerHTML = "";
+  roundOver = false;
+  session = null;              // start a brand-new round
+  newRound();
+}
+el("againBtn").onclick = playAgain;
 
 function updateScore() {
   el("score").textContent = score;
@@ -636,12 +749,14 @@ function applyLang() {
   el("mAdd").textContent = t.add;
   el("mSub").textContent = t.sub;
   el("mMix").textContent = t.mix;
-  nextBtn.textContent = t.next;
+  nextBtn.textContent = roundOver ? t.celeb.see : t.next;
   el("footer").textContent = t.footer;
   el("namePrompt").textContent = t.namePrompt;
   el("startBtn").textContent = t.start;
   el("recentTitle").textContent = t.recent;
   el("playerBtn").title = t.switchP;
+  updateProgress();
+  if (!el("celebrate").classList.contains("hidden") && session) renderCeleb();
 }
 
 el("langBtn").onclick = () => {
@@ -671,16 +786,20 @@ el("modeRow").addEventListener("click", e => {
   newRound();
 });
 
-nextBtn.onclick = newRound;
+nextBtn.onclick = advance;
 
 document.addEventListener("keydown", e => {
-  if (!el("overlay").classList.contains("hidden")) return;
+  if (!el("overlay").classList.contains("hidden")) return;   // login open
+  if (!el("celebrate").classList.contains("hidden")) {        // celebration open
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playAgain(); }
+    return;
+  }
   const n = Number(e.key);
   if (n >= 1 && n <= answersEl.children.length) {
     const b = answersEl.children[n - 1];
     if (b && !b.disabled) b.click();
   } else if ((e.key === "Enter" || e.key === " ") && nextBtn.style.display !== "none") {
-    newRound();
+    advance();
   }
 });
 

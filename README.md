@@ -27,6 +27,8 @@ Everything is in a single `index.html` file — no build step, no server, no dep
 
 - Pick an activity tab: **🧮 Math** or **🔤 Articles**.
 - In Math, pick a mode: **➕ Add**, **➖ Subtract**, or **🎲 Both**.
+- Each round is **5 questions** (see "Question 3 / 5" at the top). Finish a round to get a
+  **celebration screen** 🎉 with confetti, a star rating, and a **Play again** button.
 - Tap the correct answer. Right answers grow your **streak** and earn ⭐ stars.
 - Tap the flag button (top right) any time to switch **English ↔ German**.
 - Keyboard: press number keys to pick an answer, **Enter/Space** for the next question.
