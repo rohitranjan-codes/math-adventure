@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Math Adventure • Mathe-Abenteuer</title>
+<style>
+  :root {
+    --bg1: #7dd3fc;
+    --bg2: #c4b5fd;
+    --card: #ffffff;
+    --ink: #1f2937;
+    --good: #22c55e;
+    --bad: #f97316;
+    --accent: #6366f1;
+    --shadow: 0 10px 30px rgba(0,0,0,.18);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: "Comic Sans MS", "Segoe UI", system-ui, sans-serif;
+    background: linear-gradient(160deg, var(--bg1), var(--bg2));
+    color: var(--ink);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .title {
+    font-size: clamp(20px, 5vw, 30px);
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 0 rgba(0,0,0,.15);
+    line-height: 1.1;
+  }
+  .lang-btn {
+    border: none;
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform .1s;
+  }
+  .lang-btn:active { transform: scale(.94); }
+
+  /* ---------- Score row ---------- */
+  .scorebar {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .chip {
+    flex: 1;
+    background: rgba(255,255,255,.85);
+    border-radius: 16px;
+    padding: 8px 10px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .chip .label { font-size: 12px; opacity: .7; display:block; }
+  .chip .value { font-size: 22px; font-weight: 800; }
+
+  /* ---------- Card ---------- */
+  .card {
+    width: 100%;
+    max-width: 620px;
+    background: var(--card);
+    border-radius: 26px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+
+  .mode-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .mode-btn {
+    border: 3px solid transparent;
+    background: #eef2ff;
+    color: var(--accent);
+    border-radius: 14px;
+    padding: 8px 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .mode-btn.active { border-color: var(--accent); background: #e0e7ff; }
+
+  .visual {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    min-height: 70px;
+    margin: 6px 0 10px;
+    font-size: clamp(22px, 6vw, 34px);
+    line-height: 1.2;
+  }
+  .visual .row { letter-spacing: 2px; }
+  .visual .op { font-weight: 800; color: var(--accent); }
+
+  .question {
+    font-size: clamp(38px, 11vw, 64px);
+    font-weight: 800;
+    margin: 6px 0 4px;
+    letter-spacing: 2px;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .answer {
+    border: none;
+    background: #f1f5f9;
+    border-radius: 18px;
+    padding: 18px 0;
+    font-size: 30px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #cbd5e1;
+    transition: transform .08s;
+  }
+  .answer:active { transform: translateY(3px); box-shadow: 0 1px 0 #cbd5e1; }
+  .answer.correct { background: var(--good); color:#fff; box-shadow: 0 4px 0 #15803d; }
+  .answer.wrong { background: var(--bad); color:#fff; box-shadow: 0 4px 0 #c2410c; }
+  .answer:disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 16px;
+    font-size: 22px;
+    font-weight: 800;
+    min-height: 30px;
+    color: var(--accent);
+  }
+  .next-btn {
+    margin-top: 10px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 16px;
+    padding: 12px 26px;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #4338ca;
+    display: none;
+  }
+  .next-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #4338ca; }
+
+  .stars { font-size: 26px; min-height: 32px; margin-top: 6px; letter-spacing: 2px; }
+
+  .footer {
+    margin-top: 14px;
+    color: #fff;
+    opacity: .85;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  @keyframes pop { 0%{transform:scale(.6);opacity:0} 100%{transform:scale(1);opacity:1} }
+  .pop { animation: pop .25s ease; }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="title" id="title">Math Adventure</div>
+    <button class="lang-btn" id="langBtn" title="Switch language">
+      <span id="langFlag">🇬🇧</span><span id="langText">EN</span>
+    </button>
+  </div>
+
+  <div class="scorebar">
+    <div class="chip"><span class="label" id="lblScore">Score</span><span class="value" id="score">0</span></div>
+    <div class="chip"><span class="label" id="lblStreak">Streak</span><span class="value" id="streak">0</span></div>
+    <div class="chip"><span class="label" id="lblBest">Best</span><span class="value" id="best">0</span></div>
+  </div>
+
+  <div class="card">
+    <div class="mode-row" id="modeRow">
+      <button class="mode-btn active" data-mode="add">➕ <span id="mAdd">Add</span></button>
+      <button class="mode-btn" data-mode="sub">➖ <span id="mSub">Subtract</span></button>
+      <button class="mode-btn" data-mode="mix">🎲 <span id="mMix">Both</span></button>
+    </div>
+
+    <div class="visual" id="visual"></div>
+    <div class="question" id="question">2 + 3 = ?</div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="stars" id="stars"></div>
+    <button class="next-btn" id="nextBtn">Next ➡️</button>
+  </div>
+
+  <div class="footer" id="footer">Made with ❤️ for learning • Made with ❤️ zum Lernen</div>
+
+<script>
+/* ---------------- Translations ---------------- */
+const T = {
+  en: {
+    flag: "🇬🇧", code: "EN", title: "Math Adventure",
+    score: "Score", streak: "Streak", best: "Best",
+    add: "Add", sub: "Subtract", mix: "Both",
+    right: ["Great job! 🎉","Correct! ⭐","Awesome! 🚀","You did it! 👏","Super! 🌟"],
+    wrong: "Almost! The answer is ",
+    next: "Next ➡️",
+    footer: "Made with ❤️ for learning",
+    htmlLang: "en"
+  },
+  de: {
+    flag: "🇩🇪", code: "DE", title: "Mathe-Abenteuer",
+    score: "Punkte", streak: "Serie", best: "Beste",
+    add: "Plus", sub: "Minus", mix: "Beides",
+    right: ["Sehr gut! 🎉","Richtig! ⭐","Toll gemacht! 🚀","Geschafft! 👏","Super! 🌟"],
+    wrong: "Fast! Die Antwort ist ",
+    next: "Weiter ➡️",
+    footer: "Mit ❤️ zum Lernen gemacht",
+    htmlLang: "de"
+  }
+};
+
+/* ---------------- State ---------------- */
+let lang = localStorage.getItem("mathLang") || "en";
+let mode = "add";
+let score = 0, streak = 0;
+let best = Number(localStorage.getItem("mathBest") || 0);
+let current = null;      // {a,b,op,answer}
+let locked = false;
+
+/* ---------------- Elements ---------------- */
+const el = id => document.getElementById(id);
+const visualEl = el("visual"), questionEl = el("question"), answersEl = el("answers");
+const feedbackEl = el("feedback"), starsEl = el("stars"), nextBtn = el("nextBtn");
+
+/* ---------------- Sound (Web Audio, no files) ---------------- */
+let actx = null;
+function beep(freqs, dur = 0.14) {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    let t = actx.currentTime;
+    freqs.forEach((f, i) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      o.connect(g); g.connect(actx.destination);
+      const start = t + i * dur;
+      g.gain.setValueAtTime(0.0001, start);
+      g.gain.exponentialRampToValueAtTime(0.25, start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      o.start(start); o.stop(start + dur);
+    });
+  } catch (e) {}
+}
+const happySound = () => beep([523, 659, 784]); // C-E-G
+const oopsSound  = () => beep([311, 247]);       // gentle down
+
+/* ---------------- Helpers ---------------- */
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+
+const EMOJIS = ["🍎","🍌","⭐","🐢","🦋","🌸","🚗","🐟","🎈","🍓","🐝","🍪"];
+
+function makeQuestion() {
+  let op = mode;
+  if (mode === "mix") op = Math.random() < 0.5 ? "add" : "sub";
+
+  let a, b, answer;
+  if (op === "add") {
+    a = rand(1, 10); b = rand(1, 10); answer = a + b;   // sums up to 20
+  } else {
+    a = rand(2, 12); b = rand(1, a); answer = a - b;    // no negatives
+  }
+  return { a, b, op, answer };
+}
+
+function buildVisual(q) {
+  const icon = EMOJIS[rand(0, EMOJIS.length - 1)];
+  const opSign = q.op === "add" ? "+" : "−";
+  const rowA = icon.repeat(q.a);
+  const rowB = icon.repeat(q.b);
+  visualEl.innerHTML =
+    `<div class="row">${rowA}</div>` +
+    `<div class="op">${opSign}</div>` +
+    `<div class="row">${rowB}</div>`;
+}
+
+function optionsFor(answer) {
+  const set = new Set([answer]);
+  while (set.size < 4) {
+    let delta = rand(-3, 3);
+    let cand = answer + delta;
+    if (cand >= 0 && cand !== answer) set.add(cand);
+  }
+  return shuffle([...set]);
+}
+
+/* ---------------- Render ---------------- */
+function newRound() {
+  locked = false;
+  current = makeQuestion();
+  const sign = current.op === "add" ? "+" : "−";
+  questionEl.textContent = `${current.a} ${sign} ${current.b} = ?`;
+  buildVisual(current);
+
+  answersEl.innerHTML = "";
+  optionsFor(current.answer).forEach(val => {
+    const b = document.createElement("button");
+    b.className = "answer pop";
+    b.textContent = val;
+    b.onclick = () => choose(b, val);
+    answersEl.appendChild(b);
+  });
+
+  feedbackEl.textContent = "";
+  starsEl.textContent = "";
+  nextBtn.style.display = "none";
+}
+
+function choose(btn, val) {
+  if (locked) return;
+  locked = true;
+  const t = T[lang];
+  const buttons = [...answersEl.children];
+
+  if (val === current.answer) {
+    btn.classList.add("correct");
+    score++; streak++;
+    if (streak > best) { best = streak; localStorage.setItem("mathBest", best); }
+    feedbackEl.textContent = t.right[rand(0, t.right.length - 1)];
+    starsEl.textContent = "⭐".repeat(Math.min(streak, 5));
+    happySound();
+  } else {
+    btn.classList.add("wrong");
+    streak = 0;
+    feedbackEl.textContent = t.wrong + current.answer;
+    buttons.forEach(b => { if (Number(b.textContent) === current.answer) b.classList.add("correct"); });
+    oopsSound();
+  }
+  buttons.forEach(b => b.disabled = true);
+  updateScore();
+  nextBtn.style.display = "inline-block";
+}
+
+function updateScore() {
+  el("score").textContent = score;
+  el("streak").textContent = streak;
+  el("best").textContent = best;
+}
+
+/* ---------------- Language ---------------- */
+function applyLang() {
+  const t = T[lang];
+  document.documentElement.lang = t.htmlLang;
+  el("title").textContent = t.title;
+  el("langFlag").textContent = t.flag;
+  el("langText").textContent = t.code;
+  el("lblScore").textContent = t.score;
+  el("lblStreak").textContent = t.streak;
+  el("lblBest").textContent = t.best;
+  el("mAdd").textContent = t.add;
+  el("mSub").textContent = t.sub;
+  el("mMix").textContent = t.mix;
+  nextBtn.textContent = t.next;
+  el("footer").textContent = t.footer;
+  document.title = "Math Adventure • Mathe-Abenteuer";
+}
+
+el("langBtn").onclick = () => {
+  lang = lang === "en" ? "de" : "en";
+  localStorage.setItem("mathLang", lang);
+  applyLang();
+  // keep feedback text fresh if a round is shown
+  if (locked) { /* leave result as-is */ }
+};
+
+/* ---------------- Mode buttons ---------------- */
+el("modeRow").addEventListener("click", e => {
+  const btn = e.target.closest(".mode-btn");
+  if (!btn) return;
+  mode = btn.dataset.mode;
+  [...el("modeRow").children].forEach(b => b.classList.toggle("active", b === btn));
+  newRound();
+});
+
+nextBtn.onclick = newRound;
+
+/* Keyboard: 1-4 pick answers, Enter/Space = next */
+document.addEventListener("keydown", e => {
+  if (["1","2","3","4"].includes(e.key)) {
+    const b = answersEl.children[Number(e.key) - 1];
+    if (b && !b.disabled) b.click();
+  } else if ((e.key === "Enter" || e.key === " ") && nextBtn.style.display !== "none") {
+    newRound();
+  }
+});
+
+/* ---------------- Start ---------------- */
+applyLang();
+updateScore();
+newRound();
+</script>
+</body>
+</html>
