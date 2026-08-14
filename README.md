@@ -1,5 +1,7 @@
 # Math Adventure 🧮 • Mathe-Abenteuer
 
+**▶️ Play now: https://rohitranjan-codes.github.io/math-adventure/**
+
 A simple, colorful math game for young children (~7 years old). Practice **addition** and
 **subtraction** with pictures to count, friendly sounds, stars, and a streak counter.
 The whole game switches between **English 🇬🇧** and **German 🇩🇪** with one button.
