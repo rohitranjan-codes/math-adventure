@@ -1,51 +1,52 @@
-# Math Adventure 🧮 • Mathe-Abenteuer
+# Learning Adventure 🎒 • Lern-Abenteuer
 
 **▶️ Play now: https://rohitranjan-codes.github.io/math-adventure/**
 
-A simple, colorful math game for young children (~7 years old). Practice **addition** and
-**subtraction** with pictures to count, friendly sounds, stars, and a streak counter.
-The whole game switches between **English 🇬🇧** and **German 🇩🇪** with one button.
+A simple, colorful learning game for young children (~7 years old), in **English 🇬🇧** and
+**German 🇩🇪**. Switch the whole game between the two languages with one button.
 
 Everything is in a single `index.html` file — no build step, no server, no dependencies.
+
+## Activities
+
+- **🧮 Math** — **addition** and **subtraction** with pictures to count.
+- **🔤 Articles** — learn the article that goes with a word:
+  - **German 🇩🇪:** pick **der / die / das** for each noun (with the English meaning as a hint —
+    great for learning German gender + vocabulary).
+  - **English 🇬🇧:** pick **a / an** (e.g. *an* apple, *a* dog), with the German meaning shown too.
+
+## Players & saved progress
+
+- On first open, the child enters a **name** (no password — it's just a nickname).
+- Each player's **best streak** and **recent plays** are saved and shown under "Recent plays".
+- Tap **👤 name** (top right) to **switch player** or add a new one.
+- Saving is **local to the device/browser** (uses `localStorage`) — perfect for a no-server setup.
+  It remembers on the same device, but not across different devices.
+
+## How to play
+
+- Pick an activity tab: **🧮 Math** or **🔤 Articles**.
+- In Math, pick a mode: **➕ Add**, **➖ Subtract**, or **🎲 Both**.
+- Tap the correct answer. Right answers grow your **streak** and earn ⭐ stars.
+- Tap the flag button (top right) any time to switch **English ↔ German**.
+- Keyboard: press number keys to pick an answer, **Enter/Space** for the next question.
 
 ## Play locally
 
 Just double-click `index.html`, or open it in any web browser. That's it.
 
-## How to play
+## Hosting (already set up)
 
-- Pick a mode: **➕ Add**, **➖ Subtract**, or **🎲 Both**.
-- Count the pictures if you need help, then tap the correct answer.
-- Get it right to grow your **streak** and earn ⭐ stars. Your **best** streak is saved.
-- Tap the flag button (top right) any time to switch **English ↔ German**.
-- Keyboard: press **1–4** to answer, **Enter/Space** for the next question.
-
-## Put it online for free with GitHub Pages
-
-You don't need to run your own server — GitHub can host this page for free.
-
-1. Create a new repository on GitHub (e.g. `math-adventure`).
-2. Push this folder to it:
-   ```bash
-   git add .
-   git commit -m "Math Adventure game"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/math-adventure.git
-   git push -u origin main
-   ```
-3. On GitHub, go to **Settings → Pages**.
-4. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-5. Pick branch **main** and folder **/ (root)**, then **Save**.
-6. Wait ~1 minute. Your game will be live at:
-   `https://<your-username>.github.io/math-adventure/`
-
-Share that link — it works on phones, tablets, and computers.
+This repo is published with **GitHub Pages** from the `main` branch, so any push to `main`
+redeploys the live site above in ~1 minute. To reproduce on a fresh repo: **Settings → Pages →
+Deploy from a branch → `main` / `/ (root)`**.
 
 ## Customize it
 
-Open `index.html` and look near the top of the `<script>`:
+Open `index.html` and look inside the `<script>`:
 
-- **Number difficulty** — in `makeQuestion()` change the ranges
-  (addition uses numbers 1–10; subtraction uses 2–12).
-- **Pictures** — edit the `EMOJIS` list to use different objects.
-- **Words** — edit the `T` object to change any English or German text.
+- **Number difficulty** — in `buildMath()` change the ranges
+  (addition uses 1–10; subtraction uses 2–12).
+- **German words** — edit the `NOUNS_DE` list (`w` = word, `a` = der/die/das, `tr` = English, `e` = emoji).
+- **English words** — edit the `NOUNS_EN` list (`a` = a/an, `tr` = German meaning).
+- **Text/labels** — edit the `T` object to change any English or German wording.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Math Adventure • Mathe-Abenteuer</title>
+<title>Learning Adventure • Lern-Abenteuer</title>
 <style>
   :root {
     --bg1: #7dd3fc;
@@ -13,6 +13,9 @@
     --good: #22c55e;
     --bad: #f97316;
     --accent: #6366f1;
+    --der: #3b82f6;   /* blue  */
+    --die: #ec4899;   /* pink  */
+    --das: #22c55e;   /* green */
     --shadow: 0 10px 30px rgba(0,0,0,.18);
   }
   * { box-sizing: border-box; }
@@ -41,27 +44,32 @@
     margin-bottom: 12px;
   }
   .title {
-    font-size: clamp(20px, 5vw, 30px);
+    font-size: clamp(18px, 4.5vw, 26px);
     font-weight: 800;
     color: #fff;
     text-shadow: 0 2px 0 rgba(0,0,0,.15);
     line-height: 1.1;
+    flex: 1;
   }
-  .lang-btn {
+  .top-btns { display: flex; gap: 8px; }
+  .pill {
     border: none;
     background: #fff;
     border-radius: 999px;
     padding: 8px 14px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: var(--shadow);
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: transform .1s;
+    gap: 6px;
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
-  .lang-btn:active { transform: scale(.94); }
+  .pill:active { transform: scale(.94); }
 
   /* ---------- Score row ---------- */
   .scorebar {
@@ -93,13 +101,25 @@
     text-align: center;
   }
 
-  .mode-row {
+  .tab-row, .mode-row {
     display: flex;
     gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 14px;
   }
+  .tab-btn {
+    border: 3px solid transparent;
+    background: #f5f3ff;
+    color: var(--accent);
+    border-radius: 16px;
+    padding: 10px 18px;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .tab-btn.active { border-color: var(--accent); background: #ede9fe; }
+
   .mode-btn {
     border: 3px solid transparent;
     background: #eef2ff;
@@ -117,19 +137,27 @@
     flex-direction: column;
     gap: 6px;
     align-items: center;
-    min-height: 70px;
-    margin: 6px 0 10px;
+    min-height: 60px;
+    margin: 6px 0 6px;
     font-size: clamp(22px, 6vw, 34px);
     line-height: 1.2;
   }
   .visual .row { letter-spacing: 2px; }
   .visual .op { font-weight: 800; color: var(--accent); }
+  .visual .bigemoji { font-size: clamp(52px, 16vw, 92px); }
 
   .question {
-    font-size: clamp(38px, 11vw, 64px);
+    font-size: clamp(30px, 9vw, 52px);
     font-weight: 800;
-    margin: 6px 0 4px;
+    margin: 4px 0 2px;
     letter-spacing: 2px;
+  }
+  .hint {
+    font-size: 16px;
+    color: #64748b;
+    font-weight: 700;
+    min-height: 20px;
+    margin-bottom: 4px;
   }
 
   .answers {
@@ -143,7 +171,7 @@
     background: #f1f5f9;
     border-radius: 18px;
     padding: 18px 0;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
     cursor: pointer;
     box-shadow: 0 4px 0 #cbd5e1;
@@ -178,6 +206,30 @@
 
   .stars { font-size: 26px; min-height: 32px; margin-top: 6px; letter-spacing: 2px; }
 
+  /* ---------- Recent plays ---------- */
+  .recent {
+    width: 100%;
+    max-width: 620px;
+    background: rgba(255,255,255,.85);
+    border-radius: 20px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    box-shadow: var(--shadow);
+  }
+  .recent h3 { margin: 0 0 8px; font-size: 16px; }
+  .play-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-top: 1px dashed #e2e8f0;
+    font-size: 14px;
+  }
+  .play-row:first-of-type { border-top: none; }
+  .play-left { display: flex; align-items: center; gap: 8px; }
+  .play-score { font-weight: 800; }
+  .empty { color: #64748b; font-size: 14px; }
+
   .footer {
     margin-top: 14px;
     color: #fff;
@@ -186,16 +238,92 @@
     text-align: center;
   }
 
+  /* ---------- Login overlay ---------- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,27,75,.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+  .overlay.hidden { display: none; }
+  .login-card {
+    background: #fff;
+    border-radius: 26px;
+    padding: 26px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .login-card h2 { margin: 0 0 6px; font-size: 24px; }
+  .login-card p { margin: 0 0 16px; color: #64748b; }
+  .name-input {
+    width: 100%;
+    border: 3px solid #e0e7ff;
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 20px;
+    text-align: center;
+    font-family: inherit;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  .name-input:focus { border-color: var(--accent); }
+  .start-btn {
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 16px;
+    padding: 14px 30px;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #4338ca;
+    width: 100%;
+  }
+  .start-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #4338ca; }
+  .players-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 16px; }
+  .player-chip {
+    border: 2px solid #e0e7ff;
+    background: #f5f3ff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--accent);
+  }
+  .player-chip:active { transform: scale(.94); }
+
   @keyframes pop { 0%{transform:scale(.6);opacity:0} 100%{transform:scale(1);opacity:1} }
   .pop { animation: pop .25s ease; }
 </style>
 </head>
 <body>
+  <!-- Login overlay -->
+  <div class="overlay" id="overlay">
+    <div class="login-card">
+      <div style="font-size:46px">🎒</div>
+      <h2 id="loginTitle">Learning Adventure</h2>
+      <p id="namePrompt">What's your name?</p>
+      <div class="players-list" id="playersList"></div>
+      <input class="name-input" id="nameInput" maxlength="14" placeholder="..." autocomplete="off" />
+      <button class="start-btn" id="startBtn">Start ▶️</button>
+    </div>
+  </div>
+
   <div class="topbar">
-    <div class="title" id="title">Math Adventure</div>
-    <button class="lang-btn" id="langBtn" title="Switch language">
-      <span id="langFlag">🇬🇧</span><span id="langText">EN</span>
-    </button>
+    <div class="title" id="title">Learning Adventure</div>
+    <div class="top-btns">
+      <button class="pill" id="playerBtn" title="Switch player">👤 <span id="playerName">—</span></button>
+      <button class="pill" id="langBtn" title="Switch language">
+        <span id="langFlag">🇬🇧</span><span id="langText">EN</span>
+      </button>
+    </div>
   </div>
 
   <div class="scorebar">
@@ -205,6 +333,11 @@
   </div>
 
   <div class="card">
+    <div class="tab-row" id="tabRow">
+      <button class="tab-btn active" data-act="math">🧮 <span id="tMath">Math</span></button>
+      <button class="tab-btn" data-act="article">🔤 <span id="tArt">Articles</span></button>
+    </div>
+
     <div class="mode-row" id="modeRow">
       <button class="mode-btn active" data-mode="add">➕ <span id="mAdd">Add</span></button>
       <button class="mode-btn" data-mode="sub">➖ <span id="mSub">Subtract</span></button>
@@ -212,7 +345,8 @@
     </div>
 
     <div class="visual" id="visual"></div>
-    <div class="question" id="question">2 + 3 = ?</div>
+    <div class="question" id="question"></div>
+    <div class="hint" id="hint"></div>
 
     <div class="answers" id="answers"></div>
 
@@ -221,47 +355,108 @@
     <button class="next-btn" id="nextBtn">Next ➡️</button>
   </div>
 
-  <div class="footer" id="footer">Made with ❤️ for learning • Made with ❤️ zum Lernen</div>
+  <div class="recent" id="recent">
+    <h3 id="recentTitle">Recent plays</h3>
+    <div id="playsBox"></div>
+  </div>
+
+  <div class="footer" id="footer">Made with ❤️ for learning • Mit ❤️ zum Lernen</div>
 
 <script>
-/* ---------------- Translations ---------------- */
+/* ================= Translations ================= */
 const T = {
   en: {
-    flag: "🇬🇧", code: "EN", title: "Math Adventure",
+    flag: "🇬🇧", code: "EN", title: "Learning Adventure",
     score: "Score", streak: "Streak", best: "Best",
+    tMath: "Math", tArt: "Articles",
     add: "Add", sub: "Subtract", mix: "Both",
     right: ["Great job! 🎉","Correct! ⭐","Awesome! 🚀","You did it! 👏","Super! 🌟"],
     wrong: "Almost! The answer is ",
     next: "Next ➡️",
     footer: "Made with ❤️ for learning",
-    htmlLang: "en"
+    chooseArticle: "Choose: a or an?",
+    namePrompt: "What's your name?",
+    start: "Start ▶️",
+    recent: "Recent plays",
+    noPlays: "No plays yet — let's start! 🎈",
+    switchP: "Switch player",
+    htmlLang: "en", locale: "en-GB",
+    actLabel: { math: "Math 🧮", article: "Articles 🔤" }
   },
   de: {
-    flag: "🇩🇪", code: "DE", title: "Mathe-Abenteuer",
+    flag: "🇩🇪", code: "DE", title: "Lern-Abenteuer",
     score: "Punkte", streak: "Serie", best: "Beste",
+    tMath: "Rechnen", tArt: "Artikel",
     add: "Plus", sub: "Minus", mix: "Beides",
     right: ["Sehr gut! 🎉","Richtig! ⭐","Toll gemacht! 🚀","Geschafft! 👏","Super! 🌟"],
     wrong: "Fast! Die Antwort ist ",
     next: "Weiter ➡️",
     footer: "Mit ❤️ zum Lernen gemacht",
-    htmlLang: "de"
+    chooseArticle: "Wähle: der, die oder das?",
+    namePrompt: "Wie heißt du?",
+    start: "Los ▶️",
+    recent: "Letzte Spiele",
+    noPlays: "Noch keine Spiele — los geht's! 🎈",
+    switchP: "Spieler wechseln",
+    htmlLang: "de", locale: "de-DE",
+    actLabel: { math: "Rechnen 🧮", article: "Artikel 🔤" }
   }
 };
 
-/* ---------------- State ---------------- */
-let lang = localStorage.getItem("mathLang") || "en";
+/* ================= Word data ================= */
+// German nouns with correct article + English meaning
+const NOUNS_DE = [
+  {w:"Hund", a:"der", tr:"dog", e:"🐕"},   {w:"Katze", a:"die", tr:"cat", e:"🐈"},
+  {w:"Haus", a:"das", tr:"house", e:"🏠"}, {w:"Ball", a:"der", tr:"ball", e:"⚽"},
+  {w:"Sonne", a:"die", tr:"sun", e:"☀️"},  {w:"Auto", a:"das", tr:"car", e:"🚗"},
+  {w:"Baum", a:"der", tr:"tree", e:"🌳"},  {w:"Blume", a:"die", tr:"flower", e:"🌸"},
+  {w:"Buch", a:"das", tr:"book", e:"📖"},  {w:"Apfel", a:"der", tr:"apple", e:"🍎"},
+  {w:"Banane", a:"die", tr:"banana", e:"🍌"}, {w:"Kind", a:"das", tr:"child", e:"🧒"},
+  {w:"Fisch", a:"der", tr:"fish", e:"🐟"}, {w:"Maus", a:"die", tr:"mouse", e:"🐭"},
+  {w:"Ei", a:"das", tr:"egg", e:"🥚"},     {w:"Mond", a:"der", tr:"moon", e:"🌙"},
+  {w:"Milch", a:"die", tr:"milk", e:"🥛"}, {w:"Wasser", a:"das", tr:"water", e:"💧"},
+  {w:"Stern", a:"der", tr:"star", e:"⭐"}, {w:"Tür", a:"die", tr:"door", e:"🚪"},
+  {w:"Bett", a:"das", tr:"bed", e:"🛏️"},  {w:"Vogel", a:"der", tr:"bird", e:"🐦"},
+  {w:"Uhr", a:"die", tr:"clock", e:"🕐"},  {w:"Herz", a:"das", tr:"heart", e:"❤️"}
+];
+// English nouns needing a / an, with German meaning
+const NOUNS_EN = [
+  {w:"apple", a:"an", tr:"Apfel", e:"🍎"},   {w:"dog", a:"a", tr:"Hund", e:"🐕"},
+  {w:"egg", a:"an", tr:"Ei", e:"🥚"},        {w:"ball", a:"a", tr:"Ball", e:"⚽"},
+  {w:"orange", a:"an", tr:"Orange", e:"🍊"}, {w:"cat", a:"a", tr:"Katze", e:"🐈"},
+  {w:"umbrella", a:"an", tr:"Regenschirm", e:"☂️"}, {w:"house", a:"a", tr:"Haus", e:"🏠"},
+  {w:"elephant", a:"an", tr:"Elefant", e:"🐘"}, {w:"car", a:"a", tr:"Auto", e:"🚗"},
+  {w:"ant", a:"an", tr:"Ameise", e:"🐜"},    {w:"tree", a:"a", tr:"Baum", e:"🌳"},
+  {w:"owl", a:"an", tr:"Eule", e:"🦉"},      {w:"book", a:"a", tr:"Buch", e:"📖"},
+  {w:"octopus", a:"an", tr:"Krake", e:"🐙"}, {w:"fish", a:"a", tr:"Fisch", e:"🐟"},
+  {w:"star", a:"a", tr:"Stern", e:"⭐"},     {w:"igloo", a:"an", tr:"Iglu", e:"🛖"}
+];
+
+/* ================= State ================= */
+let lang = localStorage.getItem("gameLang") || "en";
+let activity = "math";          // "math" | "article"
 let mode = "add";
 let score = 0, streak = 0;
-let best = Number(localStorage.getItem("mathBest") || 0);
-let current = null;      // {a,b,op,answer}
+let current = null;             // { answer, options, ... }
 let locked = false;
+let session = null;             // { id, activity, correct, total }
 
-/* ---------------- Elements ---------------- */
+/* Player database (localStorage) */
+let DB = loadDB();
+function loadDB() {
+  try { return JSON.parse(localStorage.getItem("gameDB")) || { players: {}, current: null }; }
+  catch (e) { return { players: {}, current: null }; }
+}
+function saveDB() { localStorage.setItem("gameDB", JSON.stringify(DB)); }
+function player() { return DB.players[DB.current]; }
+
+/* ================= Elements ================= */
 const el = id => document.getElementById(id);
-const visualEl = el("visual"), questionEl = el("question"), answersEl = el("answers");
-const feedbackEl = el("feedback"), starsEl = el("stars"), nextBtn = el("nextBtn");
+const visualEl = el("visual"), questionEl = el("question"), hintEl = el("hint"),
+      answersEl = el("answers"), feedbackEl = el("feedback"), starsEl = el("stars"),
+      nextBtn = el("nextBtn");
 
-/* ---------------- Sound (Web Audio, no files) ---------------- */
+/* ================= Sound ================= */
 let actx = null;
 function beep(freqs, dur = 0.14) {
   try {
@@ -279,59 +474,71 @@ function beep(freqs, dur = 0.14) {
     });
   } catch (e) {}
 }
-const happySound = () => beep([523, 659, 784]); // C-E-G
-const oopsSound  = () => beep([311, 247]);       // gentle down
+const happySound = () => beep([523, 659, 784]);
+const oopsSound  = () => beep([311, 247]);
 
-/* ---------------- Helpers ---------------- */
+/* ================= Helpers ================= */
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const shuffle = arr => arr.sort(() => Math.random() - 0.5);
-
+const pick = arr => arr[rand(0, arr.length - 1)];
 const EMOJIS = ["🍎","🍌","⭐","🐢","🦋","🌸","🚗","🐟","🎈","🍓","🐝","🍪"];
 
-function makeQuestion() {
-  let op = mode;
-  if (mode === "mix") op = Math.random() < 0.5 ? "add" : "sub";
-
+/* ================= Question builders ================= */
+function buildMath() {
+  let op = mode === "mix" ? (Math.random() < 0.5 ? "add" : "sub") : mode;
   let a, b, answer;
-  if (op === "add") {
-    a = rand(1, 10); b = rand(1, 10); answer = a + b;   // sums up to 20
-  } else {
-    a = rand(2, 12); b = rand(1, a); answer = a - b;    // no negatives
-  }
-  return { a, b, op, answer };
-}
+  if (op === "add") { a = rand(1, 10); b = rand(1, 10); answer = a + b; }
+  else { a = rand(2, 12); b = rand(1, a); answer = a - b; }
 
-function buildVisual(q) {
-  const icon = EMOJIS[rand(0, EMOJIS.length - 1)];
-  const opSign = q.op === "add" ? "+" : "−";
-  const rowA = icon.repeat(q.a);
-  const rowB = icon.repeat(q.b);
+  const sign = op === "add" ? "+" : "−";
+  const icon = pick(EMOJIS);
   visualEl.innerHTML =
-    `<div class="row">${rowA}</div>` +
-    `<div class="op">${opSign}</div>` +
-    `<div class="row">${rowB}</div>`;
-}
+    `<div class="row">${icon.repeat(a)}</div>` +
+    `<div class="op">${sign}</div>` +
+    `<div class="row">${icon.repeat(b)}</div>`;
+  questionEl.textContent = `${a} ${sign} ${b} = ?`;
+  hintEl.textContent = "";
 
-function optionsFor(answer) {
   const set = new Set([answer]);
   while (set.size < 4) {
-    let delta = rand(-3, 3);
-    let cand = answer + delta;
+    let cand = answer + rand(-3, 3);
     if (cand >= 0 && cand !== answer) set.add(cand);
   }
-  return shuffle([...set]);
+  return { answer: String(answer), options: shuffle([...set]).map(String) };
 }
 
-/* ---------------- Render ---------------- */
+function buildArticle() {
+  const t = T[lang];
+  const data = lang === "de" ? NOUNS_DE : NOUNS_EN;
+  const item = pick(data);
+
+  visualEl.innerHTML = `<div class="bigemoji">${item.e}</div>`;
+  questionEl.innerHTML = `<span style="color:#94a3b8">___</span> ${item.w}`;
+  hintEl.textContent = `= ${item.tr}`;           // translation as a learning hint
+
+  const options = lang === "de" ? ["der", "die", "das"] : ["a", "an"];
+  return { answer: item.a, options };
+}
+
+/* ================= Rounds ================= */
+function ensureSession() {
+  if (!session || session.activity !== activity) {
+    session = { id: Date.now() + "-" + Math.floor(Math.random() * 1000), activity, correct: 0, total: 0 };
+    score = 0; streak = 0;
+    renderRecent();
+  }
+}
+
 function newRound() {
+  ensureSession();
   locked = false;
-  current = makeQuestion();
-  const sign = current.op === "add" ? "+" : "−";
-  questionEl.textContent = `${current.a} ${sign} ${current.b} = ?`;
-  buildVisual(current);
+
+  const t = T[lang];
+  current = activity === "math" ? buildMath() : buildArticle();
 
   answersEl.innerHTML = "";
-  optionsFor(current.answer).forEach(val => {
+  answersEl.style.gridTemplateColumns = `repeat(${Math.min(current.options.length, 2) === 1 ? 1 : (current.options.length === 3 ? 3 : 2)}, 1fr)`;
+  current.options.forEach(val => {
     const b = document.createElement("button");
     b.className = "answer pop";
     b.textContent = val;
@@ -339,9 +546,14 @@ function newRound() {
     answersEl.appendChild(b);
   });
 
+  hintEl.style.visibility = activity === "article" ? "visible" : "hidden";
+  if (activity === "math") { /* hint already blanked */ }
+  else { questionEl.style.letterSpacing = "1px"; }
+
   feedbackEl.textContent = "";
   starsEl.textContent = "";
   nextBtn.style.display = "none";
+  updateScore();
 }
 
 function choose(btn, val) {
@@ -350,58 +562,107 @@ function choose(btn, val) {
   const t = T[lang];
   const buttons = [...answersEl.children];
 
-  if (val === current.answer) {
+  session.total++;
+  const correct = String(val) === String(current.answer);
+  if (correct) {
     btn.classList.add("correct");
-    score++; streak++;
-    if (streak > best) { best = streak; localStorage.setItem("mathBest", best); }
-    feedbackEl.textContent = t.right[rand(0, t.right.length - 1)];
+    score++; streak++; session.correct++;
+    const p = player();
+    if (streak > p.best) p.best = streak;
+    feedbackEl.textContent = pick(t.right);
     starsEl.textContent = "⭐".repeat(Math.min(streak, 5));
     happySound();
   } else {
     btn.classList.add("wrong");
     streak = 0;
     feedbackEl.textContent = t.wrong + current.answer;
-    buttons.forEach(b => { if (Number(b.textContent) === current.answer) b.classList.add("correct"); });
+    buttons.forEach(b => { if (b.textContent === String(current.answer)) b.classList.add("correct"); });
     oopsSound();
   }
   buttons.forEach(b => b.disabled = true);
+
+  // persist session into player history (entry is created on first answer)
+  const pp = player();
+  let entry = pp.history.find(h => h.id === session.id);
+  if (!entry) {
+    entry = { id: session.id, activity: session.activity, correct: 0, total: 0, ts: Date.now() };
+    pp.history.unshift(entry);
+    pp.history = pp.history.slice(0, 8);
+  }
+  entry.correct = session.correct; entry.total = session.total; entry.ts = Date.now();
+  saveDB();
+
   updateScore();
+  renderRecent();
   nextBtn.style.display = "inline-block";
 }
 
 function updateScore() {
   el("score").textContent = score;
   el("streak").textContent = streak;
-  el("best").textContent = best;
+  el("best").textContent = player() ? player().best : 0;
 }
 
-/* ---------------- Language ---------------- */
+/* ================= Recent plays ================= */
+function renderRecent() {
+  const t = T[lang];
+  const box = el("playsBox");
+  const p = player();
+  const plays = p ? p.history.filter(h => h.total > 0) : [];
+  if (!plays.length) { box.innerHTML = `<div class="empty">${t.noPlays}</div>`; return; }
+  box.innerHTML = plays.map(h => {
+    const label = t.actLabel[h.activity] || h.activity;
+    const when = new Date(h.ts).toLocaleString(t.locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    return `<div class="play-row">
+      <div class="play-left"><span>${label}</span><span style="color:#94a3b8">${when}</span></div>
+      <div class="play-score">${h.correct}/${h.total}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ================= Language ================= */
 function applyLang() {
   const t = T[lang];
   document.documentElement.lang = t.htmlLang;
   el("title").textContent = t.title;
+  el("loginTitle").textContent = t.title;
   el("langFlag").textContent = t.flag;
   el("langText").textContent = t.code;
   el("lblScore").textContent = t.score;
   el("lblStreak").textContent = t.streak;
   el("lblBest").textContent = t.best;
+  el("tMath").textContent = t.tMath;
+  el("tArt").textContent = t.tArt;
   el("mAdd").textContent = t.add;
   el("mSub").textContent = t.sub;
   el("mMix").textContent = t.mix;
   nextBtn.textContent = t.next;
   el("footer").textContent = t.footer;
-  document.title = "Math Adventure • Mathe-Abenteuer";
+  el("namePrompt").textContent = t.namePrompt;
+  el("startBtn").textContent = t.start;
+  el("recentTitle").textContent = t.recent;
+  el("playerBtn").title = t.switchP;
 }
 
 el("langBtn").onclick = () => {
   lang = lang === "en" ? "de" : "en";
-  localStorage.setItem("mathLang", lang);
+  localStorage.setItem("gameLang", lang);
   applyLang();
-  // keep feedback text fresh if a round is shown
-  if (locked) { /* leave result as-is */ }
+  renderRecent();
+  if (activity === "article") { session = null; newRound(); }  // switch word set
 };
 
-/* ---------------- Mode buttons ---------------- */
+/* ================= Tabs & modes ================= */
+el("tabRow").addEventListener("click", e => {
+  const btn = e.target.closest(".tab-btn");
+  if (!btn) return;
+  activity = btn.dataset.act;
+  [...el("tabRow").children].forEach(b => b.classList.toggle("active", b === btn));
+  el("modeRow").style.display = activity === "math" ? "flex" : "none";
+  session = null;   // start a fresh session for the new activity
+  newRound();
+});
+
 el("modeRow").addEventListener("click", e => {
   const btn = e.target.closest(".mode-btn");
   if (!btn) return;
@@ -412,20 +673,62 @@ el("modeRow").addEventListener("click", e => {
 
 nextBtn.onclick = newRound;
 
-/* Keyboard: 1-4 pick answers, Enter/Space = next */
 document.addEventListener("keydown", e => {
-  if (["1","2","3","4"].includes(e.key)) {
-    const b = answersEl.children[Number(e.key) - 1];
+  if (!el("overlay").classList.contains("hidden")) return;
+  const n = Number(e.key);
+  if (n >= 1 && n <= answersEl.children.length) {
+    const b = answersEl.children[n - 1];
     if (b && !b.disabled) b.click();
   } else if ((e.key === "Enter" || e.key === " ") && nextBtn.style.display !== "none") {
     newRound();
   }
 });
 
-/* ---------------- Start ---------------- */
+/* ================= Login / players ================= */
+function openLogin() {
+  const t = T[lang];
+  const list = el("playersList");
+  const names = Object.keys(DB.players);
+  list.innerHTML = names.map(n =>
+    `<button class="player-chip" data-name="${n.replace(/"/g,'&quot;')}">👤 ${n} · ⭐${DB.players[n].best}</button>`
+  ).join("");
+  list.querySelectorAll(".player-chip").forEach(b =>
+    b.onclick = () => startPlayer(b.dataset.name));
+  el("nameInput").value = "";
+  el("overlay").classList.remove("hidden");
+  setTimeout(() => el("nameInput").focus(), 50);
+}
+
+function startPlayer(name) {
+  name = (name || "").trim().slice(0, 14);
+  if (!name) return;
+  if (!DB.players[name]) DB.players[name] = { best: 0, history: [] };
+  DB.current = name;
+  saveDB();
+  el("playerName").textContent = name;
+  el("overlay").classList.add("hidden");
+  session = null;
+  updateScore();
+  renderRecent();
+  newRound();
+}
+
+el("startBtn").onclick = () => startPlayer(el("nameInput").value);
+el("nameInput").addEventListener("keydown", e => { if (e.key === "Enter") startPlayer(el("nameInput").value); });
+el("playerBtn").onclick = openLogin;
+
+/* ================= Start ================= */
 applyLang();
-updateScore();
-newRound();
+if (DB.current && DB.players[DB.current]) {
+  el("playerName").textContent = DB.current;
+  el("overlay").classList.add("hidden");
+  updateScore();
+  renderRecent();
+  newRound();
+} else {
+  renderRecent();
+  openLogin();
+}
 </script>
 </body>
 </html>
