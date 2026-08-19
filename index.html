@@ -221,6 +221,53 @@
   #celebStars { font-size: 40px; letter-spacing: 6px; margin: 6px 0; }
   #celebMsg { font-size: 20px; font-weight: 700; color: var(--ink); }
 
+  /* ---------- Reader ---------- */
+  .hidden { display: none !important; }
+  .reader-panel { text-align: left; }
+  .reader-help { font-size: 15px; color: #64748b; margin: 0 0 10px; text-align: center; }
+  #readerInput {
+    width: 100%;
+    border: 3px solid #e0e7ff;
+    border-radius: 16px;
+    padding: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+  }
+  #readerInput:focus { border-color: var(--accent); }
+  .reader-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .mini-btn {
+    border: none;
+    background: #eef2ff;
+    color: var(--accent);
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #c7d2fe;
+  }
+  .mini-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #c7d2fe; }
+  .mini-btn.primary { background: var(--accent); color: #fff; box-shadow: 0 3px 0 #4338ca; }
+  .mini-btn.primary:active { box-shadow: 0 1px 0 #4338ca; }
+  .reader-status { text-align: center; font-weight: 700; color: var(--good); min-height: 20px; margin-top: 10px; }
+  .reader-text {
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 14px;
+    background: #f8fafc;
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .reader-text:empty { display: none; }
+  .reader-text .rw { border-radius: 6px; padding: 0 1px; }
+  .reader-text .rw.speaking { background: #fde68a; }
+  .reader-text .rw.pair { color: var(--accent); font-weight: 700; }
+
   /* ---------- Recent plays ---------- */
   .recent {
     width: 100%;
@@ -365,6 +412,7 @@
     <div class="tab-row" id="tabRow">
       <button class="tab-btn active" data-act="math">🧮 <span id="tMath">Math</span></button>
       <button class="tab-btn" data-act="article">🔤 <span id="tArt">Articles</span></button>
+      <button class="tab-btn" data-act="reader">📖 <span id="tReader">Reader</span></button>
     </div>
 
     <div class="mode-row" id="modeRow">
@@ -373,16 +421,36 @@
       <button class="mode-btn" data-mode="mix">🎲 <span id="mMix">Both</span></button>
     </div>
 
-    <div class="progress" id="progress"></div>
-    <div class="visual" id="visual"></div>
-    <div class="question" id="question"></div>
-    <div class="hint" id="hint"></div>
+    <!-- Reader panel (import + read aloud) -->
+    <div class="reader-panel hidden" id="readerPanel">
+      <p class="reader-help" id="readerHelp">Paste a story, or load a .txt file. I'll read it and make article questions from it.</p>
+      <textarea id="readerInput" rows="4" placeholder="Paste text here..."></textarea>
+      <div class="reader-actions">
+        <input type="file" id="fileInput" accept=".txt,text/plain" hidden />
+        <button class="mini-btn" id="loadBtn">📂 <span id="loadTxt">Load .txt</span></button>
+        <button class="mini-btn" id="sampleBtn">✨ <span id="sampleTxt">Sample</span></button>
+        <button class="mini-btn primary" id="useBtn">✓ <span id="useTxt">Use this text</span></button>
+      </div>
+      <div class="reader-status" id="readerStatus"></div>
+      <div class="reader-text" id="readerText"></div>
+      <div class="reader-actions" id="readerPlayRow" style="display:none">
+        <button class="mini-btn" id="readBtn">🔊 <span id="readTxt">Read aloud</span></button>
+        <button class="mini-btn primary" id="playBtn">✏️ <span id="playTxt">Play questions</span></button>
+      </div>
+    </div>
 
-    <div class="answers" id="answers"></div>
+    <div id="playPanel">
+      <div class="progress" id="progress"></div>
+      <div class="visual" id="visual"></div>
+      <div class="question" id="question"></div>
+      <div class="hint" id="hint"></div>
 
-    <div class="feedback" id="feedback"></div>
-    <div class="stars" id="stars"></div>
-    <button class="next-btn" id="nextBtn">Next ➡️</button>
+      <div class="answers" id="answers"></div>
+
+      <div class="feedback" id="feedback"></div>
+      <div class="stars" id="stars"></div>
+      <button class="next-btn" id="nextBtn">Next ➡️</button>
+    </div>
   </div>
 
   <div class="recent" id="recent">
@@ -410,6 +478,16 @@ const T = {
     recent: "Recent plays",
     noPlays: "No plays yet — let's start! 🎈",
     switchP: "Switch player",
+    tReader: "Reader",
+    reader: {
+      help: "Paste a story, or load a .txt file. I'll read it and make article questions from it.",
+      load: "Load .txt", sample: "Sample", use: "Use this text",
+      read: "Read aloud", stop: "Stop", play: "Play questions",
+      found: "Found {n} words to practice 🎉",
+      none: "No 'a / an' found here. Try another text.",
+      empty: "Please paste or load some text first.",
+      sampleText: "I see a dog and an apple. There is an elephant at the zoo. A cat sat on a mat. She ate an orange and a banana. It was an amazing day."
+    },
     progress: "Question {x} / {n}",
     celeb: {
       title: "Round complete!",
@@ -421,7 +499,7 @@ const T = {
       see: "See results 🎉"
     },
     htmlLang: "en", locale: "en-GB",
-    actLabel: { math: "Math 🧮", article: "Articles 🔤" }
+    actLabel: { math: "Math 🧮", article: "Articles 🔤", reader: "Reader 📖" }
   },
   de: {
     flag: "🇩🇪", code: "DE", title: "Lern-Abenteuer",
@@ -438,6 +516,16 @@ const T = {
     recent: "Letzte Spiele",
     noPlays: "Noch keine Spiele — los geht's! 🎈",
     switchP: "Spieler wechseln",
+    tReader: "Lesen",
+    reader: {
+      help: "Füge einen Text ein oder lade eine .txt-Datei. Ich lese ihn vor und mache Artikel-Fragen daraus.",
+      load: "Datei laden", sample: "Beispiel", use: "Text verwenden",
+      read: "Vorlesen", stop: "Stopp", play: "Fragen spielen",
+      found: "{n} Wörter zum Üben gefunden 🎉",
+      none: "Kein 'der / die / das' gefunden. Versuche einen anderen Text.",
+      empty: "Bitte füge zuerst einen Text ein oder lade eine Datei.",
+      sampleText: "Der Hund spielt im Garten. Die Katze schläft auf dem Sofa. Das Kind isst einen Apfel. Die Sonne scheint hell. Der Ball rollt über die Straße. Das Buch liegt auf dem Tisch."
+    },
     progress: "Frage {x} / {n}",
     celeb: {
       title: "Runde geschafft!",
@@ -449,7 +537,7 @@ const T = {
       see: "Ergebnis zeigen 🎉"
     },
     htmlLang: "de", locale: "de-DE",
-    actLabel: { math: "Rechnen 🧮", article: "Artikel 🔤" }
+    actLabel: { math: "Rechnen 🧮", article: "Artikel 🔤", reader: "Lesen 📖" }
   }
 };
 
@@ -492,6 +580,10 @@ let current = null;             // { answer, options, ... }
 let locked = false;
 let roundOver = false;
 let session = null;             // { id, activity, correct, total }
+let customPool = [];            // article pairs parsed from reader text
+let readerSpans = [];           // { el, start, end } for read-aloud highlight
+let readerText = "";            // the exact text being read
+let speaking = false;
 
 /* Player database (localStorage) */
 let DB = loadDB();
@@ -561,13 +653,13 @@ function buildMath() {
 }
 
 function buildArticle() {
-  const t = T[lang];
-  const data = lang === "de" ? NOUNS_DE : NOUNS_EN;
+  const usingReader = activity === "reader";
+  const data = usingReader ? customPool : (lang === "de" ? NOUNS_DE : NOUNS_EN);
   const item = pick(data);
 
-  visualEl.innerHTML = `<div class="bigemoji">${item.e}</div>`;
+  visualEl.innerHTML = `<div class="bigemoji">${item.e || "📖"}</div>`;
   questionEl.innerHTML = `<span style="color:#94a3b8">___</span> ${item.w}`;
-  hintEl.textContent = `= ${item.tr}`;           // translation as a learning hint
+  hintEl.textContent = item.tr ? `= ${item.tr}` : "";   // translation hint (built-in words)
 
   const options = lang === "de" ? ["der", "die", "das"] : ["a", "an"];
   return { answer: item.a, options };
@@ -710,6 +802,123 @@ function playAgain() {
 }
 el("againBtn").onclick = playAgain;
 
+/* ================= Reader (text import + read aloud) ================= */
+function parsePairs(text) {
+  const pairs = [], seen = new Set();
+  // German: article + Capitalized noun.  English: a/an + next word.
+  const re = lang === "de"
+    ? /\b(der|die|das|Der|Die|Das)\s+([A-ZÄÖÜ][A-Za-zäöüß]+)/g
+    : /\b(a|an)\s+([a-z]{2,})/gi;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const art = m[1].toLowerCase(), word = m[2], key = word.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    pairs.push({ w: word, a: art });
+    if (pairs.length >= 24) break;
+  }
+  return pairs;
+}
+
+function renderReader(text) {
+  const box = el("readerText");
+  box.innerHTML = "";
+  readerSpans = [];
+  readerText = text;
+  const frag = document.createDocumentFragment();
+  const re = /\S+/g;
+  let m, last = 0;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+    const span = document.createElement("span");
+    span.className = "rw";
+    span.textContent = m[0];
+    frag.appendChild(span);
+    readerSpans.push({ el: span, start: m.index, end: m.index + m[0].length });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+  box.appendChild(frag);
+}
+
+function clearHighlight() { readerSpans.forEach(s => s.el.classList.remove("speaking")); }
+
+function stopSpeaking() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  speaking = false;
+  clearHighlight();
+  el("readTxt").textContent = T[lang].reader.read;
+}
+
+el("readBtn").onclick = () => {
+  const t = T[lang].reader;
+  if (!("speechSynthesis" in window)) return;
+  if (speaking) { stopSpeaking(); return; }
+  if (!readerText) return;
+  const u = new SpeechSynthesisUtterance(readerText);
+  u.lang = T[lang].locale;
+  u.rate = 0.9;
+  u.onboundary = (e) => {
+    if (e.name && e.name !== "word") return;
+    const idx = e.charIndex;
+    readerSpans.forEach(s => s.el.classList.toggle("speaking", idx >= s.start && idx < s.end));
+  };
+  u.onend = stopSpeaking;
+  speaking = true;
+  el("readTxt").textContent = t.stop;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+};
+
+el("loadBtn").onclick = () => el("fileInput").click();
+el("fileInput").onchange = (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const fr = new FileReader();
+  fr.onload = () => { el("readerInput").value = String(fr.result).slice(0, 4000); };
+  fr.readAsText(f);
+  e.target.value = "";
+};
+
+el("sampleBtn").onclick = () => { el("readerInput").value = T[lang].reader.sampleText; };
+
+el("useBtn").onclick = () => {
+  const t = T[lang].reader;
+  const status = el("readerStatus");
+  const text = el("readerInput").value.trim();
+  stopSpeaking();
+  if (!text) { status.style.color = "#f97316"; status.textContent = t.empty; el("readerText").innerHTML = ""; el("readerPlayRow").style.display = "none"; return; }
+  renderReader(text);
+  customPool = parsePairs(text);
+  if (!customPool.length) {
+    status.style.color = "#f97316";
+    status.textContent = t.none;
+    el("readerPlayRow").style.display = "none";
+    return;
+  }
+  status.style.color = "#16a34a";
+  status.textContent = t.found.replace("{n}", customPool.length);
+  el("readerPlayRow").style.display = "flex";
+};
+
+el("playBtn").onclick = () => {
+  if (!customPool.length) return;
+  stopSpeaking();
+  el("readerPanel").classList.add("hidden");
+  el("playPanel").classList.remove("hidden");
+  session = null; roundOver = false;
+  newRound();   // activity stays "reader" -> buildArticle uses customPool
+};
+
+function setActivityView() {
+  stopSpeaking();
+  el("modeRow").style.display = activity === "math" ? "flex" : "none";
+  const reader = activity === "reader";
+  el("readerPanel").classList.toggle("hidden", !reader);
+  el("playPanel").classList.toggle("hidden", reader);
+  if (!reader) { session = null; newRound(); }
+}
+
 function updateScore() {
   el("score").textContent = score;
   el("streak").textContent = streak;
@@ -755,6 +964,13 @@ function applyLang() {
   el("startBtn").textContent = t.start;
   el("recentTitle").textContent = t.recent;
   el("playerBtn").title = t.switchP;
+  el("tReader").textContent = t.tReader;
+  el("readerHelp").textContent = t.reader.help;
+  el("loadTxt").textContent = t.reader.load;
+  el("sampleTxt").textContent = t.reader.sample;
+  el("useTxt").textContent = t.reader.use;
+  el("readTxt").textContent = speaking ? t.reader.stop : t.reader.read;
+  el("playTxt").textContent = t.reader.play;
   updateProgress();
   if (!el("celebrate").classList.contains("hidden") && session) renderCeleb();
 }
@@ -765,6 +981,12 @@ el("langBtn").onclick = () => {
   applyLang();
   renderRecent();
   if (activity === "article") { session = null; newRound(); }  // switch word set
+  if (activity === "reader") {   // parsed pairs no longer match the new language
+    stopSpeaking();
+    customPool = [];
+    el("readerPlayRow").style.display = "none";
+    el("readerStatus").textContent = "";
+  }
 };
 
 /* ================= Tabs & modes ================= */
@@ -773,9 +995,7 @@ el("tabRow").addEventListener("click", e => {
   if (!btn) return;
   activity = btn.dataset.act;
   [...el("tabRow").children].forEach(b => b.classList.toggle("active", b === btn));
-  el("modeRow").style.display = activity === "math" ? "flex" : "none";
-  session = null;   // start a fresh session for the new activity
-  newRound();
+  setActivityView();
 });
 
 el("modeRow").addEventListener("click", e => {
@@ -789,11 +1009,13 @@ el("modeRow").addEventListener("click", e => {
 nextBtn.onclick = advance;
 
 document.addEventListener("keydown", e => {
+  if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;  // typing
   if (!el("overlay").classList.contains("hidden")) return;   // login open
   if (!el("celebrate").classList.contains("hidden")) {        // celebration open
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playAgain(); }
     return;
   }
+  if (el("playPanel").classList.contains("hidden")) return;   // reader setup, not playing
   const n = Number(e.key);
   if (n >= 1 && n <= answersEl.children.length) {
     const b = answersEl.children[n - 1];

@@ -14,6 +14,13 @@ Everything is in a single `index.html` file — no build step, no server, no dep
   - **German 🇩🇪:** pick **der / die / das** for each noun (with the English meaning as a hint —
     great for learning German gender + vocabulary).
   - **English 🇬🇧:** pick **a / an** (e.g. *an* apple, *a* dog), with the German meaning shown too.
+- **📖 Reader** — turn any text into article practice:
+  - Paste a story or **load a `.txt` file** (a grown-up sets this up).
+  - **Read aloud** 🔊 — the browser reads the passage in a German or English voice and
+    highlights each word as it goes (great for early readers). Needs no downloads.
+  - **Play questions** — the game finds the article+noun pairs already in the text
+    (e.g. "der Hund", "an apple"), hides the article, and quizzes them.
+  - Everything runs in the browser — no upload, no server. Switch 🇬🇧/🇩🇪 to match your text.
 
 ## Players & saved progress
 
