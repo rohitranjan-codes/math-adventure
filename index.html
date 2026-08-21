@@ -267,6 +267,28 @@
   .reader-text .rw { border-radius: 6px; padding: 0 1px; }
   .reader-text .rw.speaking { background: #fde68a; }
   .reader-text .rw.pair { color: var(--accent); font-weight: 700; }
+  .library { margin-top: 14px; }
+  .library h4 { margin: 0 0 8px; font-size: 15px; }
+  .lib-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    margin-bottom: 6px;
+  }
+  .lib-row .lib-title { flex: 1; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lib-row .lib-when { font-size: 12px; color: #94a3b8; }
+  .lib-icon {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 2px 4px;
+    border-radius: 8px;
+  }
+  .lib-icon:active { transform: scale(.9); }
 
   /* ---------- Recent plays ---------- */
   .recent {
@@ -427,7 +449,9 @@
       <textarea id="readerInput" rows="4" placeholder="Paste text here..."></textarea>
       <div class="reader-actions">
         <input type="file" id="fileInput" accept=".txt,text/plain" hidden />
+        <input type="file" id="pdfInput" accept="application/pdf,.pdf" hidden />
         <button class="mini-btn" id="loadBtn">📂 <span id="loadTxt">Load .txt</span></button>
+        <button class="mini-btn" id="pdfBtn">📄 <span id="loadPdfTxt">Load PDF</span></button>
         <button class="mini-btn" id="sampleBtn">✨ <span id="sampleTxt">Sample</span></button>
         <button class="mini-btn primary" id="useBtn">✓ <span id="useTxt">Use this text</span></button>
       </div>
@@ -435,8 +459,10 @@
       <div class="reader-text" id="readerText"></div>
       <div class="reader-actions" id="readerPlayRow" style="display:none">
         <button class="mini-btn" id="readBtn">🔊 <span id="readTxt">Read aloud</span></button>
+        <button class="mini-btn" id="saveBtn">💾 <span id="saveTxt">Save</span></button>
         <button class="mini-btn primary" id="playBtn">✏️ <span id="playTxt">Play questions</span></button>
       </div>
+      <div class="library" id="library"></div>
     </div>
 
     <div id="playPanel">
@@ -480,12 +506,20 @@ const T = {
     switchP: "Switch player",
     tReader: "Reader",
     reader: {
-      help: "Paste a story, or load a .txt file. I'll read it and make article questions from it.",
-      load: "Load .txt", sample: "Sample", use: "Use this text",
-      read: "Read aloud", stop: "Stop", play: "Play questions",
+      help: "Paste a story, load a .txt or PDF file. I'll read it aloud and make article questions from it.",
+      load: "Load .txt", loadPdf: "Load PDF", sample: "Sample", use: "Use this text",
+      read: "Read aloud", stop: "Stop", play: "Play questions", save: "Save",
       found: "Found {n} words to practice 🎉",
       none: "No 'a / an' found here. Try another text.",
       empty: "Please paste or load some text first.",
+      saved: "Saved to your library ✓",
+      libTitle: "📚 My Library",
+      loading: "Loading the reader tools…",
+      reading: "Reading page {p} of {n}…",
+      ocr: "Scanning page {p} (OCR)…",
+      pdfDone: "Got the text! Now tap “Use this text”.",
+      pdfFail: "Sorry, I couldn't read that PDF.",
+      netHint: "The first PDF/scan needs internet to load the tools (once).",
       sampleText: "I see a dog and an apple. There is an elephant at the zoo. A cat sat on a mat. She ate an orange and a banana. It was an amazing day."
     },
     progress: "Question {x} / {n}",
@@ -518,12 +552,20 @@ const T = {
     switchP: "Spieler wechseln",
     tReader: "Lesen",
     reader: {
-      help: "Füge einen Text ein oder lade eine .txt-Datei. Ich lese ihn vor und mache Artikel-Fragen daraus.",
-      load: "Datei laden", sample: "Beispiel", use: "Text verwenden",
-      read: "Vorlesen", stop: "Stopp", play: "Fragen spielen",
+      help: "Füge Text ein, lade eine .txt- oder PDF-Datei. Ich lese sie vor und mache Artikel-Fragen daraus.",
+      load: "Datei laden", loadPdf: "PDF laden", sample: "Beispiel", use: "Text verwenden",
+      read: "Vorlesen", stop: "Stopp", play: "Fragen spielen", save: "Speichern",
       found: "{n} Wörter zum Üben gefunden 🎉",
       none: "Kein 'der / die / das' gefunden. Versuche einen anderen Text.",
       empty: "Bitte füge zuerst einen Text ein oder lade eine Datei.",
+      saved: "In deiner Bibliothek gespeichert ✓",
+      libTitle: "📚 Meine Bibliothek",
+      loading: "Lese-Werkzeuge werden geladen…",
+      reading: "Seite {p} von {n} wird gelesen…",
+      ocr: "Seite {p} wird gescannt (OCR)…",
+      pdfDone: "Text gefunden! Tippe jetzt auf „Text verwenden“.",
+      pdfFail: "Das PDF konnte ich leider nicht lesen.",
+      netHint: "Der erste PDF-Scan braucht einmal Internet, um die Werkzeuge zu laden.",
       sampleText: "Der Hund spielt im Garten. Die Katze schläft auf dem Sofa. Das Kind isst einen Apfel. Die Sonne scheint hell. Der Ball rollt über die Straße. Das Buch liegt auf dem Tisch."
     },
     progress: "Frage {x} / {n}",
@@ -916,8 +958,138 @@ function setActivityView() {
   const reader = activity === "reader";
   el("readerPanel").classList.toggle("hidden", !reader);
   el("playPanel").classList.toggle("hidden", reader);
-  if (!reader) { session = null; newRound(); }
+  if (reader) renderLibrary();
+  else { session = null; newRound(); }
 }
+
+/* ---- PDF import (PDF.js) + OCR fallback (Tesseract.js), loaded lazily from CDN ---- */
+const PDF_SRC = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js";
+const PDF_WORKER = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+const TESS_SRC = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+let pdfReady, tessReady, pdfBusy = false;
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = src; s.onload = res; s.onerror = () => rej(new Error("load fail: " + src));
+    document.head.appendChild(s);
+  });
+}
+function ensurePdfJs() {
+  if (!pdfReady) pdfReady = loadScript(PDF_SRC).then(() => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER; });
+  return pdfReady;
+}
+function ensureTesseract() {
+  if (!tessReady) tessReady = loadScript(TESS_SRC);
+  return tessReady;
+}
+function readerSetStatus(msg, color) {
+  const s = el("readerStatus");
+  s.style.color = color || "#64748b";
+  s.textContent = msg;
+}
+
+async function ocrPage(page) {
+  await ensureTesseract();
+  const viewport = page.getViewport({ scale: 2 });
+  const canvas = document.createElement("canvas");
+  canvas.width = viewport.width; canvas.height = viewport.height;
+  await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+  const langCode = lang === "de" ? "deu" : "eng";
+  const { data } = await window.Tesseract.recognize(canvas, langCode);
+  return (data.text || "").trim();
+}
+
+async function importPdf(file) {
+  const t = T[lang].reader;
+  if (pdfBusy) return;
+  pdfBusy = true;
+  try {
+    readerSetStatus(t.loading, "#64748b");
+    await ensurePdfJs();
+    const buf = await file.arrayBuffer();
+    const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+    const maxPages = Math.min(pdf.numPages, 10);
+    let out = "";
+    for (let p = 1; p <= maxPages; p++) {
+      const page = await pdf.getPage(p);
+      const content = await page.getTextContent();
+      let pageText = content.items.map(i => i.str).join(" ").replace(/\s+/g, " ").trim();
+      if (pageText.replace(/\s/g, "").length < 20) {          // scanned page -> OCR
+        readerSetStatus(t.ocr.replace("{p}", p), "#64748b");
+        pageText = await ocrPage(page);
+      } else {
+        readerSetStatus(t.reading.replace("{p}", p).replace("{n}", maxPages), "#64748b");
+      }
+      out += pageText + "\n\n";
+    }
+    el("readerInput").value = out.trim().slice(0, 6000);
+    el("useBtn").click();                                       // auto-parse
+  } catch (e) {
+    readerSetStatus(t.pdfFail + " " + t.netHint, "#f97316");
+  } finally {
+    pdfBusy = false;
+  }
+}
+
+el("pdfBtn").onclick = () => el("pdfInput").click();
+el("pdfInput").onchange = (e) => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (f) importPdf(f);
+};
+
+/* ---- My Library (saved passages per player, localStorage) ---- */
+function saveCurrentText() {
+  const t = T[lang].reader;
+  const text = el("readerInput").value.trim();
+  if (!text) { readerSetStatus(t.empty, "#f97316"); return; }
+  const p = player();
+  if (!p) return;
+  if (!p.library) p.library = [];
+  const parts = text.split(/\s+/);
+  const title = parts.slice(0, 5).join(" ") + (parts.length > 5 ? "…" : "");
+  p.library.unshift({ id: Date.now() + "", title, text, ts: Date.now() });
+  p.library = p.library.slice(0, 20);
+  saveDB();
+  readerSetStatus(t.saved, "#16a34a");
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const box = el("library");
+  const p = player();
+  const lib = (p && p.library) ? p.library : [];
+  if (!lib.length) { box.innerHTML = ""; return; }
+  const t = T[lang];
+  box.innerHTML = `<h4>${t.reader.libTitle}</h4>` + lib.map(item => {
+    const when = new Date(item.ts).toLocaleDateString(t.locale, { day: "numeric", month: "short" });
+    const safe = item.title.replace(/</g, "&lt;");
+    return `<div class="lib-row" data-id="${item.id}">
+      <span class="lib-title">${safe}</span>
+      <span class="lib-when">${when}</span>
+      <button class="lib-icon lib-load" title="Load">▶️</button>
+      <button class="lib-icon lib-del" title="Delete">🗑️</button>
+    </div>`;
+  }).join("");
+}
+
+el("library").addEventListener("click", (e) => {
+  const row = e.target.closest(".lib-row");
+  if (!row) return;
+  const id = row.dataset.id, p = player();
+  if (!p || !p.library) return;
+  if (e.target.classList.contains("lib-del")) {
+    p.library = p.library.filter(x => x.id !== id);
+    saveDB();
+    renderLibrary();
+  } else if (e.target.classList.contains("lib-load")) {
+    const item = p.library.find(x => x.id === id);
+    if (item) { el("readerInput").value = item.text; el("useBtn").click(); }
+  }
+});
+
+el("saveBtn").onclick = saveCurrentText;
 
 function updateScore() {
   el("score").textContent = score;
@@ -971,6 +1143,9 @@ function applyLang() {
   el("useTxt").textContent = t.reader.use;
   el("readTxt").textContent = speaking ? t.reader.stop : t.reader.read;
   el("playTxt").textContent = t.reader.play;
+  el("loadPdfTxt").textContent = t.reader.loadPdf;
+  el("saveTxt").textContent = t.reader.save;
+  renderLibrary();
   updateProgress();
   if (!el("celebrate").classList.contains("hidden") && session) renderCeleb();
 }
@@ -1043,7 +1218,7 @@ function openLogin() {
 function startPlayer(name) {
   name = (name || "").trim().slice(0, 14);
   if (!name) return;
-  if (!DB.players[name]) DB.players[name] = { best: 0, history: [] };
+  if (!DB.players[name]) DB.players[name] = { best: 0, history: [], library: [] };
   DB.current = name;
   saveDB();
   el("playerName").textContent = name;
@@ -1051,6 +1226,7 @@ function startPlayer(name) {
   session = null;
   updateScore();
   renderRecent();
+  renderLibrary();
   newRound();
 }
 
@@ -1065,6 +1241,7 @@ if (DB.current && DB.players[DB.current]) {
   el("overlay").classList.add("hidden");
   updateScore();
   renderRecent();
+  renderLibrary();
   newRound();
 } else {
   renderRecent();

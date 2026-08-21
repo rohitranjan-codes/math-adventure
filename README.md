@@ -15,12 +15,20 @@ Everything is in a single `index.html` file — no build step, no server, no dep
     great for learning German gender + vocabulary).
   - **English 🇬🇧:** pick **a / an** (e.g. *an* apple, *a* dog), with the German meaning shown too.
 - **📖 Reader** — turn any text into article practice:
-  - Paste a story or **load a `.txt` file** (a grown-up sets this up).
+  - Paste a story, **load a `.txt` file**, or **load a PDF** (a grown-up sets this up).
+  - **PDF import** reads normal (digital) PDFs instantly with PDF.js. For **scanned/photo
+    PDFs** it falls back to **OCR** (Tesseract.js) — all in the browser, no server, no login.
   - **Read aloud** 🔊 — the browser reads the passage in a German or English voice and
-    highlights each word as it goes (great for early readers). Needs no downloads.
+    highlights each word as it goes (great for early readers). No downloads.
   - **Play questions** — the game finds the article+noun pairs already in the text
     (e.g. "der Hund", "an apple"), hides the article, and quizzes them.
-  - Everything runs in the browser — no upload, no server. Switch 🇬🇧/🇩🇪 to match your text.
+  - **💾 Save** a passage to **My Library** — each player keeps their own saved texts
+    (stored locally in the browser) to replay any time.
+  - Switch 🇬🇧/🇩🇪 to match the language of your text.
+
+  > **Note:** PDF/OCR tools load from a public CDN, so the **first** PDF import (and the first
+  > OCR scan, which downloads a ~2 MB language file) needs an internet connection. Typing,
+  > pasting, `.txt` files, read-aloud, and everything else work fully offline.
 
 ## Players & saved progress
 
