@@ -117,16 +117,33 @@
 
   /* ---------- Destinations ---------- */
   const grid = $('#destGrid');
-  grid.innerHTML = T.destinations.map((d, i) => `
-    <article class="dest reveal" data-delay="${(i % 4) + 1}" data-id="${d.id}" tabindex="0" role="button" aria-label="Open ${esc(d.name)}">
-      <div class="cover" style="background:${d.hue}"><span>${d.emoji}</span></div>
-      <div class="body">
-        <h3>${esc(d.name)}</h3>
-        <div class="tag">${esc(d.tag)}</div>
-        <div class="meta"><span>🌡 ${esc(d.weather)}</span><span class="cost">${esc(d.perDay)}/day</span></div>
-        <span class="more">Explore</span>
-      </div>
-    </article>`).join('');
+  const TYPES = { all: { label: 'All', icon: '🧭' }, beach: { label: 'Beaches', icon: '🏖️' }, hills: { label: 'Hills & tea', icon: '🍃' }, culture: { label: 'Culture & heritage', icon: '🏛️' }, wildlife: { label: 'Wildlife', icon: '🐘' }, city: { label: 'Cities', icon: '🏙️' }, beyond: { label: 'Beyond South India', icon: '🌏' } };
+  const filters = $('#destFilters');
+  filters.innerHTML = Object.entries(TYPES).map(([k, v]) => {
+    const n = k === 'all' ? T.destinations.length : T.destinations.filter((d) => d.type === k).length;
+    return `<button class="filter" data-type="${k}">${v.icon} ${esc(v.label)} <b>${n}</b></button>`;
+  }).join('');
+  function renderDests(type) {
+    $$('.filter', filters).forEach((b) => b.classList.toggle('active', b.dataset.type === type));
+    const list = T.destinations.filter((d) => type === 'all' || d.type === type);
+    grid.innerHTML = list.map((d, i) => `
+      <article class="dest" style="--i:${i}" data-id="${d.id}" tabindex="0" role="button" aria-label="Open ${esc(d.name)}">
+        <div class="cover" style="background:${d.hue}"><span>${d.emoji}</span><em class="type-pill">${TYPES[d.type].icon} ${esc(TYPES[d.type].label)}</em></div>
+        <div class="body">
+          <h3>${esc(d.name)}</h3>
+          <div class="tag">${esc(d.tag)}</div>
+          <div class="meta">
+            <span>🛫 ${esc(d.from)}</span>
+            <span>🌡 ${esc(d.weather)}</span>
+            <span><b class="cost">${esc(d.perDay)}/day</b> · ${esc(d.nights)}</span>
+          </div>
+          <span class="more">Explore</span>
+        </div>
+      </article>`).join('');
+    $('#destCount').textContent = list.length + (list.length === 1 ? ' place' : ' places');
+  }
+  filters.addEventListener('click', (e) => { const b = e.target.closest('.filter'); if (b) { renderDests(b.dataset.type); store.set('destType', b.dataset.type); } });
+  renderDests(store.get('destType', 'all'));
   const modal = $('#modal');
   function openDest(id) {
     const d = T.destinations.find((x) => x.id === id); if (!d) return;
@@ -136,6 +153,7 @@
       <div class="content">
         <h3>${esc(d.name)}</h3>
         <div class="tag">${esc(d.tag)} · 🌡 ${esc(d.weather)}</div>
+        <div class="chip-row" style="margin-top:10px"><span class="chip warm">🛫 From Bengaluru: ${esc(d.from)}</span><span class="chip">🛏 Suggested: ${esc(d.nights)}</span></div>
         <p class="intro">${esc(d.intro)}</p>
         <div class="cols">
           <div>
