@@ -1,0 +1,270 @@
+/* ------------------------------------------------------------------
+   Data for the Europe → South India (November) travel planner.
+   All prices are approximate, per person, in EUR unless noted, and
+   were written as planning estimates — always re-check live prices.
+   ------------------------------------------------------------------ */
+
+window.TRIP = {
+  eurToInr: 98, // approximate; edit to today's rate
+
+  weather: [
+    { place: 'Bengaluru', temp: '18–27 °C', note: 'Mild, breezy, mostly dry. Light showers possible in the first week.', icon: '⛅', rating: 'great' },
+    { place: 'Goa', temp: '23–33 °C', note: 'Dry, sunny, sea calm — the season kicks off in November.', icon: '☀️', rating: 'great' },
+    { place: 'Munnar', temp: '12–22 °C', note: 'Cool, misty mornings. Some NE-monsoon showers in early November, clearing later.', icon: '🌫️', rating: 'good' },
+    { place: 'Kochi / Alleppey', temp: '24–31 °C', note: 'Warm and humid, occasional evening showers, backwaters full and green.', icon: '🌦️', rating: 'good' },
+    { place: 'Mysuru / Coorg', temp: '15–28 °C', note: 'Fresh, post-monsoon greenery, coffee harvest begins.', icon: '🌤️', rating: 'great' },
+    { place: 'Hampi', temp: '18–31 °C', note: 'Dry and clear — ideal for walking the ruins.', icon: '☀️', rating: 'great' },
+    { place: 'Pondicherry / Chennai', temp: '24–30 °C', note: 'Peak NE-monsoon rain in November. Better in January.', icon: '🌧️', rating: 'skip' },
+  ],
+
+  flights: [
+    {
+      from: 'Frankfurt (FRA)', to: 'Bengaluru (BLR)', type: 'Nonstop',
+      duration: '≈ 9 h', airlines: 'Lufthansa (daily, A350)',
+      price: '€650 – 1,000 return economy · €2,800 – 4,500 business',
+      tip: 'Departs early afternoon, lands BLR around 01:00–02:00 next day. Book 2–4 months ahead for November.'
+    },
+    {
+      from: 'Zurich (ZRH)', to: 'Bengaluru (BLR)', type: '1 stop',
+      duration: '11 – 14 h', airlines: 'Lufthansa via FRA/MUC · Qatar via DOH · Emirates via DXB · Etihad via AUH · Turkish via IST',
+      price: '€600 – 950 return economy · €2,600 – 4,200 business',
+      tip: 'Gulf carriers often price lower than the Lufthansa connection and land BLR early morning. Keep 2 h+ for the connection.'
+    },
+    {
+      from: 'Other Europe', to: 'Bengaluru (BLR)', type: 'Nonstop options',
+      duration: '9 – 10 h', airlines: 'British Airways (LHR) · Air France (CDG) · KLM (AMS)',
+      price: '€600 – 1,000 return economy',
+      tip: 'Handy if part of the group starts from Paris, London or Amsterdam and meets in Bengaluru.'
+    },
+  ],
+
+  domestic: [
+    { route: 'Bengaluru → Goa (GOI Dabolim or GOX Mopa)', time: '1 h 10', price: '€40 – 90', carriers: 'IndiGo · Air India · Air India Express · Akasa', note: 'Mopa (GOX) is closer to North Goa beaches; Dabolim (GOI) to South Goa & Panaji.' },
+    { route: 'Bengaluru → Kochi (COK)', time: '1 h 05', price: '€40 – 90', carriers: 'IndiGo · Air India · Air India Express', note: 'Gateway to Munnar (4 h drive), Alleppey and Fort Kochi.' },
+    { route: 'Goa → Kochi (COK)', time: '1 h 20', price: '€45 – 100', carriers: 'IndiGo', note: 'Lets you combine the Goa and Kerala routes without returning to Bengaluru.' },
+    { route: 'Bengaluru → Mysuru (train)', time: '2 h', price: '€8 – 15', carriers: 'Vande Bharat · Shatabdi Express', note: 'Fast, clean, air-conditioned. Book on IRCTC or 12Go a few weeks ahead.' },
+    { route: 'Bengaluru → Hampi (Hosapete)', time: '6 h car · 8 h night train · 1 h flight to Vidyanagar (VDY)', price: '€15 – 120', carriers: 'KSRTC · Hampi Express · Star Air / IndiGo', note: 'Night train (Hampi Express, 2AC) is the classic and cheapest way; hire a car for the return with stops.' },
+  ],
+
+  destinations: [
+    {
+      id: 'bengaluru', name: 'Bengaluru', tag: 'Your gateway city', emoji: '🏙️',
+      hue: 'linear-gradient(135deg,#6366f1,#a855f7)',
+      weather: '18–27 °C · mild & breezy',
+      intro: 'India\'s garden city and tech capital. Great coffee, craft breweries, parks and easy first-day pace to shake off the jet lag.',
+      todo: ['Cubbon Park & the red-brick High Court at dawn', 'Lalbagh Botanical Garden glasshouse', 'Bangalore Palace (Tudor-style, Wodeyar royals)', 'Church Street & Commercial Street browsing', 'Sunrise at Nandi Hills (60 km, leave 04:30)', 'VV Puram food street in the evening'],
+      food: ['Masala dosa & filter coffee at MTR or Vidyarthi Bhavan', 'Andhra meals on a banana leaf at Nagarjuna', 'Craft beer & wood-fired pizza at Toit, Indiranagar', 'Coastal seafood at Karavalli (Taj)'],
+      stay: { budget: 'Zostel / The Hosteller (Indiranagar) €12–25 pp', mid: 'Lemon Tree, ibis, The Park · €60–110 per room', lux: 'Taj West End, ITC Gardenia, The Leela Palace · €200–400' },
+      area: 'Stay in Indiranagar, Koramangala or around MG Road — walkable, lively, well connected by Metro and Uber.',
+      perDay: '€35 – 120',
+    },
+    {
+      id: 'goa', name: 'Goa', tag: 'Beaches, forts & Portuguese lanes', emoji: '🏖️',
+      hue: 'linear-gradient(135deg,#f59e0b,#ef4444)',
+      weather: '23–33 °C · dry & sunny',
+      intro: 'Palm-lined beaches, 450 years of Portuguese heritage, night markets and the best seafood on the west coast. November is the sweet spot: dry, warm, not yet crowded.',
+      todo: ['Sunset from Chapora Fort over Vagator', 'Ashwem & Morjim beaches (quiet, turtle nesting zone)', 'Old Goa: Basilica of Bom Jesus & Sé Cathedral (UNESCO)', 'Fontainhas Latin Quarter walk in Panaji', 'Dudhsagar Falls jeep safari + spice plantation lunch', 'Palolem & Agonda in the south — kayaking, dolphin boats', 'Anjuna Wednesday flea market · Arpora Saturday night market', 'IFFI film festival in Panaji (late Nov)'],
+      food: ['Goan fish thali at Ritz Classic or Anand', 'Prawn balchão, pork vindaloo, xacuti at Viva Panjim', 'Beach-shack grilled kingfish & feni cocktails', 'Bebinca dessert, poi bread from a village bakery'],
+      stay: { budget: 'Hostels & guesthouses in Anjuna/Palolem · €10–30', mid: 'Boutique villas in Assagao, Novotel Candolim · €70–140', lux: 'W Goa, Taj Fort Aguada, Alila Diwa, Ahilya by the Sea · €220–450' },
+      area: 'North (Assagao/Anjuna/Vagator) for nightlife & cafés; South (Palolem/Agonda) for calm beaches. Rent a scooter (€6/day) or use Goa Miles taxis.',
+      perDay: '€40 – 150',
+    },
+    {
+      id: 'munnar', name: 'Munnar', tag: 'Tea hills at 1,600 m', emoji: '🍃',
+      hue: 'linear-gradient(135deg,#10b981,#0f766e)',
+      weather: '12–22 °C · cool & misty',
+      intro: 'Rolling tea estates, cloud forest and cool air — a full change of climate from the coast. Pack a fleece for mornings.',
+      todo: ['Eravikulam National Park — endangered Nilgiri tahr', 'Sunrise jeep to Kolukkumalai, the world\'s highest tea estate', 'KDHP Tea Museum & tea tasting', 'Mattupetty Dam, Echo Point, Top Station viewpoint', 'Lockhart Gap & Anamudi peak views', 'Guided estate walk with a planter'],
+      food: ['Kerala sadya on banana leaf', 'Appam with vegetable stew for breakfast', 'Fresh-picked cardamom tea', 'Beef fry & parotta (Kerala classic)'],
+      stay: { budget: 'Homestays in Chinnakanal / Pallivasal · €20–40', mid: 'Tea Valley Resort, Elixir Hills · €70–130', lux: 'Windermere Estate, Spice Tree, KDHP Tea Bungalows · €180–350' },
+      area: 'From Kochi airport: 4 h scenic drive (110 km). Hire a car with driver (€60–90 per day for the group). Roads are winding — motion-sickness tablets help.',
+      perDay: '€35 – 140',
+    },
+    {
+      id: 'kochi', name: 'Kochi & Alleppey', tag: 'Spice port & backwaters', emoji: '⛵',
+      hue: 'linear-gradient(135deg,#0ea5e9,#2563eb)',
+      weather: '24–31 °C · warm & humid',
+      intro: 'Fort Kochi\'s colonial lanes and Chinese fishing nets, then a night on a houseboat gliding through Alleppey\'s palm-fringed canals.',
+      todo: ['Chinese fishing nets at sunset, Fort Kochi', 'Mattancherry Palace & Jew Town synagogue', 'Kathakali performance at Kerala Kathakali Centre', 'Kochi-Muziris Biennale art (Dec–Mar, check dates)', 'Overnight houseboat, Alleppey → Kumarakom', 'Village canoe tour through the narrow canals', 'Marari Beach sunset'],
+      food: ['Karimeen pollichathu (pearl spot fish in banana leaf)', 'Fish moilee & prawn curry on the houseboat', 'Puttu & kadala curry breakfast', 'Seafood at Fort House or Oceanos'],
+      stay: { budget: 'Fort Kochi homestays · €20–35', mid: 'Fort House Hotel, Old Harbour Hotel · €80–150 · Houseboat €90–160 per night (whole boat, 2 pax)', lux: 'Brunton Boatyard, Taj Malabar, Marari Beach Resort, Kumarakom Lake Resort · €200–450' },
+      area: 'Alleppey is 1.5 h from Kochi. Book houseboats through a reputed operator (Spice Routes, Lakes & Lagoons) and board around noon.',
+      perDay: '€40 – 160',
+    },
+    {
+      id: 'thekkady', name: 'Thekkady (Periyar)', tag: 'Wildlife & spice gardens', emoji: '🐘',
+      hue: 'linear-gradient(135deg,#84cc16,#15803d)',
+      weather: '18–28 °C · fresh',
+      intro: 'A perfect bridge between Munnar and the backwaters: a lake safari in Periyar Tiger Reserve, spice plantations and Kalaripayattu martial-arts shows.',
+      todo: ['Periyar Lake boat safari (elephants, bison, hornbills)', 'Guided spice-garden walk (cardamom, pepper, vanilla)', 'Kalaripayattu & Kathakali evening show', 'Bamboo rafting or border-hike with forest guides'],
+      food: ['Pepper chicken', 'Home-style Syrian Christian fish curry', 'Fresh spice tea'],
+      stay: { budget: 'Kumily guesthouses · €20–35', mid: 'Greenwoods Resort, Cardamom County · €70–130', lux: 'Spice Village (CGH Earth), Niraamaya · €180–300' },
+      area: '3 h from Munnar, 4 h to Alleppey. Add 1 night if you have time.',
+      perDay: '€35 – 130',
+    },
+    {
+      id: 'mysuru', name: 'Mysuru', tag: 'Palaces, silk & sandalwood', emoji: '🏰',
+      hue: 'linear-gradient(135deg,#f43f5e,#be185d)',
+      weather: '17–28 °C · pleasant',
+      intro: 'Karnataka\'s royal city, 2 h from Bengaluru by fast train. The Maharaja\'s Palace lit by 100,000 bulbs on Sunday evenings is unforgettable.',
+      todo: ['Mysore Palace (Sunday 19:00 illumination)', 'Chamundi Hill temple & the giant Nandi', 'Devaraja Market — jasmine, spices, kumkum', 'Srirangapatna: Tipu Sultan\'s summer palace', 'Brindavan Gardens musical fountain', 'Ashtanga yoga class (Mysuru is the birthplace)'],
+      food: ['Mysore pak sweet at Guru Sweets', 'Mysore masala dosa at Mylari', 'Filter coffee & benne dosa'],
+      stay: { budget: 'Zostel Mysuru, guesthouses · €10–25', mid: 'Royal Orchid Metropole (heritage) · €70–110', lux: 'Radisson Blu Plaza, Grand Mercure · €110–180' },
+      area: 'Book the Vande Bharat / Shatabdi train from Bengaluru KSR station. Autos and Uber cover the city.',
+      perDay: '€30 – 100',
+    },
+    {
+      id: 'coorg', name: 'Coorg (Kodagu)', tag: 'Coffee estates & waterfalls', emoji: '☕',
+      hue: 'linear-gradient(135deg,#a16207,#78350f)',
+      weather: '15–25 °C · fresh & green',
+      intro: 'The "Scotland of India": misty coffee plantations, Kodava culture and estate homestays where the harvest starts in November.',
+      todo: ['Stay on a working coffee estate', 'Abbey Falls & Raja\'s Seat sunset', 'Dubare Elephant Camp (ethical morning visit)', 'Namdroling Golden Temple, Bylakuppe Tibetan settlement', 'Talacauvery river source & Bhagamandala', 'Coffee-roasting walk and tasting'],
+      food: ['Pandi curry (Kodava pork) with kadambuttu rice balls', 'Estate-grown coffee', 'Akki roti with coconut chutney'],
+      stay: { budget: 'Homestays around Madikeri · €25–45', mid: 'Coorg Wilderness Resort, Amanvana · €90–160', lux: 'Evolve Back Coorg, Taj Madikeri Resort & Spa · €250–450' },
+      area: '3 h drive from Mysuru, 6 h from Bengaluru. Private car for the group is the practical choice.',
+      perDay: '€40 – 150',
+    },
+    {
+      id: 'hampi', name: 'Hampi', tag: 'UNESCO ruins among boulders', emoji: '🪨',
+      hue: 'linear-gradient(135deg,#f97316,#c2410c)',
+      weather: '18–31 °C · dry & clear',
+      intro: 'The 14th-century capital of the Vijayanagara empire — temples, royal baths and a stone chariot scattered across a surreal boulder landscape.',
+      todo: ['Vittala Temple & the stone chariot', 'Sunrise on Matanga Hill', 'Virupaksha Temple & Hampi Bazaar', 'Coracle ride on the Tungabhadra river', 'Cycle or e-bike tour of the Royal Enclosure', 'Sunset at Hemakuta Hill; Sanapur lake cliff-jumping'],
+      food: ['Mango Tree restaurant thalis', 'Cafés across the river in Sanapur / Hippie Island', 'North Karnataka jolada rotti meals'],
+      stay: { budget: 'Guesthouses in Hampi Bazaar & Sanapur · €10–25', mid: 'Heritage Resort Hampi, Hampi\'s Boulders · €60–120', lux: 'Evolve Back Kamalapura Palace · €250–400' },
+      area: 'Hampi Express night train from Bengaluru (2AC ≈ €15) or 1 h flight to Vidyanagar. Hire a tuk-tuk or bikes for the ruins.',
+      perDay: '€30 – 120',
+    },
+  ],
+
+  routes: [
+    {
+      id: 'goa', name: 'Sun & Spice', subtitle: 'Bengaluru → Goa', days: 10,
+      emoji: '🏖️', accent: '#f59e0b',
+      summary: 'The easy, sociable itinerary: two days to settle in Bengaluru, then a short flight to Goa for beaches, Portuguese history, seafood and markets.',
+      stats: { flights: '2 domestic', pace: 'Relaxed', cost: '€1,250 – 2,100 pp' },
+      itinerary: [
+        { day: 1, place: 'Frankfurt / Zurich', title: 'Fly to India', text: 'Afternoon departure. Nonstop from Frankfurt (≈ 9 h) or one stop from Zurich. Set your watch to IST (+4 h 30 from CET) and sleep on the plane.', tags: ['✈️ Long-haul'] },
+        { day: 2, place: 'Bengaluru', title: 'Land & unwind', text: 'Arrive around 01:00–02:00. Prepaid airport taxi or Uber to Indiranagar (45–75 min, ₹1,000–1,500). Sleep in, then a slow afternoon: Cubbon Park, Church Street coffee, sunset drinks at a rooftop.', tags: ['🛬 Arrival', '😴 Jet-lag day'] },
+        { day: 3, place: 'Bengaluru', title: 'Gardens & palaces', text: 'Lalbagh Botanical Garden early, Bangalore Palace, lunch at MTR, Commercial Street shopping. Evening: VV Puram food street or craft beer at Toit.', tags: ['🌳 City day'] },
+        { day: 4, place: 'Goa (North)', title: 'Fly to the coast', text: 'Morning flight BLR → GOX Mopa (1 h 10, €40–90). Taxi 45 min to Assagao / Vagator. Sunset at Chapora Fort, dinner at a beach shack.', tags: ['✈️ Domestic', '🌅 Sunset'] },
+        { day: 5, place: 'Goa (North)', title: 'Beach day', text: 'Rent scooters (€6/day). Ashwem and Morjim beaches, lunch at a shack, siesta. Wednesday? Anjuna flea market. Saturday? Arpora night market.', tags: ['🏖️ Beach', '🛵 Scooter'] },
+        { day: 6, place: 'Old Goa & Panaji', title: 'Heritage day', text: 'UNESCO churches at Old Goa (Bom Jesus, Sé Cathedral), then a walk through Fontainhas, Panaji\'s pastel Latin Quarter. Goan fish thali for lunch, Mandovi sunset cruise.', tags: ['⛪ UNESCO', '🍛 Food'] },
+        { day: 7, place: 'Dudhsagar', title: 'Waterfall & spices', text: 'Day trip: jeep safari to Dudhsagar Falls (strong flow after the monsoon), lunch and tour at a spice plantation. Back by evening.', tags: ['🚙 Day trip', '💦 Waterfall'] },
+        { day: 8, place: 'Goa (South)', title: 'Slow south', text: 'Move south: Palolem or Agonda. Kayaking, Cabo de Rama fort, quiet dinner on the sand. A night in the south balances the buzz of the north.', tags: ['🏖️ Beach', '🛶 Kayak'] },
+        { day: 9, place: 'Bengaluru', title: 'Return & farewell', text: 'Fly GOI → BLR (1 h 10). Last-minute shopping at UB City or Commercial Street; farewell dinner of coastal food at Karavalli.', tags: ['✈️ Domestic', '🍽️ Farewell'] },
+        { day: 10, place: 'Bengaluru → Europe', title: 'Fly home', text: 'Early morning departure (most Europe-bound flights leave BLR 02:00–05:00). Arrive Frankfurt / Zurich late morning the same day.', tags: ['✈️ Long-haul'] },
+      ],
+    },
+    {
+      id: 'kerala', name: 'Tea Hills & Backwaters', subtitle: 'Bengaluru → Munnar → Alleppey → Kochi', days: 11,
+      emoji: '🍃', accent: '#10b981',
+      summary: 'The scenic itinerary: cool tea mountains in Munnar, a wildlife lake in Thekkady, a night on a houseboat and the old spice port of Fort Kochi.',
+      stats: { flights: '2 domestic', pace: 'Moderate', cost: '€1,450 – 2,500 pp' },
+      itinerary: [
+        { day: 1, place: 'Frankfurt / Zurich', title: 'Fly to India', text: 'Afternoon departure, overnight flight to Bengaluru.', tags: ['✈️ Long-haul'] },
+        { day: 2, place: 'Bengaluru', title: 'Land & unwind', text: 'Arrive early morning; sleep, then Cubbon Park and an easy evening in Indiranagar.', tags: ['🛬 Arrival'] },
+        { day: 3, place: 'Bengaluru', title: 'City day', text: 'Lalbagh, Bangalore Palace, MTR lunch, sunset on a rooftop. Buy a local SIM if you didn\'t at the airport.', tags: ['🌳 City day'] },
+        { day: 4, place: 'Kochi → Munnar', title: 'Into the hills', text: 'Flight BLR → COK (1 h 05). Pre-booked car with driver climbs 4 h through waterfalls and spice country to Munnar. Arrive for tea at 1,600 m.', tags: ['✈️ Domestic', '🚗 4 h drive'] },
+        { day: 5, place: 'Munnar', title: 'Tea & tahr', text: 'Eravikulam National Park (Nilgiri tahr), KDHP Tea Museum, Mattupetty Dam and Top Station viewpoint. Evening estate walk.', tags: ['🍃 Tea', '🦌 Wildlife'] },
+        { day: 6, place: 'Munnar', title: 'Sunrise above the clouds', text: '04:30 jeep to Kolukkumalai, the highest tea estate in the world, for sunrise over Tamil Nadu. Afternoon free: spa, Lockhart Gap, or simply the veranda.', tags: ['🌄 Sunrise', '🚙 Jeep'] },
+        { day: 7, place: 'Thekkady', title: 'Periyar wildlife', text: 'Drive 3 h to Thekkady. Afternoon boat safari on Periyar Lake, spice-garden walk, Kalaripayattu martial-arts show.', tags: ['🐘 Wildlife', '🌶️ Spices'] },
+        { day: 8, place: 'Alleppey', title: 'Houseboat night', text: 'Drive 4 h to Alleppey, board a private houseboat at noon. Lunch on deck, canals, sunset, dinner and a night moored on the lake.', tags: ['⛵ Houseboat', '🌅 Backwaters'] },
+        { day: 9, place: 'Fort Kochi', title: 'Spice port', text: 'Disembark 09:00, drive 1.5 h to Fort Kochi. Chinese fishing nets, Mattancherry Palace, Jew Town antiques, Kathakali performance at 18:00.', tags: ['🏛️ Heritage', '🎭 Kathakali'] },
+        { day: 10, place: 'Bengaluru', title: 'Return & farewell', text: 'Fly COK → BLR (1 h 05). Farewell dinner. Tip: Kochi also has direct Gulf connections to Europe if you prefer to skip Bengaluru.', tags: ['✈️ Domestic', '🍽️ Farewell'] },
+        { day: 11, place: 'Bengaluru → Europe', title: 'Fly home', text: 'Early morning departure, home by midday.', tags: ['✈️ Long-haul'] },
+      ],
+    },
+    {
+      id: 'heritage', name: 'Heritage & Coffee', subtitle: 'Bengaluru → Mysuru → Coorg → Hampi', days: 12,
+      emoji: '🏰', accent: '#f43f5e',
+      summary: 'The Karnataka loop for culture lovers: royal Mysuru by fast train, coffee-estate living in Coorg and the surreal ruins of Hampi.',
+      stats: { flights: '0–1 domestic', pace: 'Active', cost: '€1,300 – 2,200 pp' },
+      itinerary: [
+        { day: 1, place: 'Frankfurt / Zurich', title: 'Fly to India', text: 'Overnight flight to Bengaluru.', tags: ['✈️ Long-haul'] },
+        { day: 2, place: 'Bengaluru', title: 'Land & unwind', text: 'Recover, Cubbon Park, easy dinner.', tags: ['🛬 Arrival'] },
+        { day: 3, place: 'Bengaluru', title: 'City day', text: 'Lalbagh, Bangalore Palace, Commercial Street, brewery evening.', tags: ['🌳 City day'] },
+        { day: 4, place: 'Mysuru', title: 'Royal city by train', text: 'Vande Bharat to Mysuru (2 h). Mysore Palace, Devaraja Market, Chamundi Hill at sunset. Sunday? Palace illumination at 19:00.', tags: ['🚆 Train', '🏰 Palace'] },
+        { day: 5, place: 'Mysuru', title: 'Tipu & silk', text: 'Srirangapatna island fort and summer palace, silk weaving factory, Brindavan Gardens evening fountain.', tags: ['🏛️ History'] },
+        { day: 6, place: 'Coorg', title: 'Coffee country', text: 'Car 3 h to a coffee estate near Madikeri. Estate walk, Raja\'s Seat sunset, Kodava dinner.', tags: ['🚗 3 h drive', '☕ Estate'] },
+        { day: 7, place: 'Coorg', title: 'Elephants & monks', text: 'Dubare Elephant Camp early, Abbey Falls, Namdroling Golden Temple at Bylakuppe. Coffee tasting at the estate.', tags: ['🐘 Elephants', '🛕 Monastery'] },
+        { day: 8, place: 'Bengaluru', title: 'Back to base', text: 'Drive 6 h back to Bengaluru (or 5 h to Mysuru + train). Evening: board the Hampi Express night train (2AC sleeper, ≈ €15).', tags: ['🚗 Drive', '🚆 Night train'] },
+        { day: 9, place: 'Hampi', title: 'Boulders & temples', text: 'Arrive Hosapete 07:00, 30 min to Hampi. Virupaksha Temple, Hampi Bazaar, Hemakuta Hill sunset.', tags: ['🪨 UNESCO'] },
+        { day: 10, place: 'Hampi', title: 'Stone chariot', text: 'Sunrise on Matanga Hill, Vittala Temple, Royal Enclosure by e-bike, coracle ride, afternoon at Sanapur lake.', tags: ['🌄 Sunrise', '🚲 Cycle'] },
+        { day: 11, place: 'Bengaluru', title: 'Return & farewell', text: 'Morning flight VDY → BLR (1 h) or day train. Farewell dinner in Bengaluru.', tags: ['✈️ Domestic', '🍽️ Farewell'] },
+        { day: 12, place: 'Bengaluru → Europe', title: 'Fly home', text: 'Early morning departure.', tags: ['✈️ Long-haul'] },
+      ],
+    },
+  ],
+
+  /* Cost model — per person, EUR, by travel style */
+  costModel: {
+    styles: {
+      budget:  { label: 'Backpacker', intl: 700, hotel: 20, food: 12, local: 8,  actFactor: 0.7 },
+      comfort: { label: 'Comfort',    intl: 850, hotel: 55, food: 25, local: 15, actFactor: 1.0 },
+      luxury:  { label: 'Luxury',     intl: 3300, hotel: 180, food: 55, local: 35, actFactor: 1.6 },
+    },
+    origins: { fra: { label: 'Frankfurt (nonstop)', adj: 0 }, zrh: { label: 'Zurich (1 stop)', adj: -30 }, other: { label: 'Other Europe', adj: 0 } },
+    routes: {
+      goa:      { transport: 150, activities: 110 },
+      kerala:   { transport: 270, activities: 190 },
+      heritage: { transport: 190, activities: 90 },
+    },
+    fixed: { visa: 40, insurance: 45, sim: 8 },
+    bufferPct: 0.10,
+  },
+
+  safety: [
+    { icon: '🛂', title: 'e-Visa before you fly', text: 'Germans and Swiss are eligible for the Indian e-Tourist Visa (30 days, 1 year or 5 years). Apply only on the official site, at least 7 days before departure. Print the approval.', link: { label: 'indianvisaonline.gov.in/evisa', url: 'https://indianvisaonline.gov.in/evisa/' } },
+    { icon: '🩺', title: 'Health & vaccinations', text: 'Routine vaccines plus Hepatitis A and Typhoid are usually recommended; talk to a travel clinic 6 weeks out. Drink only sealed bottled or filtered water, and carry oral rehydration salts and a basic kit.', link: { label: 'CRM / Tropeninstitut travel advice', url: 'https://www.crm.de/' } },
+    { icon: '🛡️', title: 'Travel insurance', text: 'Take a policy that covers medical evacuation and adventure activities. Private hospitals in Bengaluru and Kochi (Manipal, Apollo, Aster) are excellent — insurance makes them stress-free.', link: { label: 'Compare on Check24', url: 'https://www.check24.de/reiseversicherung/' } },
+    { icon: '🚨', title: 'Emergency numbers', text: '112 — all emergencies (police, fire, ambulance). 1363 — 24 h multilingual tourist helpline (German supported). Save your consulate: Germany and Switzerland both have Consulates General in Bengaluru.', link: { label: 'German missions in India', url: 'https://india.diplo.de/' } },
+    { icon: '🚕', title: 'Getting around safely', text: 'Use Uber, Ola or the airport\'s prepaid taxi counter instead of street hawkers. Trains: book 2AC/3AC or Vande Bharat. For hill roads hire a car with driver — don\'t self-drive.', link: { label: 'Uber India', url: 'https://www.uber.com/in/en/' } },
+    { icon: '💳', title: 'Money', text: 'ATMs are everywhere (SBI, HDFC, ICICI). Wise or Revolut cards give the best rates. Foreign tourists can activate UPI (QR payments) via "UPI One World" at BLR airport — very handy for cafés and autos.', link: { label: 'Wise', url: 'https://wise.com/' } },
+    { icon: '📱', title: 'SIM & connectivity', text: 'Buy an Airtel or Jio tourist SIM at BLR arrivals (passport + visa needed, ~€8 for 28 days), or install an eSIM (Airalo, Holafly) before you fly. WhatsApp is how everyone communicates.', link: { label: 'Airalo India eSIM', url: 'https://www.airalo.com/india-esim' } },
+    { icon: '👗', title: 'Culture & dress', text: 'Cover shoulders and knees at temples and remove shoes. Bargain politely at markets, tip 5–10 % in restaurants. Public affection is frowned upon; alcohol is fine in Goa and Bengaluru bars.', link: null },
+    { icon: '🕵️', title: 'Common scams to skip', text: '"Your hotel is closed" taxi stories, gem/carpet "export" deals, unofficial guides at monuments, and card skimmers at isolated ATMs. Politely say no and keep walking.', link: null },
+    { icon: '🔌', title: 'Plugs, time & tips', text: 'Type C/D/M sockets, 230 V — a universal adapter works. IST is UTC+5:30 (CET +4:30 in November). Diwali 2026 falls on 8 November: fireworks, sweets and some closures — plan around it.', link: null },
+  ],
+
+  links: [
+    { group: 'Flights', items: [
+      { label: 'Google Flights', url: 'https://www.google.com/travel/flights', note: 'Best price calendar for FRA/ZRH → BLR' },
+      { label: 'Skyscanner', url: 'https://www.skyscanner.net/', note: 'Compare Gulf-carrier connections' },
+      { label: 'Lufthansa', url: 'https://www.lufthansa.com/', note: 'Nonstop Frankfurt → Bengaluru' },
+      { label: 'IndiGo', url: 'https://www.goindigo.in/', note: 'Domestic: Goa, Kochi, Hyderabad' },
+      { label: 'Air India', url: 'https://www.airindia.com/', note: 'Domestic & international' },
+      { label: 'Akasa Air', url: 'https://www.akasaair.com/', note: 'Low-cost domestic' },
+    ]},
+    { group: 'Trains & buses', items: [
+      { label: 'IRCTC', url: 'https://www.irctc.co.in/', note: 'Official rail booking (foreign cards accepted)' },
+      { label: '12Go Asia', url: 'https://12go.asia/en/travel/india', note: 'Easiest for foreigners — trains, buses, ferries' },
+      { label: 'ConfirmTkt', url: 'https://www.confirmtkt.com/', note: 'Seat availability predictions' },
+      { label: 'redBus', url: 'https://www.redbus.in/', note: 'Intercity buses' },
+      { label: 'KSRTC Karnataka', url: 'https://ksrtc.in/', note: 'State buses incl. airport Vayu Vajra' },
+    ]},
+    { group: 'Stays', items: [
+      { label: 'Booking.com', url: 'https://www.booking.com/', note: 'Widest hotel & homestay choice' },
+      { label: 'Airbnb', url: 'https://www.airbnb.com/', note: 'Villas in Goa, estates in Coorg' },
+      { label: 'MakeMyTrip', url: 'https://www.makemytrip.com/', note: 'Indian rates, often cheaper' },
+      { label: 'CGH Earth', url: 'https://www.cghearth.com/', note: 'Sustainable heritage hotels in Kerala' },
+      { label: 'Hostelworld', url: 'https://www.hostelworld.com/', note: 'Zostel & hostel network' },
+    ]},
+    { group: 'On the ground', items: [
+      { label: 'Uber', url: 'https://www.uber.com/in/en/', note: 'Cabs & autos in all cities' },
+      { label: 'Ola', url: 'https://www.olacabs.com/', note: 'Local alternative' },
+      { label: 'Zomato', url: 'https://www.zomato.com/', note: 'Restaurant ratings & delivery' },
+      { label: 'Google Maps', url: 'https://maps.google.com/', note: 'Download offline maps' },
+      { label: 'UPI One World', url: 'https://www.npci.org.in/what-we-do/upi/upi-one-world', note: 'QR payments for tourists' },
+    ]},
+    { group: 'Official & safety', items: [
+      { label: 'Indian e-Visa', url: 'https://indianvisaonline.gov.in/evisa/', note: 'Only official site' },
+      { label: 'Auswärtiges Amt — Indien', url: 'https://www.auswaertiges-amt.de/de/service/laender/indien-node', note: 'German travel advice' },
+      { label: 'EDA — Indien', url: 'https://www.eda.admin.ch/eda/de/home/vertretungen-und-reisehinweise/indien.html', note: 'Swiss travel advice' },
+      { label: 'Incredible India', url: 'https://www.incredibleindia.gov.in/', note: 'Official tourism board' },
+      { label: 'India Meteorological Dept', url: 'https://mausam.imd.gov.in/', note: 'Forecasts & monsoon updates' },
+      { label: 'Kerala Tourism', url: 'https://www.keralatourism.org/', note: 'Houseboats, festivals, events' },
+      { label: 'Goa Tourism', url: 'https://goa-tourism.com/', note: 'Official Goa information' },
+    ]},
+  ],
+};

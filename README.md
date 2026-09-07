@@ -48,6 +48,17 @@ Everything is in a single `index.html` file — no build step, no server, no dep
 - Tap the flag button (top right) any time to switch **English ↔ German**.
 - Keyboard: press number keys to pick an answer, **Enter/Space** for the next question.
 
+## 🛫 Bonus: Europe → South India travel planner
+
+**▶️ Open it: https://rohitranjan-codes.github.io/math-adventure/travel/**
+
+A separate, self-contained site in the [`travel/`](travel/) folder for a group flying from
+**Frankfurt / Zurich to Bengaluru in November**. It has animated route maps, three ready-made
+itineraries (Goa · Munnar & Kerala backwaters · Mysuru, Coorg & Hampi), destination guides with
+food and hotels at three budgets, an interactive **cost planner** (EUR / INR), a safety guide with a
+saved pre-departure checklist, and curated booking links. Plain HTML/CSS/JS — no build step.
+Edit `travel/data.js` to change prices, places or links.
+
 ## Play locally
 
 Just double-click `index.html`, or open it in any web browser. That's it.

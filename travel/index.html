@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Europe → South India · November Travel Planner</title>
+<meta name="description" content="A clean, safe and detailed plan for a group travelling from Frankfurt or Zurich to Bengaluru in November — Goa, Munnar, Kerala backwaters, Mysuru, Coorg and Hampi, with costs, hotels, food and useful links." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛫</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="progress"></div>
+
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="#top"><span class="dot">✈</span> Namaste, November</a>
+  <ul class="nav-links">
+    <li><a href="#flights">Flights</a></li>
+    <li><a href="#routes">Routes</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#costs">Cost planner</a></li>
+    <li><a href="#safety">Safety</a></li>
+    <li><a href="#links">Links</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
+    <button class="icon-btn burger" id="burger" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  <div class="grid-bg"></div>
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow reveal in"><span class="pulse"></span> Frankfurt · Zurich → Bengaluru · November</span>
+      <h1>Europe to South India,<br /><span class="accent">planned properly.</span></h1>
+      <p class="lead">A calm, safe and detailed plan for a group of friends: land in Bengaluru, then choose sun in Goa, tea hills in Munnar and Kerala's backwaters, or the palaces and ruins of Karnataka. Real costs, hotels, food and the links you actually need.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#routes">See the itineraries ↓</a>
+        <a class="btn btn-ghost" href="#costs">💶 Estimate the cost</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b data-count="9" data-suffix=" h">0</b><span>Nonstop FRA → BLR</span></div>
+        <div class="stat"><b data-count="27" data-suffix=" °C">0</b><span>Bengaluru in November</span></div>
+        <div class="stat"><b data-count="3">0</b><span>Ready-made routes</span></div>
+        <div class="stat"><b data-count="1250" data-suffix="+">0</b><span>€ per person from</span></div>
+      </div>
+    </div>
+
+    <div class="flight-card">
+      <svg viewBox="0 0 520 360" role="img" aria-label="Route map from Frankfurt and Zurich to Bengaluru, then on to Goa and Kochi">
+        <defs>
+          <path id="pFRA" d="M60 60 C 200 40, 360 120, 400 250" />
+          <path id="pZRH" d="M80 110 C 220 110, 360 170, 400 250" />
+          <path id="pGOA" d="M400 250 C 385 240, 355 215, 340 185" />
+          <path id="pCOK" d="M400 250 C 400 280, 385 300, 370 320" />
+        </defs>
+        <!-- routes -->
+        <use href="#pFRA" class="route-outline" />
+        <use href="#pFRA" class="route-path" />
+        <use href="#pZRH" class="route-path" style="opacity:.55" />
+        <use href="#pGOA" class="route-path secondary" />
+        <use href="#pCOK" class="route-path secondary" />
+        <!-- cities -->
+        <circle cx="60" cy="60" r="6" class="city-dot" /><text x="60" y="44" text-anchor="middle" class="city">FRANKFURT</text>
+        <circle cx="80" cy="110" r="6" class="city-dot" /><text x="80" y="134" text-anchor="middle" class="city">ZURICH</text>
+        <circle cx="400" cy="250" r="12" class="ring" /><circle cx="400" cy="250" r="12" class="ring" style="animation-delay:1.3s" />
+        <circle cx="400" cy="250" r="8" class="city-dot" /><text x="418" y="255" class="city">BENGALURU</text>
+        <circle cx="340" cy="185" r="5" class="city-dot teal" /><text x="340" y="172" text-anchor="middle" class="city">GOA</text>
+        <circle cx="370" cy="320" r="5" class="city-dot teal" /><text x="370" y="342" text-anchor="middle" class="city">KOCHI · MUNNAR</text>
+        <!-- planes -->
+        <g class="plane"><path d="M0-7 L2-2 L9 0 L2 2 L0 7 L-1 2 L-6 1 L-6-1 L-1-2 Z" /><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#pFRA" /></animateMotion></g>
+        <g class="plane-2"><path d="M0-5 L1.5-1.5 L6 0 L1.5 1.5 L0 5 L-.7 1.5 L-4 .7 L-4-.7 L-.7-1.5 Z" /><animateMotion dur="4s" repeatCount="indefinite" rotate="auto"><mpath href="#pGOA" /></animateMotion></g>
+        <g class="plane-2"><path d="M0-5 L1.5-1.5 L6 0 L1.5 1.5 L0 5 L-.7 1.5 L-4 .7 L-4-.7 L-.7-1.5 Z" /><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#pCOK" /></animateMotion></g>
+      </svg>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i> Long-haul ≈ 9 h</span>
+        <span><i style="background:var(--accent-2)"></i> Domestic ≈ 1 h</span>
+        <span>🕐 IST = CET + 4:30</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= WEATHER ================= -->
+<section id="weather" class="alt" style="padding-top:70px">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Why November</span>
+      <h2>The monsoon is gone, the crowds haven't arrived.</h2>
+      <p>South India dries out and cools down in November. Here's how each stop on the map feels — and the one region to leave for another trip.</p>
+    </div>
+    <div class="weather-row" id="weatherRow"></div>
+  </div>
+</section>
+
+<!-- ================= FLIGHTS ================= -->
+<section id="flights">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Getting there</span>
+      <h2>Frankfurt or Zurich to Bengaluru</h2>
+      <p>Lufthansa flies nonstop from Frankfurt. From Zurich you connect once — via Frankfurt, Munich or a Gulf hub. Fly in together, or meet at Kempegowda International Airport.</p>
+    </div>
+    <div class="flight-grid" id="flightGrid"></div>
+
+    <div class="card reveal" style="margin-top:24px">
+      <h3 style="font-size:1.3rem;margin-bottom:10px">🛬 Arriving at Bengaluru (BLR)</h3>
+      <div class="chip-row">
+        <span class="chip">Immigration: e-Visa printout + return ticket</span>
+        <span class="chip">SIM counters (Airtel / Jio) in arrivals</span>
+        <span class="chip">ATMs & currency exchange before exit</span>
+        <span class="chip warm">Taxi to city: 45–75 min · ₹1,000–1,500 (≈ €10–15)</span>
+        <span class="chip warm">Vayu Vajra airport bus: ₹300</span>
+      </div>
+      <p style="color:var(--ink-2);font-size:.95rem">Most European flights land between 01:00 and 03:00. Book your first hotel from the night before so you can check in immediately, use the <b>prepaid taxi counter</b> or Uber pickup zone, and plan nothing before lunch on day one.</p>
+    </div>
+
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Onward connection</th><th>Time</th><th>Price pp</th><th>Carriers</th></tr></thead>
+        <tbody id="domesticBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROUTES ================= -->
+<section id="routes" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Itineraries</span>
+      <h2>Three routes, one gateway.</h2>
+      <p>Every route starts with two easy days in Bengaluru to recover from the flight. Pick one — or combine Goa and Kerala with the direct Goa → Kochi flight.</p>
+    </div>
+    <div class="tabs" id="routeTabs"></div>
+    <div class="route-panel" id="routePanel"></div>
+  </div>
+</section>
+
+<!-- ================= DESTINATIONS ================= -->
+<section id="destinations">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Destinations</span>
+      <h2>Where you'll actually go.</h2>
+      <p>Tap a card for things to do, what to eat, where to stay at three budgets, and how to get there.</p>
+    </div>
+    <div class="dest-grid" id="destGrid"></div>
+  </div>
+</section>
+
+<!-- ================= COSTS ================= -->
+<section id="costs" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Cost planner</span>
+      <h2>What will it cost?</h2>
+      <p>Move the sliders. Estimates are per person, include the Europe flights, and assume double rooms shared by two. Treat them as a planning range, not a quote.</p>
+    </div>
+    <div class="cost-layout">
+      <div class="card reveal">
+        <div class="field">
+          <label for="people">Travellers <output id="peopleOut"></output></label>
+          <input type="range" id="people" min="1" max="12" step="1" />
+        </div>
+        <div class="field">
+          <label for="days">Trip length <output id="daysOut"></output></label>
+          <input type="range" id="days" min="7" max="21" step="1" />
+        </div>
+        <div class="field">
+          <label>Travel style</label>
+          <div class="seg" id="styleSeg"></div>
+          <p id="styleNote" style="margin-top:10px;font-size:.85rem;color:var(--muted)"></p>
+        </div>
+        <div class="field">
+          <label>Departure</label>
+          <div class="seg" id="originSeg"></div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>Route</label>
+          <div class="seg" id="routeSeg"></div>
+        </div>
+      </div>
+      <div class="result reveal" data-delay="2">
+        <div class="currency-toggle" id="currencyToggle"><button data-c="EUR">EUR</button><button data-c="INR">INR</button></div>
+        <div class="label">Estimated total per person</div>
+        <div class="big" id="perPerson">€0</div>
+        <div id="perDay" style="opacity:.75;font-weight:700"></div>
+        <div class="group-total"><span class="label">Whole group</span><b id="groupTotal">€0</b></div>
+        <div class="breakdown" id="breakdown"></div>
+        <p class="fine">Includes a 10 % buffer. Rate used: €1 ≈ ₹<span id="rate"></span>. Flights priced for November departures booked 2–4 months ahead; luxury assumes business class.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SAFETY ================= -->
+<section id="safety">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Safe & smooth</span>
+      <h2>Travel like you've been before.</h2>
+      <p>South India is welcoming and well organised for visitors. These are the few things that make the difference between a good trip and a great one.</p>
+    </div>
+    <div class="safety-grid" id="safetyGrid"></div>
+
+    <div class="checklist reveal">
+      <h3>✅ Pre-departure checklist</h3>
+      <p class="sub">Ticks are saved on this device, so the group organiser can track progress. <span id="checkCount"></span></p>
+      <div class="check-progress"><div id="checkFill"></div></div>
+      <ul id="checklist">
+        <li><label><input type="checkbox" value="visa" /><span>Indian e-Visa approved &amp; printed (apply ≥ 7 days before)</span></label></li>
+        <li><label><input type="checkbox" value="passport" /><span>Passport valid 6+ months with 2 blank pages</span></label></li>
+        <li><label><input type="checkbox" value="flights" /><span>Europe ↔ Bengaluru flights booked</span></label></li>
+        <li><label><input type="checkbox" value="domestic" /><span>Domestic flights / trains booked (IndiGo, IRCTC or 12Go)</span></label></li>
+        <li><label><input type="checkbox" value="hotel1" /><span>First-night hotel booked from the night before arrival</span></label></li>
+        <li><label><input type="checkbox" value="insurance" /><span>Travel &amp; medical insurance with evacuation cover</span></label></li>
+        <li><label><input type="checkbox" value="vax" /><span>Travel clinic visit: Hep A, Typhoid, routine boosters</span></label></li>
+        <li><label><input type="checkbox" value="meds" /><span>Medical kit: ORS, anti-diarrhoeal, mosquito repellent (DEET), sunscreen</span></label></li>
+        <li><label><input type="checkbox" value="cards" /><span>Wise/Revolut card + one backup credit card; bank informed</span></label></li>
+        <li><label><input type="checkbox" value="sim" /><span>eSIM installed or plan to buy Airtel/Jio SIM at BLR</span></label></li>
+        <li><label><input type="checkbox" value="apps" /><span>Apps: Uber, Ola, Google Maps offline, Zomato, WhatsApp group</span></label></li>
+        <li><label><input type="checkbox" value="adapter" /><span>Universal adapter (Type C/D/M), power bank</span></label></li>
+        <li><label><input type="checkbox" value="copies" /><span>Digital copies of passport, visa, insurance shared in the group</span></label></li>
+        <li><label><input type="checkbox" value="consulate" /><span>Consulate numbers saved (Bengaluru) + 112 and 1363</span></label></li>
+        <li><label><input type="checkbox" value="clothes" /><span>Packing: light cotton, one fleece for Munnar, modest temple outfit, rain jacket</span></label></li>
+        <li><label><input type="checkbox" value="register" /><span>Registered trip with Auswärtiges Amt (ELEFAND) / EDA Travel Admin</span></label></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LINKS ================= -->
+<section id="links" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Useful links</span>
+      <h2>Everything you'll need to book.</h2>
+      <p>Only official or widely trusted services. Book Indian domestic flights and trains on their home sites for the best prices.</p>
+    </div>
+    <div class="links-grid" id="linksGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container row">
+    <span>✈ Namaste, November · Europe → South India travel planner · <span id="year"></span></span>
+    <span>Prices are approximate planning estimates in EUR — verify before booking. Not affiliated with any airline or hotel.</span>
+  </div>
+</footer>
+
+<button class="btn btn-primary" id="toTop" aria-label="Back to top">↑</button>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="backdrop"></div>
+  <div class="sheet"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
