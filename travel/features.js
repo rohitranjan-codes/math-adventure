@@ -149,13 +149,17 @@
   }
   const nights = () => plan.reduce((a, s) => a + s.nights, 0);
   const hours = () => plan.reduce((a, s) => a + byId(s.id).hours, 0);
-  function tripDates(i) {
-    const d0 = $('#tripDate').value; if (!d0) return '';
+  function stopRange(i) {
+    const d0 = $('#tripDate').value; if (!d0) return null;
     let start = new Date(d0 + 'T00:00:00'); start.setDate(start.getDate() + 1);
     for (let k = 0; k < i; k++) start.setDate(start.getDate() + plan[k].nights);
     const end = new Date(start); end.setDate(end.getDate() + plan[i].nights);
+    return { start, end };
+  }
+  function tripDates(i) {
+    const r = stopRange(i); if (!r) return '';
     const f = (d) => d.toLocaleDateString(A.LANG.cur === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'short' });
-    return `${f(start)} → ${f(end)}`;
+    return `${f(r.start)} → ${f(r.end)}`;
   }
   function savePlan() { store.set('plan', plan); history.replaceState(null, '', planUrl()); emit('planchange', plan); }
   function addStop(id, n) { const d = byId(id); plan.push({ id, nights: n ?? (parseInt(d.nights) || 2) }); renderBuilder(); savePlan(); }
@@ -180,7 +184,7 @@
         <div class="stop-cover">${window.sceneSVG(d.id, d.type, d.hue)}<span>${d.emoji}</span></div>
         <div class="stop-body">
           <div class="stop-title"><b>${esc(d.name)}</b><small>${esc(d.from)}${tripDates(i) ? ' · 📅 ' + tripDates(i) : ''}</small></div>
-          <div class="stop-cost">≈ €${Math.round(s.nights * perDay(d))} ${t('builder.perPerson')}</div>
+          <div class="stop-cost">≈ €${Math.round(s.nights * perDay(d))} ${t('builder.perPerson')}${(() => { const r = stopRange(i), fc = r && window.wxForecast ? window.wxForecast(d.id, r.start, r.end) : null; return fc ? ` <span class="stop-wx">· ${fc.icon} ${fc.min}–${fc.max}°${fc.rain != null ? ' · 🌧 ' + fc.rain + '%' : ''}</span>` : ''; })()}</div>
         </div>
         <div class="stop-nights"><button data-act="minus" aria-label="fewer nights">−</button><b>${s.nights}</b><span>${t('builder.nights')}</span><button data-act="plus" aria-label="more nights">+</button></div>
         <div class="stop-tools"><button data-act="up" ${i === 0 ? 'disabled' : ''}>↑</button><button data-act="down" ${i === plan.length - 1 ? 'disabled' : ''}>↓</button><button data-act="remove" class="danger">✕</button></div>
@@ -282,6 +286,93 @@
 
   /* ---------- Language change: re-render dynamic bits ---------- */
   on('langchange', () => { paintLang(); renderStamps(); quizIntro(); renderPool(); renderBuilder(); renderDates(); rateLabel.textContent = rateLabel.textContent.includes('·') ? rateLabel.textContent.replace(/^[^·]+/, t('rate.live') + ' ') : t('rate.fixed'); if ($('#mapLegend')) $('#mapLegend').innerHTML = Object.entries(TYPE_COLORS).map(([k, c]) => `<span><i style="background:${c}"></i>${esc(A.TYPES[k].label)}</span>`).join(''); });
+
+
+  /* ---------- Live weather (Open-Meteo, free, no key) ---------- */
+  const WMO = (code) => {
+    const c = +code;
+    if (c === 0) return { icon: '☀️', en: 'Clear', de: 'Klar' };
+    if (c <= 2) return { icon: '⛅', en: 'Partly cloudy', de: 'Teils bewölkt' };
+    if (c === 3) return { icon: '☁️', en: 'Overcast', de: 'Bedeckt' };
+    if (c <= 48) return { icon: '🌫️', en: 'Fog', de: 'Nebel' };
+    if (c <= 57) return { icon: '🌦️', en: 'Drizzle', de: 'Nieselregen' };
+    if (c <= 67) return { icon: '🌧️', en: 'Rain', de: 'Regen' };
+    if (c <= 77) return { icon: '❄️', en: 'Snow', de: 'Schnee' };
+    if (c <= 82) return { icon: '🌦️', en: 'Showers', de: 'Schauer' };
+    return { icon: '⛈️', en: 'Thunderstorms', de: 'Gewitter' };
+  };
+  const WX = { data: null, hist: null, at: null };
+  const wxCache = (k, maxAge) => { const v = store.get(k, null); return v && Date.now() - v.at < maxAge ? v : null; };
+  const dests = T.destinations;
+  const locParams = `latitude=${dests.map((d) => d.lat).join(',')}&longitude=${dests.map((d) => d.lng).join(',')}`;
+  // forecast for one destination over a date range → aggregated min/max/rain/icon, or null if outside the forecast window
+  window.wxForecast = (id, start, end) => {
+    if (!WX.data) return null;
+    const i = dests.findIndex((d) => d.id === id), loc = WX.data[i]; if (!loc || !loc.daily) return null;
+    const days = loc.daily.time.map((t, k) => ({ t: new Date(t + 'T00:00:00'), min: loc.daily.temperature_2m_min[k], max: loc.daily.temperature_2m_max[k], rain: loc.daily.precipitation_probability_max?.[k], code: loc.daily.weather_code[k] }))
+      .filter((x) => x.t >= start && x.t <= end && x.min != null);
+    if (!days.length) return null;
+    const codes = days.map((x) => x.code).sort((a, b) => b - a);
+    return { min: Math.round(Math.min(...days.map((x) => x.min))), max: Math.round(Math.max(...days.map((x) => x.max))), rain: days[0].rain == null ? null : Math.round(Math.max(...days.map((x) => x.rain || 0))), icon: WMO(codes[Math.floor(codes.length / 2)]).icon, n: days.length };
+  };
+  function wxNow(id) {
+    if (!WX.data) return null;
+    const loc = WX.data[dests.findIndex((d) => d.id === id)]; if (!loc || !loc.current) return null;
+    const w = WMO(loc.current.weather_code);
+    return { temp: Math.round(loc.current.temperature_2m), icon: w.icon, text: A.LANG.cur === 'de' ? w.de : w.en, hum: loc.current.relative_humidity_2m };
+  }
+  function wxLast(id) {
+    if (!WX.hist) return null;
+    const loc = WX.hist[dests.findIndex((d) => d.id === id)]; if (!loc || !loc.daily) return null;
+    const mins = loc.daily.temperature_2m_min.filter((x) => x != null), maxs = loc.daily.temperature_2m_max.filter((x) => x != null), rain = loc.daily.precipitation_sum.filter((x) => x != null);
+    if (!mins.length) return null;
+    const avg = (a) => Math.round(a.reduce((s, x) => s + x, 0) / a.length);
+    return { min: avg(mins), max: avg(maxs), rainy: rain.filter((x) => x >= 1).length, year: loc.daily.time[0].slice(0, 4) };
+  }
+  function liveHTML(id) {
+    const now = wxNow(id), last = wxLast(id);
+    const d0 = $('#tripDate').value;
+    let trip = null;
+    if (d0) { const s = new Date(d0 + 'T00:00:00'); s.setDate(s.getDate() + 1); const e = new Date(s); e.setDate(e.getDate() + nights()); trip = window.wxForecast(id, s, e); }
+    if (!now && !last) return '';
+    return `${now ? `<span class="wx-now"><b>${now.icon} ${now.temp}°</b> ${t('wx.now')} · ${esc(now.text)}</span>` : ''}
+      ${trip ? `<span class="wx-trip"><b>${trip.icon} ${trip.min}–${trip.max}°</b> ${t('wx.trip')}${trip.rain != null ? ` · 🌧 ${trip.rain}% ${t('wx.rain')}` : ''}</span>` : (d0 ? `<span class="wx-soon">📅 ${t('wx.soon')}</span>` : '')}
+      ${last ? `<span class="wx-last">📊 ${t('wx.lastNov')} ${last.year}: ${last.min}–${last.max}° · ${last.rainy} ${t('wx.rainy')}</span>` : ''}`;
+  }
+  function paintWeather() {
+    $$('[data-wx]').forEach((el) => { const html = liveHTML(el.dataset.wx); el.innerHTML = html; el.classList.toggle('on', !!html); });
+    const st = $('#wxStatus');
+    if (WX.data) st.innerHTML = `<span class="pulse-dot"></span> ${t('wx.by')} · ${t('wx.updated')} ${new Date(WX.at).toLocaleTimeString(A.LANG.cur === 'de' ? 'de-DE' : 'en-GB', { hour: '2-digit', minute: '2-digit' })} · <a href="https://open-meteo.com/" target="_blank" rel="noopener">open-meteo.com</a>`;
+    else st.innerHTML = '';
+  }
+  async function loadWeather() {
+    const cached = wxCache('wx', 30 * 60 * 1000);
+    if (cached) { WX.data = cached.data; WX.at = cached.at; }
+    else {
+      try {
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?${locParams}&current=temperature_2m,relative_humidity_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&timezone=Asia%2FKolkata&forecast_days=16`);
+        if (!r.ok) throw new Error(r.status);
+        const j = await r.json(); WX.data = Array.isArray(j) ? j : [j]; WX.at = Date.now();
+        store.set('wx', { data: WX.data, at: WX.at });
+      } catch { /* keep static notes */ }
+    }
+    const hc = wxCache('wxHist', 7 * 24 * 60 * 60 * 1000);
+    if (hc) WX.hist = hc.data;
+    else {
+      try {
+        const y = new Date().getFullYear() - (new Date().getMonth() >= 11 ? 0 : 1); // most recent complete November
+        const r = await fetch(`https://archive-api.open-meteo.com/v1/archive?${locParams}&start_date=${y}-11-01&end_date=${y}-11-30&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Asia%2FKolkata`);
+        if (!r.ok) throw new Error(r.status);
+        const j = await r.json(); WX.hist = Array.isArray(j) ? j : [j];
+        store.set('wxHist', { data: WX.hist, at: Date.now() });
+      } catch { /* optional */ }
+    }
+    paintWeather(); if (WX.data) renderBuilder();
+  }
+  loadWeather();
+  on('destopened', () => paintWeather());
+  on('planchange', () => paintWeather());
+  on('langchange', () => paintWeather());
 
   // deep link: #quiz
   if (location.hash === '#quiz') setTimeout(() => $('#quiz').scrollIntoView(), 300);

@@ -129,7 +129,7 @@ window.CONTENT = {
     'map.explore': 'Explore', 'map.add': 'Add to trip', 'map.fail': 'The map needs an internet connection to load tiles.',
     'check.done': 'done', 'check.all': 'All packed — have an amazing trip! 🎉',
     'dest.places': 'places', 'dest.place': 'place',
-    'quiz.q': ['Your perfect morning on holiday starts with…'],
+    'wx.now': 'Now', 'wx.trip': 'Your dates', 'wx.lastNov': 'Last November', 'wx.rainy': 'rainy days', 'wx.rain': 'rain chance', 'wx.by': 'Live weather & forecasts by Open-Meteo', 'wx.updated': 'updated', 'wx.soon': 'Forecast appears 16 days before your dates',
   },
   deJs: {
     'quiz.start': 'Test starten', 'quiz.next': 'Frage', 'quiz.of': 'von', 'quiz.again': 'Nochmal', 'quiz.route': 'Zur Route', 'quiz.share': 'Per WhatsApp teilen', 'quiz.picks': 'Drei Ziele für euch',
@@ -141,5 +141,6 @@ window.CONTENT = {
     'map.explore': 'Öffnen', 'map.add': 'Zur Reise', 'map.fail': 'Die Karte braucht Internet, um Kacheln zu laden.',
     'check.done': 'erledigt', 'check.all': 'Alles gepackt — gute Reise! 🎉',
     'dest.places': 'Orte', 'dest.place': 'Ort',
+    'wx.now': 'Jetzt', 'wx.trip': 'Eure Daten', 'wx.lastNov': 'Letzter November', 'wx.rainy': 'Regentage', 'wx.rain': 'Regenrisiko', 'wx.by': 'Live-Wetter & Prognosen von Open-Meteo', 'wx.updated': 'aktualisiert', 'wx.soon': 'Prognose erscheint 16 Tage vor euren Daten',
   },
 };

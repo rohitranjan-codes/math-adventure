@@ -9,16 +9,16 @@ window.TRIP = {
   photos: [],   // ids that have a real photo at img/<id>.jpg, e.g. ['goa', 'hampi']
 
   weather: [
-    { place: 'Bengaluru', temp: '18–27 °C', note: 'Mild, breezy, mostly dry. Light showers possible in the first week.', icon: '⛅', rating: 'great' },
-    { place: 'Goa', temp: '23–33 °C', note: 'Dry, sunny, sea calm — the season kicks off in November.', icon: '☀️', rating: 'great' },
-    { place: 'Munnar', temp: '12–22 °C', note: 'Cool, misty mornings. Some NE-monsoon showers in early November, clearing later.', icon: '🌫️', rating: 'good' },
-    { place: 'Kochi / Alleppey', temp: '24–31 °C', note: 'Warm and humid, occasional evening showers, backwaters full and green.', icon: '🌦️', rating: 'good' },
-    { place: 'Mysuru / Coorg', temp: '15–28 °C', note: 'Fresh, post-monsoon greenery, coffee harvest begins.', icon: '🌤️', rating: 'great' },
-    { place: 'Hampi', temp: '18–31 °C', note: 'Dry and clear — ideal for walking the ruins.', icon: '☀️', rating: 'great' },
-    { place: 'Hyderabad', temp: '18–30 °C', note: 'Dry, sunny, crisp evenings — great city weather.', icon: '☀️', rating: 'great' },
-    { place: 'Andaman Islands', temp: '24–30 °C', note: 'Post-monsoon calm seas and good visibility for diving.', icon: '🏝️', rating: 'great' },
-    { place: 'Delhi / Agra / Jaipur', temp: '12–28 °C', note: 'Ideal temperatures, but Delhi smog peaks in November.', icon: '🌤️', rating: 'good' },
-    { place: 'Pondicherry / Chennai', temp: '24–30 °C', note: 'Peak NE-monsoon rain in November. Better in January.', icon: '🌧️', rating: 'skip' },
+    { id: 'bengaluru', place: 'Bengaluru', temp: '18–27 °C', note: 'Mild, breezy, mostly dry. Light showers possible in the first week.', icon: '⛅', rating: 'great' },
+    { id: 'goa', place: 'Goa', temp: '23–33 °C', note: 'Dry, sunny, sea calm — the season kicks off in November.', icon: '☀️', rating: 'great' },
+    { id: 'munnar', place: 'Munnar', temp: '12–22 °C', note: 'Cool, misty mornings. Some NE-monsoon showers in early November, clearing later.', icon: '🌫️', rating: 'good' },
+    { id: 'kochi', place: 'Kochi / Alleppey', temp: '24–31 °C', note: 'Warm and humid, occasional evening showers, backwaters full and green.', icon: '🌦️', rating: 'good' },
+    { id: 'coorg', place: 'Mysuru / Coorg', temp: '15–28 °C', note: 'Fresh, post-monsoon greenery, coffee harvest begins.', icon: '🌤️', rating: 'great' },
+    { id: 'hampi', place: 'Hampi', temp: '18–31 °C', note: 'Dry and clear — ideal for walking the ruins.', icon: '☀️', rating: 'great' },
+    { id: 'hyderabad', place: 'Hyderabad', temp: '18–30 °C', note: 'Dry, sunny, crisp evenings — great city weather.', icon: '☀️', rating: 'great' },
+    { id: 'andaman', place: 'Andaman Islands', temp: '24–30 °C', note: 'Post-monsoon calm seas and good visibility for diving.', icon: '🏝️', rating: 'great' },
+    { id: 'goldentriangle', place: 'Delhi / Agra / Jaipur', temp: '12–28 °C', note: 'Ideal temperatures, but Delhi smog peaks in November.', icon: '🌤️', rating: 'good' },
+    { id: 'pondicherry', place: 'Pondicherry / Chennai', temp: '24–30 °C', note: 'Peak NE-monsoon rain in November. Better in January.', icon: '🌧️', rating: 'skip' },
   ],
 
   flights: [

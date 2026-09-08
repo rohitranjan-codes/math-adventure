@@ -84,6 +84,7 @@
       <span class="icon" style="animation-delay:${i * .3}s">${w.icon}</span>
       <b>${esc(w.place)}</b>
       <div class="temp">${esc(w.temp)}</div>
+      <div class="live" data-wx="${w.id}"></div>
       <p>${esc(w.note)}</p>
       <span class="badge ${w.rating}">${w.rating === 'great' ? 'Perfect' : w.rating === 'good' ? 'Good' : 'Skip in Nov'}</span>
     </div>`).join('');
@@ -176,6 +177,7 @@
       <div class="content">
         <h3>${esc(d.name)}</h3>
         <div class="tag">${esc(d.tag)} · 🌡 ${esc(d.weather)}</div>
+        <div class="live modal-live" data-wx="${d.id}"></div>
         <div class="chip-row" style="margin-top:10px"><span class="chip warm">🛫 From Bengaluru: ${esc(d.from)}</span><span class="chip">🛏 Suggested: ${esc(d.nights)}</span></div>
         <p class="intro">${esc(d.intro)}</p>
         <div class="cols">
