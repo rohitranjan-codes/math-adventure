@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="vendor/leaflet.css" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -17,14 +18,18 @@
 <nav class="nav" aria-label="Main">
   <a class="brand" href="#top"><span class="dot">✈</span> Namaste, November</a>
   <ul class="nav-links">
-    <li><a href="#flights">Flights</a></li>
-    <li><a href="#routes">Routes</a></li>
-    <li><a href="#destinations">Destinations</a></li>
-    <li><a href="#costs">Cost planner</a></li>
-    <li><a href="#safety">Safety</a></li>
-    <li><a href="#links">Links</a></li>
+    <li><a href="#flights" data-i18n="nav.flights">Flights</a></li>
+    <li><a href="#routes" data-i18n="nav.routes">Routes</a></li>
+    <li><a href="#map" data-i18n="nav.map">Map</a></li>
+    <li><a href="#destinations" data-i18n="nav.destinations">Destinations</a></li>
+    <li><a href="#food" data-i18n="nav.food">Food</a></li>
+    <li><a href="#builder" data-i18n="nav.builder">Build</a></li>
+    <li><a href="#costs" data-i18n="nav.costs">Costs</a></li>
+    <li><a href="#safety" data-i18n="nav.safety">Safety</a></li>
   </ul>
   <div class="nav-actions">
+    <button class="pill-btn" id="stampsBtn" title="Passport stamps">🛂 <span id="stampCount">0/24</span></button>
+    <button class="pill-btn" id="langBtn" aria-label="Sprache wechseln">DE</button>
     <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
     <button class="icon-btn burger" id="burger" aria-label="Menu">☰</button>
   </div>
@@ -36,18 +41,18 @@
   <div class="grid-bg"></div>
   <div class="container hero-grid">
     <div>
-      <span class="eyebrow reveal in"><span class="pulse"></span> Frankfurt · Zurich → Bengaluru · November</span>
-      <h1>Europe to South India,<br /><span class="accent">planned properly.</span></h1>
-      <p class="lead">A calm, safe and detailed plan for a group of friends: land in Bengaluru, then choose sun in Goa, tea hills in Munnar and Kerala's backwaters, the palaces and ruins of Karnataka — or go further to the Andamans, Hyderabad, Sri Lanka and beyond. Real costs, hotels, food and the links you actually need.</p>
+      <span class="eyebrow reveal in"><span class="pulse"></span> <span data-i18n="hero.eyebrow">Frankfurt · Zurich → Bengaluru · November</span></span>
+      <h1 data-i18n="hero.title">Europe to South India,<br /><span class="accent">planned properly.</span></h1>
+      <p class="lead" data-i18n="hero.lead">A calm, safe and detailed plan for a group of friends: land in Bengaluru, then choose sun in Goa, tea hills in Munnar and Kerala's backwaters, the palaces and ruins of Karnataka — or go further to the Andamans, Hyderabad, Sri Lanka and beyond. Real costs, hotels, food and the links you actually need.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#routes">See the itineraries ↓</a>
-        <a class="btn btn-ghost" href="#costs">💶 Estimate the cost</a>
+        <a class="btn btn-primary" href="#routes" data-i18n="hero.cta1">See the itineraries ↓</a>
+        <a class="btn btn-ghost" href="#builder" data-i18n="hero.cta2">🧳 Build your trip</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><b data-count="9" data-suffix=" h">0</b><span>Nonstop FRA → BLR</span></div>
-        <div class="stat"><b data-count="27" data-suffix=" °C">0</b><span>Bengaluru in November</span></div>
-        <div class="stat"><b data-count="22">0</b><span>Destinations from BLR</span></div>
-        <div class="stat"><b data-count="1250" data-suffix="+">0</b><span>€ per person from</span></div>
+        <div class="stat"><b data-count="9" data-suffix=" h">0</b><span data-i18n="hero.s1">Nonstop FRA → BLR</span></div>
+        <div class="stat"><b data-count="27" data-suffix=" °C">0</b><span data-i18n="hero.s2">Bengaluru in November</span></div>
+        <div class="stat"><b data-count="24">0</b><span data-i18n="hero.s3">Destinations from BLR</span></div>
+        <div class="stat"><b data-count="1250" data-suffix="+">0</b><span data-i18n="hero.s4">€ per person from</span></div>
       </div>
     </div>
 
@@ -78,8 +83,8 @@
         <g class="plane-2"><path d="M0-5 L1.5-1.5 L6 0 L1.5 1.5 L0 5 L-.7 1.5 L-4 .7 L-4-.7 L-.7-1.5 Z" /><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#pCOK" /></animateMotion></g>
       </svg>
       <div class="legend">
-        <span><i style="background:var(--accent)"></i> Long-haul ≈ 9 h</span>
-        <span><i style="background:var(--accent-2)"></i> Domestic ≈ 1 h</span>
+        <span><i style="background:var(--accent)"></i> <span data-i18n="hero.legend1">Long-haul ≈ 9 h</span></span>
+        <span><i style="background:var(--accent-2)"></i> <span data-i18n="hero.legend2">Domestic ≈ 1 h</span></span>
         <span>🕐 IST = CET + 4:30</span>
       </div>
     </div>
@@ -90,9 +95,9 @@
 <section id="weather" class="alt" style="padding-top:70px">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Why November</span>
-      <h2>The monsoon is gone, the crowds haven't arrived.</h2>
-      <p>South India dries out and cools down in November. Here's how each stop on the map feels — and the one region to leave for another trip.</p>
+      <span class="kicker" data-i18n="weather.kicker">Why November</span>
+      <h2 data-i18n="weather.h2">The monsoon is gone, the crowds haven't arrived.</h2>
+      <p data-i18n="weather.p">South India dries out and cools down in November. Here's how each stop on the map feels — and the one region to leave for another trip.</p>
     </div>
     <div class="weather-row" id="weatherRow"></div>
   </div>
@@ -102,14 +107,14 @@
 <section id="flights">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Getting there</span>
-      <h2>Frankfurt or Zurich to Bengaluru</h2>
-      <p>Lufthansa flies nonstop from Frankfurt. From Zurich you connect once — via Frankfurt, Munich or a Gulf hub. Fly in together, or meet at Kempegowda International Airport.</p>
+      <span class="kicker" data-i18n="flights.kicker">Getting there</span>
+      <h2 data-i18n="flights.h2">Frankfurt or Zurich to Bengaluru</h2>
+      <p data-i18n="flights.p">Lufthansa flies nonstop from Frankfurt. From Zurich you connect once — via Frankfurt, Munich or a Gulf hub. Fly in together, or meet at Kempegowda International Airport.</p>
     </div>
     <div class="flight-grid" id="flightGrid"></div>
 
     <div class="card reveal" style="margin-top:24px">
-      <h3 style="font-size:1.3rem;margin-bottom:10px">🛬 Arriving at Bengaluru (BLR)</h3>
+      <h3 style="font-size:1.3rem;margin-bottom:10px" data-i18n="flights.arrive">🛬 Arriving at Bengaluru (BLR)</h3>
       <div class="chip-row">
         <span class="chip">Immigration: e-Visa printout + return ticket</span>
         <span class="chip">SIM counters (Airtel / Jio) in arrivals</span>
@@ -122,23 +127,50 @@
 
     <div class="table-wrap reveal">
       <table>
-        <thead><tr><th>Onward connection</th><th>Time</th><th>Price pp</th><th>Carriers</th></tr></thead>
+        <thead><tr><th data-i18n="flights.th1">Onward connection</th><th data-i18n="flights.th2">Time</th><th data-i18n="flights.th3">Price pp</th><th data-i18n="flights.th4">Carriers</th></tr></thead>
         <tbody id="domesticBody"></tbody>
       </table>
     </div>
   </div>
 </section>
 
-<!-- ================= ROUTES ================= -->
-<section id="routes" class="alt">
+<!-- ================= QUIZ ================= -->
+<section id="quiz" class="alt">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Itineraries</span>
-      <h2>Three routes, one gateway.</h2>
-      <p>Every route starts with two easy days in Bengaluru to recover from the flight. Pick one, combine Goa and Kerala with the direct Goa → Kochi flight, or swap in any of the destinations below.</p>
+      <span class="kicker" data-i18n="quiz.kicker">A quick game</span>
+      <h2 data-i18n="quiz.h2">Which trip is you?</h2>
+      <p data-i18n="quiz.p">Five questions, thirty seconds. You get a route and three destinations at the end — share the result in the group chat and see who matches.</p>
+    </div>
+    <div class="quiz card reveal" id="quizBox"></div>
+  </div>
+</section>
+
+<!-- ================= ROUTES ================= -->
+<section id="routes">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="routes.kicker">Itineraries</span>
+      <h2 data-i18n="routes.h2">Three routes, one gateway.</h2>
+      <p data-i18n="routes.p">Every route starts with two easy days in Bengaluru to recover from the flight. Pick one, combine Goa and Kerala with the direct Goa → Kochi flight, or swap in any of the destinations below.</p>
     </div>
     <div class="tabs" id="routeTabs"></div>
     <div class="route-panel" id="routePanel"></div>
+  </div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section id="map" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="map.kicker">The map</span>
+      <h2 data-i18n="map.h2">Everything within reach of Bengaluru.</h2>
+      <p data-i18n="map.p">Hover a pin for travel time from BLR and cost per day; click to open the guide or add the place straight into your trip plan.</p>
+    </div>
+    <div id="mapWrap" class="reveal">
+      <div id="mapEl" role="region" aria-label="Map of destinations"></div>
+      <div class="map-foot"><div class="map-legend" id="mapLegend"></div><span id="mapNote"></span></div>
+    </div>
   </div>
 </section>
 
@@ -146,10 +178,11 @@
 <section id="destinations">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Destinations</span>
-      <h2>Where you'll actually go.</h2>
-      <p>Twenty-two places you can reach from Bengaluru — by a short flight, a fast train or a scenic drive. Filter by mood, then tap a card for things to do, what to eat, where to stay at three budgets, and how to get there.</p>
+      <span class="kicker" data-i18n="dest.kicker">Destinations</span>
+      <h2 data-i18n="dest.h2">Where you'll actually go.</h2>
+      <p data-i18n="dest.p">Twenty-four places you can reach from Bengaluru — by a short flight, a fast train or a scenic drive. Filter by mood, then tap a card for things to do, what to eat, where to stay at three budgets, and how to get there.</p>
     </div>
+    <div class="passport" id="passport"></div>
     <div class="dest-toolbar">
       <div class="filters" id="destFilters"></div>
       <span id="destCount"></span>
@@ -158,64 +191,125 @@
   </div>
 </section>
 
-<!-- ================= COSTS ================= -->
-<section id="costs" class="alt">
+<!-- ================= FOOD ================= -->
+<section id="food" class="alt">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Cost planner</span>
-      <h2>What will it cost?</h2>
-      <p>Move the sliders. Estimates are per person, include the Europe flights, and assume double rooms shared by two. Treat them as a planning range, not a quote.</p>
+      <span class="kicker" data-i18n="food.kicker">Eat this</span>
+      <h2 data-i18n="food.h2">The dishes worth flying for.</h2>
+      <p data-i18n="food.p">South India eats differently from the north: rice, coconut, tamarind, seafood and coffee. Sixteen dishes with a spice rating and where each one is best.</p>
     </div>
-    <div class="cost-layout">
-      <div class="card reveal">
-        <div class="field">
-          <label for="people">Travellers <output id="peopleOut"></output></label>
-          <input type="range" id="people" min="1" max="12" step="1" />
+    <div class="food-grid" id="foodGrid"></div>
+  </div>
+</section>
+
+<!-- ================= BUILDER ================= -->
+<section id="builder">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="builder.kicker">Your trip</span>
+      <h2 data-i18n="builder.h2">Build your own plan.</h2>
+      <p data-i18n="builder.p">Tap or drag destinations, set nights, reorder. The page works out days, transfers and cost. Share the link in the group — everyone can build their version and compare.</p>
+    </div>
+    <div class="builder-layout">
+      <aside class="card builder-pool reveal">
+        <h3 data-i18n="builder.pool">Add a stop</h3>
+        <div class="pool-filters" id="poolFilters"></div>
+        <div class="pool" id="builderPool"></div>
+      </aside>
+      <div class="builder-main reveal" data-delay="2">
+        <div class="presets"><span data-i18n="builder.presets">Load a template:</span><div id="builderPresets"></div></div>
+        <div class="timeline-builder" id="builderTimeline"></div>
+        <div class="result builder-summary" id="builderSummary"></div>
+        <div class="builder-actions">
+          <button class="btn btn-primary" id="shareWa">💬 <span data-i18n="builder.share">Share on WhatsApp</span></button>
+          <button class="btn btn-ghost" id="copyLink">🔗 <span data-i18n="builder.copy">Copy link</span></button>
+          <button class="btn btn-ghost" id="printPlan">🖨️ <span data-i18n="builder.print">Print / PDF</span></button>
+          <button class="btn btn-ghost" id="clearPlan">↺ <span data-i18n="builder.clear">Reset</span></button>
         </div>
-        <div class="field">
-          <label for="days">Trip length <output id="daysOut"></output></label>
-          <input type="range" id="days" min="7" max="21" step="1" />
-        </div>
-        <div class="field">
-          <label>Travel style</label>
-          <div class="seg" id="styleSeg"></div>
-          <p id="styleNote" style="margin-top:10px;font-size:.85rem;color:var(--muted)"></p>
-        </div>
-        <div class="field">
-          <label>Departure</label>
-          <div class="seg" id="originSeg"></div>
-        </div>
-        <div class="field" style="margin-bottom:0">
-          <label>Route</label>
-          <div class="seg" id="routeSeg"></div>
-        </div>
-      </div>
-      <div class="result reveal" data-delay="2">
-        <div class="currency-toggle" id="currencyToggle"><button data-c="EUR">EUR</button><button data-c="INR">INR</button></div>
-        <div class="label">Estimated total per person</div>
-        <div class="big" id="perPerson">€0</div>
-        <div id="perDay" style="opacity:.75;font-weight:700"></div>
-        <div class="group-total"><span class="label">Whole group</span><b id="groupTotal">€0</b></div>
-        <div class="breakdown" id="breakdown"></div>
-        <p class="fine">Includes a 10 % buffer. Rate used: €1 ≈ ₹<span id="rate"></span>. Flights priced for November departures booked 2–4 months ahead; luxury assumes business class.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= SAFETY ================= -->
-<section id="safety">
+<!-- ================= COSTS ================= -->
+<section id="costs" class="alt">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Safe & smooth</span>
-      <h2>Travel like you've been before.</h2>
-      <p>South India is welcoming and well organised for visitors. These are the few things that make the difference between a good trip and a great one.</p>
+      <span class="kicker" data-i18n="costs.kicker">Cost planner</span>
+      <h2 data-i18n="costs.h2">What will it cost?</h2>
+      <p data-i18n="costs.p">Move the sliders. Estimates are per person, include the Europe flights, and assume double rooms shared by two. Treat them as a planning range, not a quote.</p>
+    </div>
+    <div class="cost-layout">
+      <div class="card reveal">
+        <div class="field">
+          <label for="people"><span data-i18n="label.travellers">Travellers</span> <output id="peopleOut"></output></label>
+          <input type="range" id="people" min="1" max="12" step="1" />
+        </div>
+        <div class="field">
+          <label for="days"><span data-i18n="label.length">Trip length</span> <output id="daysOut"></output></label>
+          <input type="range" id="days" min="7" max="21" step="1" />
+        </div>
+        <div class="field">
+          <label data-i18n="label.style">Travel style</label>
+          <div class="seg" id="styleSeg"></div>
+          <p id="styleNote" style="margin-top:10px;font-size:.85rem;color:var(--muted)"></p>
+        </div>
+        <div class="field">
+          <label data-i18n="label.departure">Departure</label>
+          <div class="seg" id="originSeg"></div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label data-i18n="label.route">Route</label>
+          <div class="seg" id="routeSeg"></div>
+        </div>
+      </div>
+      <div class="result reveal" data-delay="2">
+        <div class="currency-toggle" id="currencyToggle"><button data-c="EUR">EUR</button><button data-c="INR">INR</button></div>
+        <div class="label" data-i18n="result.label">Estimated total per person</div>
+        <div class="big" id="perPerson">€0</div>
+        <div id="perDay" style="opacity:.75;font-weight:700"></div>
+        <div class="group-total"><span class="label" data-i18n="result.group">Whole group</span><b id="groupTotal">€0</b></div>
+        <div class="breakdown" id="breakdown"></div>
+        <p class="fine">Includes a 10 % buffer. Rate: €1 ≈ ₹<span id="rate"></span> (<span id="rateLabel"></span>). Flights priced for November departures booked 2–4 months ahead; luxury assumes business class.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DATES ================= -->
+<section id="dates">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="dates.kicker">Your dates</span>
+      <h2 data-i18n="dates.h2">Countdown, festivals & packing.</h2>
+      <p data-i18n="dates.p">Pick the departure date. The page counts down, shows the festivals that fall inside your trip, and writes a packing list from the plan you built above.</p>
+    </div>
+    <div class="dates-layout">
+      <div class="card date-card reveal">
+        <label class="small-label" for="tripDate" data-i18n="dates.label">Departure date</label>
+        <input type="date" id="tripDate" min="2026-10-01" max="2027-03-31" />
+        <div class="countdown" id="countdown"></div>
+      </div>
+      <div class="card reveal" data-delay="2"><h3 class="small" data-i18n="dates.festivals">🎆 Festivals during your trip</h3><div id="festivalList"></div></div>
+      <div class="card reveal" data-delay="3"><h3 class="small" data-i18n="dates.packing">🎒 Your packing list</h3><div class="packing" id="packingList"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SAFETY ================= -->
+<section id="safety" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="safety.kicker">Safe & smooth</span>
+      <h2 data-i18n="safety.h2">Travel like you've been before.</h2>
+      <p data-i18n="safety.p">South India is welcoming and well organised for visitors. These are the few things that make the difference between a good trip and a great one.</p>
     </div>
     <div class="safety-grid" id="safetyGrid"></div>
 
     <div class="checklist reveal">
-      <h3>✅ Pre-departure checklist</h3>
-      <p class="sub">Ticks are saved on this device, so the group organiser can track progress. <span id="checkCount"></span></p>
+      <h3 data-i18n="check.h3">✅ Pre-departure checklist</h3>
+      <p class="sub"><span data-i18n="check.sub">Ticks are saved on this device, so the group organiser can track progress.</span> <span id="checkCount"></span></p>
       <div class="check-progress"><div id="checkFill"></div></div>
       <ul id="checklist">
         <li><label><input type="checkbox" value="visa" /><span>Indian e-Visa approved &amp; printed (apply ≥ 7 days before)</span></label></li>
@@ -240,12 +334,12 @@
 </section>
 
 <!-- ================= LINKS ================= -->
-<section id="links" class="alt">
+<section id="links">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Useful links</span>
-      <h2>Everything you'll need to book.</h2>
-      <p>Only official or widely trusted services. Book Indian domestic flights and trains on their home sites for the best prices.</p>
+      <span class="kicker" data-i18n="links.kicker">Useful links</span>
+      <h2 data-i18n="links.h2">Everything you'll need to book.</h2>
+      <p data-i18n="links.p">Only official or widely trusted services. Book Indian domestic flights and trains on their home sites for the best prices.</p>
     </div>
     <div class="links-grid" id="linksGrid"></div>
   </div>
@@ -254,7 +348,7 @@
 <footer>
   <div class="container row">
     <span>✈ Namaste, November · Europe → South India travel planner · <span id="year"></span></span>
-    <span>Prices are approximate planning estimates in EUR — verify before booking. Not affiliated with any airline or hotel.</span>
+    <span data-i18n="footer.note">Prices are approximate planning estimates in EUR — verify before booking. Not affiliated with any airline or hotel.</span>
   </div>
 </footer>
 
@@ -265,7 +359,13 @@
   <div class="sheet"></div>
 </div>
 
+<div id="printArea"></div>
+
 <script src="data.js"></script>
+<script src="content.js"></script>
+<script src="illustrations.js"></script>
+<script src="vendor/leaflet.js"></script>
 <script src="app.js"></script>
+<script src="features.js"></script>
 </body>
 </html>

@@ -11,6 +11,26 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* ignore */ } },
   };
 
+  /* ---------- i18n ---------- */
+  const C = window.CONTENT || { de: {}, en: {}, deJs: {} };
+  const LANG = { cur: store.get('lang', 'en') };
+  const t = (k) => (LANG.cur === 'de' ? (C.deJs[k] ?? C.en[k]) : C.en[k]) ?? k;
+  function applyLang() {
+    document.documentElement.lang = LANG.cur;
+    $$('[data-i18n]').forEach((el) => {
+      const k = el.dataset.i18n;
+      if (el.dataset.en == null) el.dataset.en = el.innerHTML;
+      el.innerHTML = LANG.cur === 'de' && C.de[k] ? C.de[k] : el.dataset.en;
+    });
+    Object.entries(TYPES).forEach(([k, v]) => { v.label = LANG.cur === 'de' ? v.de : v.en; });
+    dispatchEvent(new CustomEvent('langchange'));
+  }
+  const TYPES = {
+    all: { en: 'All', de: 'Alle', icon: '🧭' }, beach: { en: 'Beaches', de: 'Strände', icon: '🏖️' }, hills: { en: 'Hills & tea', de: 'Berge & Tee', icon: '🍃' },
+    culture: { en: 'Culture & heritage', de: 'Kultur & Erbe', icon: '🏛️' }, wildlife: { en: 'Wildlife', de: 'Wildtiere', icon: '🐘' }, city: { en: 'Cities', de: 'Städte', icon: '🏙️' }, far: { en: 'Further afield in India', de: 'Weiter weg in Indien', icon: '🧳' },
+  };
+  Object.values(TYPES).forEach((v) => { v.label = LANG.cur === 'de' ? v.de : v.en; });
+
   /* ---------- Theme ---------- */
   const root = document.documentElement;
   const applyTheme = (t) => { root.dataset.theme = t; $('#themeBtn').textContent = t === 'dark' ? '☀️' : '🌙'; };
@@ -117,18 +137,20 @@
 
   /* ---------- Destinations ---------- */
   const grid = $('#destGrid');
-  const TYPES = { all: { label: 'All', icon: '🧭' }, beach: { label: 'Beaches', icon: '🏖️' }, hills: { label: 'Hills & tea', icon: '🍃' }, culture: { label: 'Culture & heritage', icon: '🏛️' }, wildlife: { label: 'Wildlife', icon: '🐘' }, city: { label: 'Cities', icon: '🏙️' }, beyond: { label: 'Beyond South India', icon: '🌏' } };
   const filters = $('#destFilters');
-  filters.innerHTML = Object.entries(TYPES).map(([k, v]) => {
-    const n = k === 'all' ? T.destinations.length : T.destinations.filter((d) => d.type === k).length;
-    return `<button class="filter" data-type="${k}">${v.icon} ${esc(v.label)} <b>${n}</b></button>`;
-  }).join('');
-  function renderDests(type) {
-    $$('.filter', filters).forEach((b) => b.classList.toggle('active', b.dataset.type === type));
+  let destType = store.get('destType', 'all');
+  function renderFilters() {
+    filters.innerHTML = Object.entries(TYPES).map(([k, v]) => {
+      const n = k === 'all' ? T.destinations.length : T.destinations.filter((d) => d.type === k).length;
+      return `<button class="filter ${destType === k ? 'active' : ''}" data-type="${k}">${v.icon} ${esc(v.label)} <b>${n}</b></button>`;
+    }).join('');
+  }
+  function renderDests(type = destType) {
+    destType = type; renderFilters();
     const list = T.destinations.filter((d) => type === 'all' || d.type === type);
     grid.innerHTML = list.map((d, i) => `
       <article class="dest" style="--i:${i}" data-id="${d.id}" tabindex="0" role="button" aria-label="Open ${esc(d.name)}">
-        <div class="cover" style="background:${d.hue}"><span>${d.emoji}</span><em class="type-pill">${TYPES[d.type].icon} ${esc(TYPES[d.type].label)}</em></div>
+        ${window.coverHTML(d, `<em class="type-pill">${TYPES[d.type].icon} ${esc(TYPES[d.type].label)}</em>`)}
         <div class="body">
           <h3>${esc(d.name)}</h3>
           <div class="tag">${esc(d.tag)}</div>
@@ -140,16 +162,17 @@
           <span class="more">Explore</span>
         </div>
       </article>`).join('');
-    $('#destCount').textContent = list.length + (list.length === 1 ? ' place' : ' places');
+    $('#destCount').textContent = list.length + ' ' + (list.length === 1 ? t('dest.place') : t('dest.places'));
   }
   filters.addEventListener('click', (e) => { const b = e.target.closest('.filter'); if (b) { renderDests(b.dataset.type); store.set('destType', b.dataset.type); } });
-  renderDests(store.get('destType', 'all'));
+  renderDests();
+  addEventListener('langchange', () => renderDests());
   const modal = $('#modal');
   function openDest(id) {
     const d = T.destinations.find((x) => x.id === id); if (!d) return;
     $('.sheet', modal).innerHTML = `
       <button class="close" aria-label="Close">✕</button>
-      <div class="cover" style="background:${d.hue}"><span>${d.emoji}</span></div>
+      ${window.coverHTML(d)}
       <div class="content">
         <h3>${esc(d.name)}</h3>
         <div class="tag">${esc(d.tag)} · 🌡 ${esc(d.weather)}</div>
@@ -176,6 +199,7 @@
       </div>`;
     modal.classList.add('open'); document.body.style.overflow = 'hidden';
     $('.close', modal).addEventListener('click', closeModal);
+    dispatchEvent(new CustomEvent('destopened', { detail: d.id }));
   }
   function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
   grid.addEventListener('click', (e) => { const c = e.target.closest('.dest'); if (c) openDest(c.dataset.id); });
@@ -240,6 +264,13 @@
     requestAnimationFrame(() => $$('.fill', bd).forEach((f) => { f.style.width = f.dataset.w + '%'; }));
     $('#styleNote').textContent = ({ budget: 'Hostels & homestays, trains and local buses, street food and thalis.', comfort: '3–4★ hotels and boutique stays, domestic flights, private car in the hills, good restaurants.', luxury: 'Business-class flights, 5★ heritage hotels and resorts, private drivers everywhere.' })[state.style];
     store.set('cost', state);
+    dispatchEvent(new CustomEvent('costchange'));
+  }
+  function syncInputs() {
+    peopleEl.value = state.people; daysEl.value = state.days;
+    $$('#styleSeg button').forEach((b) => b.classList.toggle('active', b.dataset.v === state.style));
+    $$('#originSeg button').forEach((b) => b.classList.toggle('active', b.dataset.v === state.origin));
+    $$('#routeSeg button').forEach((b) => b.classList.toggle('active', b.dataset.v === state.route));
   }
   calc();
 
@@ -256,8 +287,9 @@
   const checks = store.get('checks', {});
   const list = $('#checklist');
   const items = $$('input', list);
-  const updateProgress = () => { const done = items.filter((i) => i.checked).length; $('#checkFill').style.width = (done / items.length) * 100 + '%'; $('#checkCount').textContent = `${done} / ${items.length} done`; };
-  items.forEach((i) => { i.checked = !!checks[i.value]; i.addEventListener('change', () => { checks[i.value] = i.checked; store.set('checks', checks); updateProgress(); }); });
+  let wasDone = false;
+  const updateProgress = () => { const done = items.filter((i) => i.checked).length; $('#checkFill').style.width = (done / items.length) * 100 + '%'; $('#checkCount').textContent = done === items.length ? t('check.all') : `${done} / ${items.length} ${t('check.done')}`; if (done === items.length && !wasDone && items.some((i) => i.dataset.touched)) dispatchEvent(new CustomEvent('checklistdone')); wasDone = done === items.length; };
+  items.forEach((i) => { i.checked = !!checks[i.value]; i.addEventListener('change', () => { i.dataset.touched = '1'; checks[i.value] = i.checked; store.set('checks', checks); updateProgress(); }); });
   updateProgress();
 
   /* ---------- Links ---------- */
@@ -283,4 +315,7 @@
 
   $('#year').textContent = new Date().getFullYear();
   $('#rate').textContent = T.eurToInr;
+
+  window.APP = { $, $$, esc, store, t, LANG, applyLang, TYPES, openDest, closeModal, setRoute, renderRoute, calc, syncInputs, state, M, fmtNum };
+  if (LANG.cur === 'de') applyLang();
 })();

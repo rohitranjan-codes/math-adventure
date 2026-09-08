@@ -1,0 +1,145 @@
+/* ------------------------------------------------------------------
+   Engagement content: food, festivals, packing rules, quiz, i18n.
+   ------------------------------------------------------------------ */
+window.CONTENT = {
+  food: [
+    { name: 'Masala dosa', emoji: '🥞', region: 'Bengaluru', veg: true, spice: 1, price: '€1–3', text: 'Crisp fermented rice crêpe with spiced potato. Breakfast of the south — eat it at Vidyarthi Bhavan or MTR with filter coffee.' },
+    { name: 'Filter coffee', emoji: '☕', region: 'Karnataka', veg: true, spice: 0, price: '€0.30', text: 'Chicory-blended, brewed in a steel filter and poured from a height to froth. Served in a tumbler-and-dabara set.' },
+    { name: 'Goan fish thali', emoji: '🐟', region: 'Goa', veg: false, spice: 2, price: '€3–6', text: 'Fried kingfish, prawn curry, rice, kokum drink and pickles on one plate. Lunch-only at Ritz Classic, Anand or Vinayak.' },
+    { name: 'Pork vindaloo', emoji: '🍖', region: 'Goa', veg: false, spice: 3, price: '€5–8', text: 'Portuguese "vinha d\'alhos" turned Goan — vinegar, garlic and Kashmiri chilli. Eat it with poi bread at Viva Panjim.' },
+    { name: 'Kerala sadya', emoji: '🍃', region: 'Kerala', veg: true, spice: 1, price: '€2–5', text: 'Twenty-plus dishes on a banana leaf: avial, sambar, thoran, payasam. Eat with your right hand, banana at the end.' },
+    { name: 'Appam & stew', emoji: '🥥', region: 'Kerala', veg: true, spice: 0, price: '€2–4', text: 'Lacy rice-coconut pancake with a soft centre, dipped in a mild coconut stew. The Munnar breakfast.' },
+    { name: 'Karimeen pollichathu', emoji: '🌿', region: 'Backwaters', veg: false, spice: 2, price: '€6–10', text: 'Pearl-spot fish marinated in spices, wrapped in banana leaf and grilled. The houseboat classic.' },
+    { name: 'Hyderabadi biryani', emoji: '🍛', region: 'Hyderabad', veg: false, spice: 2, price: '€3–6', text: 'Slow-cooked "dum" rice with marinated meat, saffron and fried onions. Paradise, Shah Ghouse or Bawarchi.' },
+    { name: 'Mysore pak', emoji: '🍬', region: 'Mysuru', veg: true, spice: 0, price: '€1', text: 'Ghee, gram flour and sugar — melts in the mouth. Guru Sweets by Devaraja Market invented it for the Maharaja.' },
+    { name: 'Benne dosa', emoji: '🧈', region: 'Davanagere / Bengaluru', veg: true, spice: 1, price: '€1–2', text: 'A softer, butter-drenched dosa from Davanagere. CTR in Malleshwaram is the Bengaluru pilgrimage.' },
+    { name: 'Chettinad pepper chicken', emoji: '🌶️', region: 'Tamil Nadu', veg: false, spice: 3, price: '€4–7', text: 'Black pepper, star anise and stone-flower — the boldest spice blend in the south, from the Chettiar merchant kitchens.' },
+    { name: 'Pandi curry', emoji: '🍲', region: 'Coorg', veg: false, spice: 2, price: '€4–6', text: 'Kodava pork curry darkened with kachampuli vinegar, eaten with kadambuttu rice dumplings at a coffee estate.' },
+    { name: 'Bisi bele bath', emoji: '🍚', region: 'Karnataka', veg: true, spice: 2, price: '€1–3', text: 'Hot lentil-rice with vegetables, tamarind and a signature spice powder. Comfort food in every Bengaluru canteen.' },
+    { name: 'Jigarthanda', emoji: '🥤', region: 'Madurai', veg: true, spice: 0, price: '€0.50', text: '"Heart-cooler": almond gum, milk, sarsaparilla syrup and ice cream. Famous Jigarthanda shop near the temple.' },
+    { name: 'Vada pav', emoji: '🍔', region: 'Mumbai', veg: true, spice: 2, price: '€0.20', text: 'Spiced potato fritter in a bun with garlic chutney. Mumbai\'s burger — try Ashok Vada Pav in Dadar.' },
+    { name: 'Laal maas', emoji: '🔥', region: 'Rajasthan', veg: false, spice: 3, price: '€6–10', text: 'Fiery mutton curry with Mathania chillies. Balance it with a makhaniya lassi in Jodhpur.' },
+  ],
+
+  /* November festival calendar (2026 dates; "approx" where the official date is announced late) */
+  festivals: [
+    { date: '2026-11-01', name: 'Karnataka Rajyotsava', where: 'Bengaluru & all Karnataka', text: 'State formation day: flags, processions, cultural shows on MG Road. Some shops close.', approx: false },
+    { date: '2026-11-05', name: 'Hampi Utsav', where: 'Hampi', text: 'Three days of dance, music and light shows among the ruins. Usually early November — dates announced late, check.', approx: true },
+    { date: '2026-11-08', name: 'Diwali / Deepavali', where: 'Everywhere', text: 'Festival of lights: oil lamps, sweets, fireworks. Some closures on the day; book hotels early for the week.', approx: false },
+    { date: '2026-11-14', name: 'Children\'s Day', where: 'Everywhere', text: 'Not a holiday — but schools are on trips, so monuments are busier.', approx: false },
+    { date: '2026-11-20', name: 'IFFI — International Film Festival of India', where: 'Panaji, Goa', text: 'Screenings, open-air shows and a festive Panaji for eight days (20–28 Nov).', approx: true },
+    { date: '2026-11-21', name: 'Pushkar Camel Fair', where: 'Pushkar, Rajasthan', text: 'Camel trading, folk music and a full-moon fair. Peaks on Kartik Purnima (24 Nov).', approx: true },
+    { date: '2026-11-24', name: 'Dev Deepawali & Guru Nanak Jayanti', where: 'Varanasi · Gurdwaras', text: 'A million lamps light the Varanasi ghats on Kartik Purnima. Sikh gurdwaras hold langar feasts.', approx: false },
+    { date: '2026-11-28', name: 'Arpora Saturday Night Market opens', where: 'Arpora, Goa', text: 'The big night market season starts around late November — music, stalls, food.', approx: true },
+    { date: '2026-12-01', name: 'Kochi-Muziris Biennale', where: 'Fort Kochi', text: 'India\'s biggest contemporary-art event, December to March in heritage warehouses.', approx: true },
+  ],
+
+  /* Packing rules — base list plus additions triggered by destination type or id */
+  packing: {
+    base: ['Passport + printed e-Visa + copies', 'Light cotton clothes, one smart outfit', 'Universal adapter (Type C/D/M), power bank', 'Sunscreen, sunglasses, hat', 'Mosquito repellent (DEET or picaridin)', 'ORS sachets, anti-diarrhoeal, paracetamol', 'Hand sanitiser & tissues', 'Reusable water bottle with filter', 'Small day-pack, padlock for lockers', 'Wise/Revolut card + backup card + some cash'],
+    hills: ['Fleece or light down jacket (mornings 10–15 °C)', 'Rain jacket (NE-monsoon showers)', 'Walking shoes with grip', 'Motion-sickness tablets for ghat roads'],
+    beach: ['Reef-safe sunscreen, rash vest', 'Sarong / cover-up for walking to shacks', 'Flip-flops + water shoes', 'Dry bag for boat trips'],
+    wildlife: ['Muted-colour clothes (khaki, olive)', 'Binoculars', 'Warm layer for 06:00 safaris', 'Zoom lens or phone clip-on'],
+    culture: ['Temple outfit: shoulders & knees covered', 'Socks for hot temple floors', 'Scarf / headcover for gurdwaras', 'Slip-on shoes (you remove them a lot)'],
+    city: ['Comfortable trainers for long walks', 'Light scarf against evening AC', 'Small umbrella'],
+    far: ['Warm layer for North Indian mornings (10 °C)', 'N95 mask for Delhi air quality', 'Extra memory cards — you will need them'],
+    andaman: ['Snorkel mask (rental hygiene is patchy)', 'Waterproof phone pouch', 'Seasickness tablets for ferries'],
+    kochi: ['Light long sleeves for houseboat mosquitoes'],
+    rishikesh: ['Yoga clothes', 'Quick-dry towel for rafting'],
+  },
+
+  quiz: {
+    questions: [
+      { q: 'Your perfect morning on holiday starts with…', a: [
+        { t: '🌊 Waves and a walk on the sand', s: { beach: 3 } },
+        { t: '🌫️ Mist over hills and a cup of tea', s: { hills: 3 } },
+        { t: '🛕 A temple bell and a busy market', s: { culture: 3 } },
+        { t: '🐘 A 6 am jeep into the forest', s: { wildlife: 3 } } ] },
+      { q: 'How do you feel about long drives?', a: [
+        { t: '🚗 Love them — windows down, stops for chai', s: { hills: 2, wildlife: 2 } },
+        { t: '✈️ Prefer a one-hour flight and done', s: { beach: 2, city: 2 } },
+        { t: '🚆 Trains, please — I want to watch India go by', s: { culture: 2, far: 1 } },
+        { t: '🛶 As long as there is a boat at the end', s: { hills: 1, beach: 1 } } ] },
+      { q: 'Pick your dinner.', a: [
+        { t: '🐟 Grilled fish at a beach shack', s: { beach: 3 } },
+        { t: '🍃 A 20-dish sadya on a banana leaf', s: { hills: 2, culture: 1 } },
+        { t: '🍛 Biryani or a royal thali in an old city', s: { culture: 2, city: 2, far: 1 } },
+        { t: '☕ Estate dinner by a fire, coffee after', s: { hills: 2, wildlife: 1 } } ] },
+      { q: 'Your group\'s energy level?', a: [
+        { t: '😎 Slow — hammocks and one plan a day', s: { beach: 3 } },
+        { t: '🥾 Active — hikes, sunrise points, safaris', s: { hills: 2, wildlife: 2 } },
+        { t: '📸 Curious — ruins, palaces, stories', s: { culture: 3 } },
+        { t: '🎉 Big — nightlife, markets, festivals', s: { city: 2, beach: 1, far: 1 } } ] },
+      { q: 'What should the photos look like?', a: [
+        { t: '🌅 Palm sunsets and turquoise water', s: { beach: 3 } },
+        { t: '🍵 Endless green tea terraces', s: { hills: 3 } },
+        { t: '🪨 Boulders, carved stone, golden light', s: { culture: 3 } },
+        { t: '🏯 Forts, deserts and the Taj at dawn', s: { far: 3, culture: 1 } } ] },
+    ],
+    results: {
+      beach:    { route: 'goa',      title: 'The Beach Soul', text: 'You want warmth, salt water and slow days. Goa is your route, with Gokarna or the Andamans if you have extra time.', picks: ['goa', 'gokarna', 'andaman'] },
+      hills:    { route: 'kerala',   title: 'The Hill Wanderer', text: 'Cool air, tea estates and a houseboat night. Take the Tea Hills & Backwaters route, or swap in Coorg and Wayanad.', picks: ['munnar', 'coorg', 'wayanad'] },
+      culture:  { route: 'heritage', title: 'The Heritage Hunter', text: 'Palaces, ruins and living temples. The Heritage & Coffee loop fits, with Hampi as the highlight.', picks: ['hampi', 'mysuru', 'madurai'] },
+      wildlife: { route: 'kerala',   title: 'The Wild One', text: 'Dawn safaris and forest lodges. Build Kabini into the Heritage loop, or Thekkady into the Kerala route.', picks: ['kabini', 'thekkady', 'wayanad'] },
+      city:     { route: 'goa',      title: 'The City Explorer', text: 'Food, markets, nightlife. Do Bengaluru properly, add Hyderabad or Mumbai, then finish on a Goa beach.', picks: ['hyderabad', 'mumbai', 'goa'] },
+      far:      { route: 'heritage', title: 'The Grand Tourist', text: 'You have time and want the icons. Fly north for the Golden Triangle or Rajasthan after a South India start.', picks: ['goldentriangle', 'rajasthan', 'varanasi'] },
+    },
+  },
+
+  /* German UI strings. Static HTML uses data-i18n keys; JS uses t('key'). */
+  de: {
+    'nav.flights': 'Flüge', 'nav.routes': 'Routen', 'nav.map': 'Karte', 'nav.destinations': 'Ziele', 'nav.food': 'Essen', 'nav.builder': 'Planen', 'nav.costs': 'Kosten', 'nav.safety': 'Sicherheit', 'nav.links': 'Links',
+    'hero.eyebrow': 'Frankfurt · Zürich → Bengaluru · November',
+    'hero.title': 'Europa nach Südindien,<br /><span class="accent">richtig geplant.</span>',
+    'hero.lead': 'Ein ruhiger, sicherer und detaillierter Plan für eine Gruppe von Freunden: Landung in Bengaluru, dann Sonne in Goa, Teehügel in Munnar und Keralas Backwaters, Paläste und Ruinen in Karnataka — oder weiter in den Norden. Echte Kosten, Hotels, Essen und die Links, die ihr wirklich braucht.',
+    'hero.cta1': 'Zu den Routen ↓', 'hero.cta2': '💶 Kosten schätzen',
+    'hero.s1': 'Nonstop FRA → BLR', 'hero.s2': 'Bengaluru im November', 'hero.s3': 'Ziele ab BLR', 'hero.s4': '€ pro Person ab',
+    'hero.legend1': 'Langstrecke ≈ 9 h', 'hero.legend2': 'Inland ≈ 1 h',
+    'weather.kicker': 'Warum November', 'weather.h2': 'Der Monsun ist vorbei, die Massen kommen erst noch.', 'weather.p': 'Südindien trocknet ab und kühlt sich im November ab. So fühlt sich jeder Stopp auf der Karte an — und welche Region ihr lieber für eine andere Reise aufhebt.',
+    'flights.kicker': 'Anreise', 'flights.h2': 'Frankfurt oder Zürich nach Bengaluru', 'flights.p': 'Lufthansa fliegt nonstop ab Frankfurt. Ab Zürich gibt es einen Umstieg — via Frankfurt, München oder einen Golf-Hub. Gemeinsam fliegen oder am Kempegowda International Airport treffen.',
+    'flights.arrive': '🛬 Ankunft in Bengaluru (BLR)',
+    'flights.th1': 'Weiterreise', 'flights.th2': 'Dauer', 'flights.th3': 'Preis p. P.', 'flights.th4': 'Anbieter',
+    'quiz.kicker': 'Kleiner Test', 'quiz.h2': 'Welche Reise passt zu euch?', 'quiz.p': 'Fünf Fragen, dreißig Sekunden. Am Ende bekommt ihr eine Route und drei Ziele — teilt das Ergebnis in der WhatsApp-Gruppe.',
+    'routes.kicker': 'Reisepläne', 'routes.h2': 'Drei Routen, ein Tor.', 'routes.p': 'Jede Route beginnt mit zwei ruhigen Tagen in Bengaluru, um den Flug zu verdauen. Wählt eine, kombiniert Goa und Kerala über den Direktflug Goa → Kochi, oder tauscht Ziele aus der Liste unten ein.',
+    'map.kicker': 'Karte', 'map.h2': 'Alles, was von Bengaluru aus erreichbar ist.', 'map.p': 'Fahrt über die Pins: Reisezeit ab BLR, Kosten pro Tag und ein Klick, um das Ziel zu öffnen oder zur Reise hinzuzufügen.',
+    'dest.kicker': 'Ziele', 'dest.h2': 'Wohin ihr wirklich fahrt.', 'dest.p': 'Vierundzwanzig Orte, die ihr von Bengaluru erreicht — per Kurzflug, Schnellzug oder Panoramastraße. Nach Stimmung filtern, dann auf eine Karte tippen: Aktivitäten, Essen, Hotels in drei Preisklassen und Anreise.',
+    'food.kicker': 'Essen', 'food.h2': 'Das müsst ihr probieren.', 'food.p': 'Südindien isst anders als der Norden: Reis, Kokos, Tamarinde, Meeresfrüchte und Kaffee. Sechzehn Gerichte, mit Schärfegrad und wo sie am besten sind.',
+    'builder.kicker': 'Eure Reise', 'builder.h2': 'Baut euren eigenen Plan.', 'builder.p': 'Ziele antippen oder ziehen, Nächte anpassen, Reihenfolge ändern. Die Seite rechnet Tage, Transfers und Kosten aus. Teilt den Link in der Gruppe — jeder kann seine Version bauen.',
+    'costs.kicker': 'Kostenplaner', 'costs.h2': 'Was kostet das?', 'costs.p': 'Schiebt die Regler. Schätzungen pro Person, inklusive Europaflüge, Doppelzimmer zu zweit. Eine Planungsspanne, kein Angebot.',
+    'dates.kicker': 'Eure Daten', 'dates.h2': 'Countdown, Feste & Packliste.', 'dates.p': 'Wählt das Abflugdatum: Die Seite zählt herunter, zeigt Feste während eurer Reise und erstellt eine Packliste aus eurem Plan.',
+    'safety.kicker': 'Sicher & entspannt', 'safety.h2': 'Reist, als wärt ihr schon mal da gewesen.', 'safety.p': 'Südindien ist gastfreundlich und gut auf Besucher eingestellt. Diese paar Dinge machen aus einer guten Reise eine großartige.',
+    'check.h3': '✅ Checkliste vor der Abreise', 'check.sub': 'Häkchen werden auf diesem Gerät gespeichert.',
+    'links.kicker': 'Nützliche Links', 'links.h2': 'Alles, was ihr zum Buchen braucht.', 'links.p': 'Nur offizielle oder weithin vertrauenswürdige Dienste. Indische Inlandsflüge und Züge am besten direkt auf den Heimatseiten buchen.',
+    'footer.note': 'Preise sind ungefähre Planungswerte in EUR — vor der Buchung prüfen. Keine Verbindung zu Airlines oder Hotels.',
+    'label.travellers': 'Reisende', 'label.length': 'Reisedauer', 'label.style': 'Reisestil', 'label.departure': 'Abflug', 'label.route': 'Route',
+    'result.label': 'Geschätzt pro Person', 'result.group': 'Ganze Gruppe',
+    'builder.presets': 'Vorlage laden:', 'builder.pool': 'Stopp hinzufügen', 'builder.timeline': 'Eure Reihenfolge', 'builder.summary': 'Zusammenfassung', 'builder.share': 'Per WhatsApp teilen', 'builder.copy': 'Link kopieren', 'builder.print': 'Plan drucken / PDF', 'builder.clear': 'Zurücksetzen',
+    'dates.label': 'Abflugdatum', 'dates.festivals': 'Feste während eurer Reise', 'dates.packing': 'Eure Packliste',
+    'stamps.title': 'Euer Reisepass', 'stamps.sub': 'Jedes geöffnete Ziel gibt einen Stempel.',
+  },
+
+  /* English strings for JS-generated text (German equivalents in `de`) */
+  en: {
+    'quiz.start': 'Start the quiz', 'quiz.next': 'Question', 'quiz.of': 'of', 'quiz.again': 'Try again', 'quiz.route': 'See your route', 'quiz.share': 'Share on WhatsApp', 'quiz.picks': 'Three places for you',
+    'builder.presets': 'Load a template:', 'builder.pool': 'Add a stop', 'builder.timeline': 'Your order', 'builder.summary': 'Summary', 'builder.share': 'Share on WhatsApp', 'builder.copy': 'Copy link', 'builder.print': 'Print / PDF', 'builder.clear': 'Reset',
+    'builder.nights': 'nights', 'builder.days': 'days', 'builder.stops': 'stops', 'builder.travel': 'h of transfers', 'builder.perPerson': 'per person', 'builder.group': 'whole group', 'builder.empty': 'Tap a destination on the left (or drag it here) to start your plan.', 'builder.copied': 'Link copied!',
+    'dates.days': 'days to go', 'dates.today': 'It\'s today — safe travels!', 'dates.gone': 'Already departed — enjoy!', 'dates.none': 'No festivals in your window — but every day has a temple ceremony somewhere.', 'dates.approx': 'approx.',
+    'stamps.of': 'of', 'stamps.stamped': 'STAMPED', 'stamps.new': 'New stamp!',
+    'rate.live': 'live rate', 'rate.fixed': 'approx. rate',
+    'map.explore': 'Explore', 'map.add': 'Add to trip', 'map.fail': 'The map needs an internet connection to load tiles.',
+    'check.done': 'done', 'check.all': 'All packed — have an amazing trip! 🎉',
+    'dest.places': 'places', 'dest.place': 'place',
+    'quiz.q': ['Your perfect morning on holiday starts with…'],
+  },
+  deJs: {
+    'quiz.start': 'Test starten', 'quiz.next': 'Frage', 'quiz.of': 'von', 'quiz.again': 'Nochmal', 'quiz.route': 'Zur Route', 'quiz.share': 'Per WhatsApp teilen', 'quiz.picks': 'Drei Ziele für euch',
+    'builder.presets': 'Vorlage laden:', 'builder.pool': 'Stopp hinzufügen', 'builder.timeline': 'Eure Reihenfolge', 'builder.summary': 'Zusammenfassung', 'builder.share': 'Per WhatsApp teilen', 'builder.copy': 'Link kopieren', 'builder.print': 'Drucken / PDF', 'builder.clear': 'Zurücksetzen',
+    'builder.nights': 'Nächte', 'builder.days': 'Tage', 'builder.stops': 'Stopps', 'builder.travel': 'h Transfers', 'builder.perPerson': 'pro Person', 'builder.group': 'ganze Gruppe', 'builder.empty': 'Tippt links auf ein Ziel (oder zieht es hierher), um zu starten.', 'builder.copied': 'Link kopiert!',
+    'dates.days': 'Tage bis zum Abflug', 'dates.today': 'Heute geht\'s los — gute Reise!', 'dates.gone': 'Schon unterwegs — viel Spaß!', 'dates.none': 'Keine Feste in eurem Zeitraum — aber irgendwo ist immer Tempelfest.', 'dates.approx': 'ca.',
+    'stamps.of': 'von', 'stamps.stamped': 'GESTEMPELT', 'stamps.new': 'Neuer Stempel!',
+    'rate.live': 'Live-Kurs', 'rate.fixed': 'ca. Kurs',
+    'map.explore': 'Öffnen', 'map.add': 'Zur Reise', 'map.fail': 'Die Karte braucht Internet, um Kacheln zu laden.',
+    'check.done': 'erledigt', 'check.all': 'Alles gepackt — gute Reise! 🎉',
+    'dest.places': 'Orte', 'dest.place': 'Ort',
+  },
+};
