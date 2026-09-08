@@ -183,13 +183,23 @@
         <div class="cols">
           <div>
             <h4>✨ Things to do</h4><ul>${d.todo.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-            <h4>🍛 Eat & drink</h4><ul>${d.food.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+            <h4>🍛 ${t('guide.eat')}</h4>
+            <p class="rating-summary"></p>
+            <div class="picks">${(window.GUIDE?.eat[d.id] || []).length ? (window.GUIDE.eat[d.id]).map((p) => `
+              <div class="pick-row rated" data-q="${esc(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">
+                <span class="tier tier-eat">🍽️</span>
+                <div><b>${esc(p.n)}</b><small>${esc(p.area)}</small><p>${esc(p.why)}</p>
+                  <div class="pick-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">Google ↗</a><a target="_blank" rel="noopener" href="https://www.zomato.com/search?q=${encodeURIComponent(p.n)}">Zomato ↗</a></div>
+                </div>
+              </div>`).join('') : `<p class="picks-note">${t('guide.eatNone')}</p>`}</div>
+            <h4 style="margin-top:14px">🥘 Dishes to try</h4><ul>${d.food.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
           </div>
           <div>
             <h4>🛏️ ${t('guide.picks')}</h4>
             <p class="picks-note">${t('guide.picksNote')}</p>
+            <p class="rating-summary"></p>
             <div class="picks">${(window.GUIDE?.picks[d.id] || []).map((p) => `
-              <div class="pick-row">
+              <div class="pick-row rated" data-q="${esc(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">
                 <span class="tier tier-${p.tier}">${t('tier.' + p.tier)}</span>
                 <div><b>${esc(p.n)}</b><small>${esc(p.area)}</small><p>${esc(p.why)}</p>
                   <div class="pick-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">Google ↗</a><a target="_blank" rel="noopener" href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">Booking.com ↗</a></div>
@@ -209,6 +219,7 @@
     modal.classList.add('open'); document.body.style.overflow = 'hidden';
     $('.close', modal).addEventListener('click', closeModal);
     dispatchEvent(new CustomEvent('destopened', { detail: d.id }));
+    if (window.RATINGS) $$('.picks', modal).forEach((box) => window.RATINGS.apply(box.parentElement));
   }
   function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
   grid.addEventListener('click', (e) => { const c = e.target.closest('.dest'); if (c) openDest(c.dataset.id); });

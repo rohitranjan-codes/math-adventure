@@ -176,6 +176,131 @@ window.GUIDE = {
     ],
   },
 
+
+  /* Restaurants & cafés per destination (rated live through the ratings service) */
+  eat: {
+    bengaluru: [
+      { n: 'Mavalli Tiffin Room (MTR)', area: 'Lalbagh Road', why: 'The 1924 original: masala dosa, rava idli, filter coffee.' },
+      { n: 'Vidyarthi Bhavan', area: 'Basavanagudi', why: 'Legendary crisp dosa, queues from 06:30.' },
+      { n: 'Nagarjuna', area: 'Residency Road', why: 'Andhra meals on a banana leaf, fiery and generous.' },
+      { n: 'Toit Brewpub', area: 'Indiranagar', why: 'Bengaluru\'s craft-beer institution; book a table.' },
+      { n: 'Karavalli', area: 'Taj Gateway, Residency Road', why: 'Coastal Mangalorean & Kerala food, one of India\'s great restaurants.' },
+    ],
+    goa: [
+      { n: 'Ritz Classic', area: 'Panaji', why: 'Goan fish thali at lunch, always packed.' },
+      { n: 'Viva Panjim', area: 'Fontainhas', why: 'Home-style Goan in a Portuguese house.' },
+      { n: 'Gunpowder', area: 'Assagao', why: 'Garden restaurant, South-Indian coastal plates.' },
+      { n: 'Thalassa', area: 'Siolim', why: 'Greek food and sunsets over the river.' },
+      { n: 'Bomra\'s', area: 'Candolim', why: 'Burmese-Goan fine dining in a garden.' },
+    ],
+    munnar: [
+      { n: 'Saravana Bhavan Munnar', area: 'Munnar town', why: 'Reliable South-Indian vegetarian.' },
+      { n: 'Rapsy Restaurant', area: 'Munnar bazaar', why: 'Cheap, busy, great biryani and parotta.' },
+    ],
+    kochi: [
+      { n: 'Fort House Restaurant', area: 'Fort Kochi waterfront', why: 'Karimeen and prawn curry by the water.' },
+      { n: 'Kashi Art Café', area: 'Burgher Street', why: 'Breakfast, cake and art in an old house.' },
+      { n: 'Oceanos', area: 'Fort Kochi', why: 'Seafood with Portuguese-Kerala flavours.' },
+      { n: 'Kayees Rahmathulla Hotel', area: 'Mattancherry', why: 'Famous Kochi biryani, lunch only.' },
+    ],
+    thekkady: [
+      { n: 'Ebony\'s Café', area: 'Kumily', why: 'Rooftop café with Kerala dishes and views.' },
+      { n: 'Grandma\'s Café', area: 'Thekkady', why: 'Home-style Kerala food, pepper chicken.' },
+    ],
+    mysuru: [
+      { n: 'Vinayaka Mylari', area: 'Nazarbad', why: 'The famous soft Mylari dosa, mornings only.' },
+      { n: 'Guru Sweet Mart', area: 'Devaraja Market', why: 'Inventors of Mysore pak.' },
+      { n: 'Hotel RRR', area: 'Gandhi Square', why: 'Andhra meals and mutton pulao.' },
+    ],
+    coorg: [
+      { n: 'Coorg Cuisine', area: 'Madikeri', why: 'Pandi curry and kadambuttu, the Kodava standards.' },
+      { n: 'Raintree Restaurant', area: 'Madikeri', why: 'Kodava dishes in a garden setting.' },
+    ],
+    hampi: [
+      { n: 'Mango Tree Restaurant', area: 'Hampi Bazaar', why: 'Thalis under a mango tree, the Hampi classic.' },
+      { n: 'Laughing Buddha', area: 'Sanapur (Hippie Island)', why: 'River-view café for sunset.' },
+    ],
+    hyderabad: [
+      { n: 'Paradise Biryani', area: 'Secunderabad', why: 'The most famous biryani house in the city.' },
+      { n: 'Shah Ghouse Café', area: 'Tolichowki', why: 'Locals\' choice for dum biryani and haleem.' },
+      { n: 'Bawarchi', area: 'RTC X Roads', why: 'Massive portions, always busy.' },
+      { n: 'Chutneys', area: 'Banjara Hills', why: 'Vegetarian breakfasts and Andhra thalis.' },
+      { n: 'Pista House', area: 'Charminar', why: 'Haleem legends (also good year-round).' },
+    ],
+    ooty: [
+      { n: 'Earl\'s Secret', area: 'King\'s Cliff', why: 'Colonial dining room with fireplaces.' },
+      { n: 'Sidewalk Café', area: 'Ooty town', why: 'Pizzas, cakes, coffee.' },
+    ],
+    kabini: [],
+    chikmagalur: [
+      { n: 'Town Canteen', area: 'Chikmagalur town', why: 'The benne dosa everyone talks about.' },
+    ],
+    gokarna: [
+      { n: 'Namaste Café', area: 'Om Beach', why: 'Beachfront classic: seafood, juices, sunsets.' },
+      { n: 'Prema Restaurant', area: 'Gokarna town', why: 'Cheap, honest thalis near the temple.' },
+    ],
+    wayanad: [
+      { n: 'Wilton\'s Restaurant', area: 'Kalpetta', why: 'Kerala meals and biryani, family favourite.' },
+    ],
+    varkala: [
+      { n: 'Coffee Temple', area: 'North cliff', why: 'Best breakfast and coffee on the cliff.' },
+      { n: 'Café del Mar', area: 'Varkala cliff', why: 'Seafood grills and sunset drinks.' },
+      { n: 'Darjeeling Café', area: 'Varkala cliff', why: 'Long menu, reliable, great view.' },
+    ],
+    andaman: [
+      { n: 'Full Moon Café', area: 'Havelock', why: 'Beach-side seafood and pasta.' },
+      { n: 'Something Different', area: 'Havelock', why: 'Beachfront dinners under the trees.' },
+      { n: 'New Lighthouse Restaurant', area: 'Port Blair', why: 'Grilled lobster and crab by the sea.' },
+    ],
+    madurai: [
+      { n: 'Murugan Idli Shop', area: 'West Masi Street', why: 'Idli, dosa and podi, a Tamil institution.' },
+      { n: 'Famous Jigarthanda', area: 'East Marret Street', why: 'The original jigarthanda shop.' },
+      { n: 'Kumar Mess', area: 'Madurai', why: 'Mutton chukka and kari dosa.' },
+    ],
+    badami: [
+      { n: 'Hotel Badami Court', area: 'Badami', why: 'The most dependable meal in town.' },
+    ],
+    pondicherry: [
+      { n: 'Villa Shanti', area: 'White Town', why: 'Courtyard restaurant, French-Creole plates.' },
+      { n: 'Baker Street', area: 'Rue Bussy', why: 'French bakery: croissants, quiche, éclairs.' },
+      { n: 'Surguru', area: 'Mission Street', why: 'Clean South-Indian vegetarian.' },
+      { n: 'Carte Blanche', area: 'Hotel de l\'Orient', why: 'Fine Creole dining in a heritage courtyard.' },
+    ],
+    goldentriangle: [
+      { n: 'Karim\'s', area: 'Jama Masjid, Old Delhi', why: 'Mughal kebabs and korma since 1913.' },
+      { n: 'Indian Accent', area: 'The Lodhi, New Delhi', why: 'India\'s most awarded modern restaurant.' },
+      { n: 'Peshawri', area: 'ITC Mughal, Agra', why: 'Dal bukhara and tandoori, worth the price.' },
+      { n: 'Pinch of Spice', area: 'Agra', why: 'Reliable North-Indian near the Taj.' },
+      { n: 'Laxmi Misthan Bhandar (LMB)', area: 'Johari Bazaar, Jaipur', why: 'Rajasthani thali and sweets since 1727.' },
+      { n: 'Lassiwala', area: 'MI Road, Jaipur', why: 'Lassi in clay cups, the original shop.' },
+    ],
+    rajasthan: [
+      { n: 'Ambrai', area: 'Amet Haveli, Udaipur', why: 'Lakeside dinner facing the City Palace.' },
+      { n: 'Upre by 1559 AD', area: 'Lake Pichola, Udaipur', why: 'Rooftop Rajasthani with lake views.' },
+      { n: 'Indique', area: 'Pal Haveli, Jodhpur', why: 'Rooftop with fort and clock-tower views.' },
+      { n: 'Shri Mishrilal Hotel', area: 'Clock Tower, Jodhpur', why: 'Makhaniya lassi since 1927.' },
+      { n: 'Gypsy Restaurant', area: 'Jodhpur', why: 'Unlimited Rajasthani thali.' },
+    ],
+    varanasi: [
+      { n: 'Blue Lassi Shop', area: 'Kachori Gali', why: 'Lassi in clay pots since 1925.' },
+      { n: 'Baati Chokha', area: 'Teliyabagh', why: 'Rustic UP thali in a village-style room.' },
+      { n: 'Kashi Chat Bhandar', area: 'Godowlia', why: 'Tamatar chaat and pani puri.' },
+      { n: 'Deena Chat Bhandar', area: 'Dashashwamedh Road', why: 'Chaat legends near the ghats.' },
+    ],
+    rishikesh: [
+      { n: 'Chotiwala', area: 'Swarg Ashram', why: 'Vegetarian thalis since 1958.' },
+      { n: 'Little Buddha Café', area: 'Laxman Jhula', why: 'Treehouse café over the river.' },
+      { n: 'Bistro Nirvana', area: 'Tapovan', why: 'Garden café with wood-fired pizza.' },
+    ],
+    mumbai: [
+      { n: 'Britannia & Co.', area: 'Ballard Estate', why: 'Parsi berry pulao since 1923.' },
+      { n: 'The Bombay Canteen', area: 'Lower Parel', why: 'Modern regional Indian, book ahead.' },
+      { n: 'Trishna', area: 'Kala Ghoda', why: 'Butter-garlic crab, the famous one.' },
+      { n: 'Bademiya', area: 'Colaba', why: 'Late-night kebabs on the street.' },
+      { n: 'Kyani & Co.', area: 'Marine Lines', why: 'Irani café: bun maska and chai.' },
+    ],
+  },
+
   /* Getting around & booking-ahead, per destination */
   ops: {
     bengaluru: [

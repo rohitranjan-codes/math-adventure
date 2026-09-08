@@ -32,6 +32,13 @@ Live site (once GitHub Pages is enabled): `https://rohitranjan-codes.github.io/e
   one-line reason and links to its live Google and Booking.com reviews (no ratings are stored, so
   nothing goes stale or gets invented), plus the cab apps, car-hire, ferry, train and activity
   operators that work in each place.
+- **Live rating filter (4.0+ with 100+ Google reviews)** — hotels and restaurants in every guide
+  are checked against live Google ratings and only places that pass are shown; a "show N hidden"
+  link reveals the rest. Needs the small ratings service in `worker/` (Cloudflare Worker, free
+  tier, one-time setup — see `worker/README.md`). Without it the lists are shown unfiltered with a
+  note. All Booking.com links also carry Booking's own "review score 8+" filter.
+- **Restaurants** — 2 to 6 named restaurants and cafés per destination with area, why, and links to
+  Google and Zomato, rated through the same filter.
 - **Booking desk** — reads the trip plan and departure date and lists everything to book in order:
   international flights, every domestic hop or road transfer, every hotel stay with dates and room
   count, and activities that need advance booking. Every link opens Google Flights, Skyscanner,
@@ -65,14 +72,16 @@ Everything editable lives in **`data.js`**:
 | `domestic`     | Onward flights / trains / road table                          |
 | `destinations` | Destination cards, map pins & builder stops (`type`, `lat`/`lng`, `hours`, `transfer`) |
 | `photos`       | Ids that have a real photo at `img/<id>.jpg` (replaces the illustration) |
+| `ratingsEndpoint` | URL of the deployed ratings worker (empty = filter off)                |
+| `ratingFilter` | `{ min: 4.0, minCount: 100 }` — the rating threshold                        |
 | `routes`       | The tabbed day-by-day itineraries                             |
 | `costModel`    | Per-person prices by travel style, origin and route           |
 | `safety`       | Safety cards                                                  |
 | `links`        | Useful links, grouped                                         |
 
 Quiz questions, the food gallery, festivals, packing rules and German strings live in
-**`content.js`**. Hotel picks, operators, airport codes and the road-only list used by the booking
-desk live in **`guide.js`**. Cover illustrations are generated in the browser by `illustrations.js`.
+**`content.js`**. Hotel picks, restaurants, operators, airport codes and the road-only list used by the booking
+desk live in **`guide.js`**. The ratings client is `ratings.js`; the service is in `worker/`. Cover illustrations are generated in the browser by `illustrations.js`.
 
 ### Adding real photos
 

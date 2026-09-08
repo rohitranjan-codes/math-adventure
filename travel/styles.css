@@ -521,3 +521,14 @@ footer .row { display: flex; flex-wrap: wrap; justify-content: space-between; ga
 .desk-check { display: flex; align-items: center; gap: 8px; font-size: .78rem; font-weight: 800; color: var(--muted); cursor: pointer; padding-top: 6px; } .desk-check input { width: 20px; height: 20px; accent-color: var(--accent-2); }
 .desk-empty { padding: 26px; border-radius: var(--radius); border: 2px dashed var(--line); text-align: center; color: var(--muted); font-weight: 700; }
 @media (max-width: 640px) { .desk-row { grid-template-columns: 44px 1fr; } .desk-check { grid-column: 2; } }
+
+/* Live ratings filter */
+.rating-summary { font-size: .78rem; font-weight: 700; color: var(--muted); margin: -2px 0 6px; min-height: 1em; }
+.rating-summary .rs-on { color: #166534; } .rating-summary .rs-off { color: #92400e; }
+.rs-toggle { border: 0; background: none; padding: 0; font: inherit; font-weight: 800; color: var(--accent-2); text-decoration: underline; cursor: pointer; }
+.rating-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 999px; background: #fef3c7; color: #92400e; font-size: .74rem; font-weight: 900; vertical-align: middle; margin-left: 6px; }
+.rating-badge small { font-weight: 700; opacity: .8; } .rating-badge.none { background: var(--bg-2); color: var(--muted); }
+.rating-slot { display: flex; align-items: center; gap: 6px; margin: 3px 0 2px; } .rating-slot .rating-badge { margin-left: 0; } .rating-slot.dim { opacity: .7; }
+.rating-link { font-size: .72rem; font-weight: 800; margin-left: 4px; }
+.pick-row.rating-hidden { display: none; } .show-hidden .pick-row.rating-hidden { display: grid; opacity: .6; }
+.tier-eat { background: var(--bg-2); font-size: 1rem; }

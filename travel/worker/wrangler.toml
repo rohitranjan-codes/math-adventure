@@ -1,0 +1,9 @@
+name = "india-trip-ratings"
+main = "ratings-worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+# Lock CORS to your site once it is live, e.g. "https://rohitranjan-codes.github.io"
+ALLOWED_ORIGIN = "*"
+
+# Secret (never commit): wrangler secret put GOOGLE_PLACES_KEY

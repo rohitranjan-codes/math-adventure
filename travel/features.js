@@ -284,10 +284,14 @@
   const yymmdd = (d) => ymd(d).slice(2).replace(/-/g, '');
   const gflights = (from, to, out, back) => `https://www.google.com/travel/flights?q=${encodeURIComponent(`Flights from ${from} to ${to}${out ? ' on ' + ymd(out) : ''}${back ? ' returning ' + ymd(back) : ''}`)}`;
   const sky = (from, to, out, back) => `https://www.skyscanner.net/transport/flights/${from.toLowerCase()}/${to.toLowerCase()}/${out ? yymmdd(out) : ''}${back ? '/' + yymmdd(back) : ''}/?adults=${A.state.people}`;
-  const bookingUrl = (city, inD, outD) => `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(city + ', India')}${inD ? `&checkin=${ymd(inD)}&checkout=${ymd(outD)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}&group_children=0`;
+  const BK_FILTER = '&nflt=review_score%3D80'; // Booking.com "review score 8+" — the closest match to a 4★+ filter on that site
+  const bookingUrl = (city, inD, outD) => `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(city + ', India')}${inD ? `&checkin=${ymd(inD)}&checkout=${ymd(outD)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}&group_children=0${BK_FILTER}`;
   const ghotels = (city, inD, outD) => `https://www.google.com/travel/search?q=${encodeURIComponent('hotels in ' + city + ' India')}${inD ? `&dates=${ymd(inD)},${ymd(outD)}` : ''}`;
   const twelveGo = (from, to, d) => `https://12go.asia/en/travel/${encodeURIComponent(from.toLowerCase().replace(/[^a-z]+/g, '-'))}/${encodeURIComponent(to.toLowerCase().replace(/[^a-z]+/g, '-'))}${d ? '?date=' + ymd(d) + '&people=' + A.state.people : ''}`;
   const deskDone = new Set(store.get('deskDone', []));
+  // With the ratings service on, desk chips only show picks already verified ≥ filter (from the ratings cache); unknown = hidden until checked.
+  const pickPasses = (q) => { if (!window.RATINGS || !window.RATINGS.enabled()) return true; const c = (() => { try { return JSON.parse(localStorage.getItem('ratings') || '{}')[q]; } catch { return null; } })(); return c ? window.RATINGS.passes(c.v) : false; };
+  const prefetchDeskRatings = () => { if (!window.RATINGS || !window.RATINGS.enabled()) return; const qs = []; plan.forEach((s) => (G.picks[s.id] || []).forEach((p) => qs.push(p.n + ' ' + (G.searchCity[s.id] || byId(s.id).name)))); if (qs.length) window.RATINGS.get(qs).then(() => renderDesk()).catch(() => {}); };
   const dfmt = (d) => d.toLocaleDateString(A.LANG.cur === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'short' });
   function deskRows() {
     const rows = [];
@@ -310,7 +314,7 @@
           links: [{ l: t('desk.savaari'), u: 'https://www.savaari.com/', p: true }, { l: t('desk.12go'), u: twelveGo(G.searchCity[prev.id] || prev.name, city, dep) }, ...(['mysuru', 'hampi', 'ooty', 'hyderabad'].includes(s.id) ? [{ l: t('desk.irctc'), u: 'https://www.irctc.co.in/' }] : []), { l: 'redBus', u: 'https://www.redbus.in/' }] });
       }
       if (s.nights > 0) rows.push({ key: `stay${i}-${s.id}`, icon: '🛏️', kind: t('desk.stay'), title: `${d.emoji} ${d.name} · ${s.nights} ${t('desk.nights')}`, sub: `${r ? dfmt(r.start) + ' → ' + dfmt(r.end) + ' · ' : ''}${Math.ceil(A.state.people / 2)} ${t('desk.rooms')} · ${d.perDay}/day`,
-        links: [{ l: t('desk.booking'), u: bookingUrl(city, r?.start, r?.end), p: true }, { l: t('desk.ghotels'), u: ghotels(city, r?.start, r?.end) }, ...(G.picks[s.id] || []).slice(0, 3).map((p) => ({ l: '★ ' + p.n, u: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(p.n + ' ' + city)}${r ? `&checkin=${ymd(r.start)}&checkout=${ymd(r.end)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}`, c: 'pickchip' }))] });
+        links: [{ l: t('desk.booking'), u: bookingUrl(city, r?.start, r?.end), p: true }, { l: t('desk.ghotels'), u: ghotels(city, r?.start, r?.end) }, ...(G.picks[s.id] || []).filter((p) => pickPasses(p.n + ' ' + city)).slice(0, 3).map((p) => ({ l: '★ ' + p.n, u: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(p.n + ' ' + city)}${r ? `&checkin=${ymd(r.start)}&checkout=${ymd(r.end)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}`, c: 'pickchip' }))] });
       (G.ops[s.id] || []).filter((o) => o.kind === 'activity' || o.kind === 'boat' || o.kind === 'train').forEach((o, k) => rows.push({ key: `act${s.id}-${k}`, icon: ({ activity: '🎟️', boat: '⛵', train: '🚆' })[o.kind], kind: t('desk.book'), title: `${d.name} · ${o.n}`, sub: o.why, links: [{ l: o.n + ' ↗', u: o.url, p: true }] }));
     });
     return rows;
@@ -331,8 +335,8 @@
     if (done === rows.length && rows.length && deskEl.dataset.celebrated !== String(rows.length)) { deskEl.dataset.celebrated = String(rows.length); if (deskEl.dataset.touched) confetti(200); }
   }
   deskEl.addEventListener('change', (e) => { const row = e.target.closest('.desk-row'); if (!row) return; deskEl.dataset.touched = '1'; e.target.checked ? deskDone.add(row.dataset.key) : deskDone.delete(row.dataset.key); store.set('deskDone', [...deskDone]); renderDesk(); });
-  renderDesk();
-  on('planchange', renderDesk); on('costchange', renderDesk); on('langchange', renderDesk);
+  renderDesk(); prefetchDeskRatings();
+  on('planchange', () => { renderDesk(); prefetchDeskRatings(); }); on('costchange', renderDesk); on('langchange', renderDesk);
   dateEl.addEventListener('change', renderDesk);
 
   /* ---------- Live exchange rate ---------- */

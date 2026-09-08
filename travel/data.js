@@ -7,6 +7,10 @@
 window.TRIP = {
   eurToInr: 98, // fallback; the page fetches a live rate when online
   photos: [],   // ids that have a real photo at img/<id>.jpg, e.g. ['goa', 'hampi']
+  /* Live ratings filter for hotels & restaurants. Deploy worker/ and paste its URL here.
+     Empty string = filter off (curated lists shown unfiltered). */
+  ratingsEndpoint: '',
+  ratingFilter: { min: 4.0, minCount: 100 },
 
   weather: [
     { id: 'bengaluru', place: 'Bengaluru', temp: '18–27 °C', note: 'Mild, breezy, mostly dry. Light showers possible in the first week.', icon: '⛅', rating: 'great' },
