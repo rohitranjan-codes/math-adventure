@@ -186,16 +186,23 @@
             <h4>🍛 Eat & drink</h4><ul>${d.food.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
           </div>
           <div>
-            <h4>🛏️ Where to stay</h4>
-            <div class="stay-tier"><b>Budget</b><span>${esc(d.stay.budget)}</span></div>
-            <div class="stay-tier"><b>Comfort</b><span>${esc(d.stay.mid)}</span></div>
-            <div class="stay-tier"><b>Luxury</b><span>${esc(d.stay.lux)}</span></div>
-            <h4 style="margin-top:18px">🧭 Getting there & around</h4>
-            <p style="color:var(--ink-2);font-size:.93rem">${esc(d.area)}</p>
-            <div class="chip-row" style="margin-top:16px">
-              <a class="chip" target="_blank" rel="noopener" href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(d.name + ', India')}">Hotels on Booking.com ↗</a>
-              <a class="chip warm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(d.name + ' India')}">Open in Maps ↗</a>
+            <h4>🛏️ ${t('guide.picks')}</h4>
+            <p class="picks-note">${t('guide.picksNote')}</p>
+            <div class="picks">${(window.GUIDE?.picks[d.id] || []).map((p) => `
+              <div class="pick-row">
+                <span class="tier tier-${p.tier}">${t('tier.' + p.tier)}</span>
+                <div><b>${esc(p.n)}</b><small>${esc(p.area)}</small><p>${esc(p.why)}</p>
+                  <div class="pick-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">Google ↗</a><a target="_blank" rel="noopener" href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(p.n + ' ' + (window.GUIDE.searchCity[d.id] || d.name))}">Booking.com ↗</a></div>
+                </div>
+              </div>`).join('')}</div>
+            <div class="chip-row" style="margin-top:12px">
+              <a class="chip" target="_blank" rel="noopener" href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent((window.GUIDE?.searchCity[d.id] || d.name) + ', India')}">${t('guide.allHotels')} ↗</a>
+              <a class="chip warm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(d.name + ' India')}">${t('guide.maps')} ↗</a>
             </div>
+            <h4 style="margin-top:20px">🧭 ${t('guide.around')}</h4>
+            <p style="color:var(--ink-2);font-size:.93rem">${esc(d.area)}</p>
+            <div class="ops">${(window.GUIDE?.ops[d.id] || []).map((o) => `
+              <a class="op" target="_blank" rel="noopener" href="${esc(o.url)}"><span class="op-kind">${({ cab: '🚕', car: '🚗', bus: '🚌', boat: '⛵', train: '🚆', activity: '🎟️' })[o.kind] || '🔗'}</span><div><b>${esc(o.n)} ↗</b><small>${esc(o.why)}</small></div></a>`).join('')}</div>
           </div>
         </div>
       </div>`;

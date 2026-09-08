@@ -114,6 +114,8 @@ window.CONTENT = {
     'label.travellers': 'Reisende', 'label.length': 'Reisedauer', 'label.style': 'Reisestil', 'label.departure': 'Abflug', 'label.route': 'Route',
     'result.label': 'Geschätzt pro Person', 'result.group': 'Ganze Gruppe',
     'builder.presets': 'Vorlage laden:', 'builder.pool': 'Stopp hinzufügen', 'builder.timeline': 'Eure Reihenfolge', 'builder.summary': 'Zusammenfassung', 'builder.share': 'Per WhatsApp teilen', 'builder.copy': 'Link kopieren', 'builder.print': 'Plan drucken / PDF', 'builder.clear': 'Zurücksetzen',
+    'desk.kicker': 'Buchungsschalter', 'desk.h2': 'Alles buchen, in der richtigen Reihenfolge.', 'desk.p': 'Der Schalter liest euren Plan und eure Daten: Flüge, Hotels, Transfers und Aktivitäten — jeder Link öffnet die Suche bereits ausgefüllt, mit echten Preisen und echten Bewertungen. Hakt ab, was gebucht ist.',
+    'nav.desk': 'Buchen',
     'dates.label': 'Abflugdatum', 'dates.festivals': 'Feste während eurer Reise', 'dates.packing': 'Eure Packliste',
     'stamps.title': 'Euer Reisepass', 'stamps.sub': 'Jedes geöffnete Ziel gibt einen Stempel.',
   },
@@ -129,6 +131,9 @@ window.CONTENT = {
     'map.explore': 'Explore', 'map.add': 'Add to trip', 'map.fail': 'The map needs an internet connection to load tiles.',
     'check.done': 'done', 'check.all': 'All packed — have an amazing trip! 🎉',
     'dest.places': 'places', 'dest.place': 'place',
+    'guide.picks': 'Our picks', 'guide.picksNote': 'Chosen for location, service and consistently strong public reviews. Tap through to see live ratings before you book.', 'guide.allHotels': 'All hotels on Booking.com', 'guide.maps': 'Open in Maps', 'guide.around': 'Getting around & booking ahead',
+    'tier.budget': 'Budget', 'tier.mid': 'Comfort', 'tier.lux': 'Luxury',
+    'desk.intl': 'International flights', 'desk.hop': 'Getting there', 'desk.stay': 'Stay', 'desk.book': 'Book ahead', 'desk.flight': 'Flight', 'desk.road': 'Car with driver', 'desk.train': 'Train / bus', 'desk.nights': 'nights', 'desk.rooms': 'rooms', 'desk.booked': 'Booked', 'desk.progress': 'booked', 'desk.empty': 'Build a plan above and set a departure date — the booking desk fills itself in.', 'desk.return': 'return', 'desk.from': 'from', 'desk.google': 'Google Flights', 'desk.sky': 'Skyscanner', 'desk.booking': 'Booking.com', 'desk.ghotels': 'Google Hotels', 'desk.picks': 'Our picks', 'desk.12go': '12Go (trains & buses)', 'desk.savaari': 'Savaari (car & driver)', 'desk.irctc': 'IRCTC (trains)', 'desk.noDate': 'Set a departure date to prefill exact dates.',
     'wx.now': 'Now', 'wx.trip': 'Your dates', 'wx.lastNov': 'Last November', 'wx.rainy': 'rainy days', 'wx.rain': 'rain chance', 'wx.by': 'Live weather & forecasts by Open-Meteo', 'wx.updated': 'updated', 'wx.soon': 'Forecast appears 16 days before your dates',
   },
   deJs: {
@@ -141,6 +146,9 @@ window.CONTENT = {
     'map.explore': 'Öffnen', 'map.add': 'Zur Reise', 'map.fail': 'Die Karte braucht Internet, um Kacheln zu laden.',
     'check.done': 'erledigt', 'check.all': 'Alles gepackt — gute Reise! 🎉',
     'dest.places': 'Orte', 'dest.place': 'Ort',
+    'guide.picks': 'Unsere Empfehlungen', 'guide.picksNote': 'Ausgewählt nach Lage, Service und durchgehend guten öffentlichen Bewertungen. Vor dem Buchen die aktuellen Bewertungen ansehen.', 'guide.allHotels': 'Alle Hotels auf Booking.com', 'guide.maps': 'In Maps öffnen', 'guide.around': 'Unterwegs & vorab buchen',
+    'tier.budget': 'Budget', 'tier.mid': 'Komfort', 'tier.lux': 'Luxus',
+    'desk.intl': 'Internationale Flüge', 'desk.hop': 'Anreise', 'desk.stay': 'Unterkunft', 'desk.book': 'Vorab buchen', 'desk.flight': 'Flug', 'desk.road': 'Auto mit Fahrer', 'desk.train': 'Zug / Bus', 'desk.nights': 'Nächte', 'desk.rooms': 'Zimmer', 'desk.booked': 'Gebucht', 'desk.progress': 'gebucht', 'desk.empty': 'Baut oben einen Plan und wählt ein Abflugdatum — der Buchungsschalter füllt sich von selbst.', 'desk.return': 'zurück', 'desk.from': 'ab', 'desk.google': 'Google Flights', 'desk.sky': 'Skyscanner', 'desk.booking': 'Booking.com', 'desk.ghotels': 'Google Hotels', 'desk.picks': 'Unsere Empfehlungen', 'desk.12go': '12Go (Züge & Busse)', 'desk.savaari': 'Savaari (Auto & Fahrer)', 'desk.irctc': 'IRCTC (Züge)', 'desk.noDate': 'Abflugdatum setzen, um genaue Daten vorzufüllen.',
     'wx.now': 'Jetzt', 'wx.trip': 'Eure Daten', 'wx.lastNov': 'Letzter November', 'wx.rainy': 'Regentage', 'wx.rain': 'Regenrisiko', 'wx.by': 'Live-Wetter & Prognosen von Open-Meteo', 'wx.updated': 'aktualisiert', 'wx.soon': 'Prognose erscheint 16 Tage vor euren Daten',
   },
 };

@@ -24,7 +24,7 @@
     <li><a href="#destinations" data-i18n="nav.destinations">Destinations</a></li>
     <li><a href="#food" data-i18n="nav.food">Food</a></li>
     <li><a href="#builder" data-i18n="nav.builder">Build</a></li>
-    <li><a href="#costs" data-i18n="nav.costs">Costs</a></li>
+    <li><a href="#desk" data-i18n="nav.desk">Book</a></li>
     <li><a href="#safety" data-i18n="nav.safety">Safety</a></li>
   </ul>
   <div class="nav-actions">
@@ -233,8 +233,21 @@
   </div>
 </section>
 
+<!-- ================= BOOKING DESK ================= -->
+<section id="desk" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="desk.kicker">Booking desk</span>
+      <h2 data-i18n="desk.h2">Book everything, in the right order.</h2>
+      <p data-i18n="desk.p">The desk reads your plan and dates: international flights, every hop, every hotel, transfers and activities — each link opens the search already filled in, with live prices and live reviews. Tick things off as you book.</p>
+    </div>
+    <div class="desk-progress reveal"><div class="check-progress"><div id="deskFill"></div></div><span id="deskCount"></span></div>
+    <div class="desk" id="deskList"></div>
+  </div>
+</section>
+
 <!-- ================= COSTS ================= -->
-<section id="costs" class="alt">
+<section id="costs">
   <div class="container">
     <div class="section-head reveal">
       <span class="kicker" data-i18n="costs.kicker">Cost planner</span>
@@ -279,7 +292,7 @@
 </section>
 
 <!-- ================= DATES ================= -->
-<section id="dates">
+<section id="dates" class="alt">
   <div class="container">
     <div class="section-head reveal">
       <span class="kicker" data-i18n="dates.kicker">Your dates</span>
@@ -299,7 +312,7 @@
 </section>
 
 <!-- ================= SAFETY ================= -->
-<section id="safety" class="alt">
+<section id="safety">
   <div class="container">
     <div class="section-head reveal">
       <span class="kicker" data-i18n="safety.kicker">Safe & smooth</span>
@@ -335,7 +348,7 @@
 </section>
 
 <!-- ================= LINKS ================= -->
-<section id="links">
+<section id="links" class="alt">
   <div class="container">
     <div class="section-head reveal">
       <span class="kicker" data-i18n="links.kicker">Useful links</span>
@@ -364,6 +377,7 @@
 
 <script src="data.js"></script>
 <script src="content.js"></script>
+<script src="guide.js"></script>
 <script src="illustrations.js"></script>
 <script src="vendor/leaflet.js"></script>
 <script src="app.js"></script>

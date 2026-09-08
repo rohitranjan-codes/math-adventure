@@ -276,6 +276,65 @@
   renderDates();
   on('planchange', renderDates);
 
+
+  /* ---------- Booking desk: the plan turned into prefilled searches ---------- */
+  const G = window.GUIDE || { airports: {}, roadOnly: [], searchCity: {}, picks: {}, ops: {} };
+  const deskEl = $('#deskList');
+  const ymd = (d) => d.toISOString().slice(0, 10);
+  const yymmdd = (d) => ymd(d).slice(2).replace(/-/g, '');
+  const gflights = (from, to, out, back) => `https://www.google.com/travel/flights?q=${encodeURIComponent(`Flights from ${from} to ${to}${out ? ' on ' + ymd(out) : ''}${back ? ' returning ' + ymd(back) : ''}`)}`;
+  const sky = (from, to, out, back) => `https://www.skyscanner.net/transport/flights/${from.toLowerCase()}/${to.toLowerCase()}/${out ? yymmdd(out) : ''}${back ? '/' + yymmdd(back) : ''}/?adults=${A.state.people}`;
+  const bookingUrl = (city, inD, outD) => `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(city + ', India')}${inD ? `&checkin=${ymd(inD)}&checkout=${ymd(outD)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}&group_children=0`;
+  const ghotels = (city, inD, outD) => `https://www.google.com/travel/search?q=${encodeURIComponent('hotels in ' + city + ' India')}${inD ? `&dates=${ymd(inD)},${ymd(outD)}` : ''}`;
+  const twelveGo = (from, to, d) => `https://12go.asia/en/travel/${encodeURIComponent(from.toLowerCase().replace(/[^a-z]+/g, '-'))}/${encodeURIComponent(to.toLowerCase().replace(/[^a-z]+/g, '-'))}${d ? '?date=' + ymd(d) + '&people=' + A.state.people : ''}`;
+  const deskDone = new Set(store.get('deskDone', []));
+  const dfmt = (d) => d.toLocaleDateString(A.LANG.cur === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'short' });
+  function deskRows() {
+    const rows = [];
+    if (!plan.length) return rows;
+    const d0 = $('#tripDate').value ? new Date($('#tripDate').value + 'T00:00:00') : null;
+    const endD = d0 ? new Date(d0.getTime() + (nights() + 2) * 86400000) : null;
+    const origin = { fra: 'FRA', zrh: 'ZRH', other: 'FRA' }[A.state.origin] || 'FRA';
+    const lastId = plan[plan.length - 1].id, lastAp = G.airports[lastId] || 'BLR';
+    rows.push({ key: 'intl', icon: '✈️', kind: t('desk.intl'), title: `${origin} → BLR${lastAp !== 'BLR' ? ` · ${lastAp} → ${origin}` : ''}`, sub: d0 ? `${dfmt(d0)} → ${dfmt(endD)} · ${A.state.people} 👤` : t('desk.noDate'),
+      links: [{ l: t('desk.google'), u: gflights(origin, 'BLR', d0, lastAp === 'BLR' ? endD : null), p: true }, { l: t('desk.sky'), u: sky(origin, 'BLR', d0, lastAp === 'BLR' ? endD : null) }, ...(lastAp !== 'BLR' ? [{ l: `${t('desk.return')}: ${lastAp} → ${origin}`, u: gflights(lastAp, origin, endD) }] : []), { l: 'Lufthansa', u: 'https://www.lufthansa.com/' }] });
+    plan.forEach((s, i) => {
+      const d = byId(s.id), r = stopRange(i), city = G.searchCity[s.id] || d.name;
+      if (i > 0) {
+        const prev = byId(plan[i - 1].id), fromAp = G.airports[prev.id] || 'BLR', toAp = G.airports[s.id];
+        const road = G.roadOnly.includes(s.id) || !toAp || toAp === fromAp;
+        const dep = r ? r.start : null;
+        if (!road) rows.push({ key: `hop${i}`, icon: '🛫', kind: t('desk.hop'), title: `${prev.name} → ${d.name} · ${t('desk.flight')} ${fromAp} → ${toAp}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${d.from}`,
+          links: [{ l: t('desk.google'), u: gflights(fromAp, toAp, dep), p: true }, { l: t('desk.sky'), u: sky(fromAp, toAp, dep) }, { l: 'IndiGo', u: 'https://www.goindigo.in/' }, { l: 'Air India', u: 'https://www.airindia.com/' }] });
+        else rows.push({ key: `hop${i}`, icon: '🚗', kind: t('desk.hop'), title: `${prev.name} → ${d.name}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${d.from}`,
+          links: [{ l: t('desk.savaari'), u: 'https://www.savaari.com/', p: true }, { l: t('desk.12go'), u: twelveGo(G.searchCity[prev.id] || prev.name, city, dep) }, ...(['mysuru', 'hampi', 'ooty', 'hyderabad'].includes(s.id) ? [{ l: t('desk.irctc'), u: 'https://www.irctc.co.in/' }] : []), { l: 'redBus', u: 'https://www.redbus.in/' }] });
+      }
+      if (s.nights > 0) rows.push({ key: `stay${i}-${s.id}`, icon: '🛏️', kind: t('desk.stay'), title: `${d.emoji} ${d.name} · ${s.nights} ${t('desk.nights')}`, sub: `${r ? dfmt(r.start) + ' → ' + dfmt(r.end) + ' · ' : ''}${Math.ceil(A.state.people / 2)} ${t('desk.rooms')} · ${d.perDay}/day`,
+        links: [{ l: t('desk.booking'), u: bookingUrl(city, r?.start, r?.end), p: true }, { l: t('desk.ghotels'), u: ghotels(city, r?.start, r?.end) }, ...(G.picks[s.id] || []).slice(0, 3).map((p) => ({ l: '★ ' + p.n, u: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(p.n + ' ' + city)}${r ? `&checkin=${ymd(r.start)}&checkout=${ymd(r.end)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}`, c: 'pickchip' }))] });
+      (G.ops[s.id] || []).filter((o) => o.kind === 'activity' || o.kind === 'boat' || o.kind === 'train').forEach((o, k) => rows.push({ key: `act${s.id}-${k}`, icon: ({ activity: '🎟️', boat: '⛵', train: '🚆' })[o.kind], kind: t('desk.book'), title: `${d.name} · ${o.n}`, sub: o.why, links: [{ l: o.n + ' ↗', u: o.url, p: true }] }));
+    });
+    return rows;
+  }
+  function renderDesk() {
+    const rows = deskRows();
+    if (!rows.length) { deskEl.innerHTML = `<div class="desk-empty">${t('desk.empty')}</div>`; $('#deskCount').textContent = ''; $('#deskFill').style.width = '0%'; return; }
+    deskEl.innerHTML = rows.map((r, i) => `
+      <div class="desk-row ${deskDone.has(r.key) ? 'done' : ''}" style="--i:${i}" data-key="${esc(r.key)}">
+        <div class="desk-icon">${r.icon}</div>
+        <div><div class="desk-kind">${esc(r.kind)}</div><div class="desk-title">${esc(r.title)}</div><div class="desk-sub">${esc(r.sub)}</div>
+          <div class="desk-links">${r.links.map((l) => `<a class="${l.p ? 'primary' : ''} ${l.c || ''}" target="_blank" rel="noopener" href="${esc(l.u)}">${esc(l.l)}</a>`).join('')}</div></div>
+        <label class="desk-check"><input type="checkbox" ${deskDone.has(r.key) ? 'checked' : ''}> ${t('desk.booked')}</label>
+      </div>`).join('');
+    const done = rows.filter((r) => deskDone.has(r.key)).length;
+    $('#deskCount').textContent = `${done} / ${rows.length} ${t('desk.progress')}`;
+    $('#deskFill').style.width = (done / rows.length) * 100 + '%';
+    if (done === rows.length && rows.length && deskEl.dataset.celebrated !== String(rows.length)) { deskEl.dataset.celebrated = String(rows.length); if (deskEl.dataset.touched) confetti(200); }
+  }
+  deskEl.addEventListener('change', (e) => { const row = e.target.closest('.desk-row'); if (!row) return; deskEl.dataset.touched = '1'; e.target.checked ? deskDone.add(row.dataset.key) : deskDone.delete(row.dataset.key); store.set('deskDone', [...deskDone]); renderDesk(); });
+  renderDesk();
+  on('planchange', renderDesk); on('costchange', renderDesk); on('langchange', renderDesk);
+  dateEl.addEventListener('change', renderDesk);
+
   /* ---------- Live exchange rate ---------- */
   const rateLabel = $('#rateLabel');
   rateLabel.textContent = t('rate.fixed');

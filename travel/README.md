@@ -28,6 +28,15 @@ Live site (once GitHub Pages is enabled): `https://rohitranjan-codes.github.io/e
 - **Trip builder** — tap or drag destinations into a timeline, set nights, reorder, load one of
   the three routes as a template. Computes days, transfer hours and cost per person / group. The
   plan is encoded in the URL, so it can be shared on WhatsApp, copied, or printed to PDF.
+- **Curated picks** — 4 to 6 hotels per destination across budget, comfort and luxury, each with a
+  one-line reason and links to its live Google and Booking.com reviews (no ratings are stored, so
+  nothing goes stale or gets invented), plus the cab apps, car-hire, ferry, train and activity
+  operators that work in each place.
+- **Booking desk** — reads the trip plan and departure date and lists everything to book in order:
+  international flights, every domestic hop or road transfer, every hotel stay with dates and room
+  count, and activities that need advance booking. Every link opens Google Flights, Skyscanner,
+  Booking.com, Google Hotels, 12Go or the operator already filled in. Tick items off; progress is
+  saved.
 - **Cost planner** — sliders for group size, trip length, travel style, departure city and route,
   in EUR or INR. Uses a live EUR→INR rate from the free Frankfurter API when online.
 - **Dates** — departure-date picker with countdown, November 2026 festival calendar filtered to
@@ -62,7 +71,8 @@ Everything editable lives in **`data.js`**:
 | `links`        | Useful links, grouped                                         |
 
 Quiz questions, the food gallery, festivals, packing rules and German strings live in
-**`content.js`**. Cover illustrations are generated in the browser by `illustrations.js`.
+**`content.js`**. Hotel picks, operators, airport codes and the road-only list used by the booking
+desk live in **`guide.js`**. Cover illustrations are generated in the browser by `illustrations.js`.
 
 ### Adding real photos
 
