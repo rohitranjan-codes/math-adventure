@@ -421,7 +421,8 @@ footer .row { display: flex; flex-wrap: wrap; justify-content: space-between; ga
 
 /* Builder */
 .builder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
-@media (max-width: 960px) { .builder-layout { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .builder-layout { grid-template-columns: 1fr; } .builder-pool { position: static; max-height: none; } .pool { max-height: 260px; grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .pool { grid-template-columns: 1fr; } }
 .builder-pool { position: sticky; top: 90px; max-height: calc(100vh - 110px); display: flex; flex-direction: column; }
 .builder-pool h3 { font-size: 1.15rem; margin-bottom: 10px; }
 .pool-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; } .filter.small { padding: 6px 10px; font-size: .95rem; }
