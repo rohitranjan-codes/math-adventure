@@ -1,11 +1,27 @@
-# Namaste, November 🛫 — Europe → South India travel planner
+# Namaste, India 🛫 — Europe → India travel planner
 
-**A clean, animated, single-page travel plan for a group flying from Frankfurt or Zurich to
-Bengaluru in November.**
+**A safe, comfortable, single-page trip planner from any European airport to all of India.**
+Pick your origin, home country, arrival and departure gateway, month, group size, style and
+currency — every section adapts.
 
 Live site (once GitHub Pages is enabled): `https://rohitranjan-codes.github.io/europe-india-travel-planner/`
 
 ## What's inside
+
+- **Trip settings bar** — 29 European origin airports with their nonstop links, 20 home countries,
+  8 Indian gateways (arrive in one, leave from another), departure date, travellers, style and
+  currency (EUR, CHF, GBP, SEK, NOK, DKK, PLN, CZK, HUF, INR with live rates). Everything is
+  saved and encoded in the URL, so a shared link carries the whole setup.
+- **Three styles, no backpacking** — Comfort (4★), Premium (5★) and Luxury (palaces, business
+  class). Costs, hotel picks, transfers and flight classes follow the style.
+- **Any month** — every destination carries a 12-month rating; the "when to go" strip, cards,
+  builder and weather history follow the chosen month.
+- **Geo engine** — any leg between two stops is estimated from coordinates: named day trains where
+  they exist, flights when both ends have airports and the road is long, otherwise a private car
+  with driver — with hours and cost per person.
+- **Safety & comfort cards** — nearest good hospital, comfort score and practical notes for every
+  destination, plus a per-country card with official travel advice, trip registration, embassy,
+  consulates near your gateway and health sources.
 
 - **Animated hero** with a route map — planes flying FRA / ZRH → Bengaluru → Goa / Kochi.
 - **Why November** — temperature and honest verdicts for every region (including where *not* to go).
@@ -70,7 +86,8 @@ Everything editable lives in **`data.js`**:
 | `weather`      | November weather cards                                        |
 | `flights`      | Europe → Bengaluru options                                    |
 | `domestic`     | Onward flights / trains / road table                          |
-| `destinations` | Destination cards, map pins & builder stops (`type`, `lat`/`lng`, `hours`, `transfer`) |
+| `gateways`     | Indian arrival/departure airports and which destination city they map to |
+| `destinations` | Cards, map pins & builder stops (`region`, `airport`/`via`, `months[12]`, `priceIndex`, `comfort`) |
 | `photos`       | Ids that have a real photo at `img/<id>.jpg` (replaces the illustration) |
 | `ratingsEndpoint` | URL of the deployed ratings worker (empty = filter off)                |
 | `ratingFilter` | `{ min: 4.0, minCount: 100 }` — the rating threshold                        |
@@ -80,8 +97,10 @@ Everything editable lives in **`data.js`**:
 | `links`        | Useful links, grouped                                         |
 
 Quiz questions, the food gallery, festivals, packing rules and German strings live in
-**`content.js`**. Hotel picks, restaurants, operators, airport codes and the road-only list used by the booking
-desk live in **`guide.js`**. The ratings client is `ratings.js`; the service is in `worker/`. Cover illustrations are generated in the browser by `illustrations.js`.
+**`content.js`**. Hotel picks, restaurants and operators live in **`guide.js`**. European origins, per-country
+safety sources and currencies are in **`europe.js`**; the leg estimator in **`geo.js`**; the
+settings bar and everything it drives in **`settings.js`**. The ratings client is `ratings.js`;
+the service is in `worker/`. Cover illustrations are generated in the browser by `illustrations.js`.
 
 ### Adding real photos
 

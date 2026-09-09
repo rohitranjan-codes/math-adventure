@@ -9,6 +9,8 @@
   const byId = (id) => T.destinations.find((d) => d.id === id);
   const on = (name, fn) => addEventListener(name, fn);
   const emit = (name, detail) => dispatchEvent(new CustomEvent(name, { detail }));
+  const gwDest = () => byId(A.gatewayDest ? A.gatewayDest().id : T.gateways.find((g) => g.code === A.state.gateway)?.dest || 'bengaluru');
+  const gwDest2 = () => byId(A.gateway2 ? A.gateway2().dest : gwDest().id);
 
   /* ---------- Language toggle ---------- */
   const langBtn = $('#langBtn');
@@ -47,7 +49,7 @@
     const cover = $('#modal .sheet .cover'); if (!cover) return;
     const d = byId(id);
     const el = document.createElement('div'); el.className = 'stamp' + (fresh ? ' slam' : '');
-    el.innerHTML = `<span>${t('stamps.stamped')}</span><b>${esc(d.name.toUpperCase())}</b><small>NOV 2026 · BLR</small>`;
+    el.innerHTML = `<span>${t('stamps.stamped')}</span><b>${esc(d.name.toUpperCase())}</b><small>${(A.monthName ? A.monthName().slice(0, 3) : 'NOV').toUpperCase()} ${store.get('tripDate', '2026').slice(0, 4)} · ${A.state.gateway || 'BLR'}</small>`;
     cover.appendChild(el);
     if (fresh && stamps.size === T.destinations.length) confetti(240);
   });
@@ -95,17 +97,23 @@
   if (window.L && mapEl) {
     const map = L.map(mapEl, { scrollWheelZoom: false, zoomControl: true });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>', maxZoom: 18 }).addTo(map);
-    const blr = byId('bengaluru');
-    const lines = {};
+    const lines = {}, markers = {};
+    function drawLines() {
+      const hub = gwDest();
+      Object.values(lines).forEach((l) => map.removeLayer(l));
+      T.destinations.forEach((d) => { if (d.id !== hub.id) lines[d.id] = L.polyline([[hub.lat, hub.lng], [d.lat, d.lng]], { color: TYPE_COLORS[d.type], weight: 1.5, opacity: .35, dashArray: '4 6' }).addTo(map); else delete lines[d.id]; });
+      Object.entries(markers).forEach(([id, m]) => { const el = m.getElement && m.getElement(); if (el) el.querySelector('.pin')?.classList.toggle('hub', id === hub.id); });
+    }
     T.destinations.forEach((d) => {
-      if (d.id !== 'bengaluru') lines[d.id] = L.polyline([[blr.lat, blr.lng], [d.lat, d.lng]], { color: TYPE_COLORS[d.type], weight: 1.5, opacity: .35, dashArray: '4 6' }).addTo(map);
-      const icon = L.divIcon({ className: 'pin-wrap', html: `<div class="pin ${d.id === 'bengaluru' ? 'hub' : ''}" style="--c:${TYPE_COLORS[d.type]}">${d.emoji}</div>`, iconSize: [34, 34], iconAnchor: [17, 17], popupAnchor: [0, -18] });
-      const m = L.marker([d.lat, d.lng], { icon }).addTo(map);
-      m.bindPopup(() => `<div class="pop"><b>${d.emoji} ${esc(d.name)}</b><span>${esc(d.tag)}</span><div class="pop-meta">🛫 ${esc(d.from)}<br>💶 ${esc(d.perDay)}/day · 🛏 ${esc(d.nights)}</div><div class="pop-actions"><button data-open="${d.id}">${t('map.explore')}</button><button data-add="${d.id}" class="alt">+ ${t('map.add')}</button></div></div>`, { closeButton: false });
+      const icon = L.divIcon({ className: 'pin-wrap', html: `<div class="pin" style="--c:${TYPE_COLORS[d.type]}">${d.emoji}</div>`, iconSize: [34, 34], iconAnchor: [17, 17], popupAnchor: [0, -18] });
+      const m = L.marker([d.lat, d.lng], { icon }).addTo(map); markers[d.id] = m;
+      m.bindPopup(() => { const hub = gwDest(), l = d.id !== hub.id ? window.GEO.leg(hub, d, A.state.style, A.state.people) : null; return `<div class="pop"><b>${d.emoji} ${esc(d.name)}</b><span>${esc(d.tag)}</span><div class="pop-meta">${l ? `${window.GEO.MODE_ICON[l.mode]} ${l.hours} h · ${A.fmtNum(l.cost)} ${t('desk.from')} ${esc(hub.name)}` : (A.LANG.cur === 'de' ? 'Euer Gateway' : 'Your gateway')}<br>${A.monthBadge ? A.monthBadge(d) : ''} · 🛏 ${esc(d.nights)}</div><div class="pop-actions"><button data-open="${d.id}">${t('map.explore')}</button><button data-add="${d.id}" class="alt">+ ${t('map.add')}</button></div></div>`; }, { closeButton: false });
       m.on('mouseover', () => { if (lines[d.id]) lines[d.id].setStyle({ weight: 3, opacity: .9, dashArray: null }); });
       m.on('mouseout', () => { if (lines[d.id]) lines[d.id].setStyle({ weight: 1.5, opacity: .35, dashArray: '4 6' }); });
     });
+    drawLines();
     map.fitBounds([[7.5, 71], [31, 93.5]], { padding: [10, 10] });
+    on('settingschange', (e) => { if (e.detail && (e.detail.gatewayChanged || e.detail.init)) drawLines(); });
     map.on('popupopen', (e) => {
       const el = e.popup.getElement();
       el.querySelector('[data-open]')?.addEventListener('click', (ev) => A.openDest(ev.target.dataset.open));
@@ -133,22 +141,34 @@
     goa: [['bengaluru', 2], ['goa', 5], ['bengaluru', 1]],
     kerala: [['bengaluru', 2], ['munnar', 3], ['thekkady', 1], ['kochi', 2], ['bengaluru', 1]],
     heritage: [['bengaluru', 2], ['mysuru', 2], ['coorg', 2], ['hampi', 2], ['bengaluru', 1]],
+    golden: [['delhi', 2], ['goldentriangle', 3], ['varanasi', 2], ['delhi', 1]],
+    rajasthan: [['delhi', 1], ['rajasthan', 6], ['delhi', 1]],
   };
   let plan = [];
   const parseHash = () => { const m = location.hash.match(/plan=([a-z0-9.\-]+)/i); if (!m) return null; const p = m[1].split('-').map((s) => s.split('.')).filter(([id, n]) => byId(id) && +n >= 0).map(([id, n]) => ({ id, nights: +n })); const pp = location.hash.match(/p=(\d+)/), st = location.hash.match(/s=(\w+)/); if (pp) A.state.people = Math.min(12, Math.max(1, +pp[1])); if (st && A.M.styles[st[1]]) A.state.style = st[1]; return p; };
   plan = parseHash() || store.get('plan', null) || PRESETS.goa.map(([id, nights]) => ({ id, nights }));
-  const planUrl = () => `${location.origin}${location.pathname}#plan=${plan.map((s) => `${s.id}.${s.nights}`).join('-')}&p=${A.state.people}&s=${A.state.style}`;
-  const perDay = (d) => { const [lo, hi] = (d.perDay.match(/\d+/g) || [40, 100]).map(Number); return { budget: lo, comfort: (lo + hi) / 2, luxury: hi * 1.3 }[A.state.style]; };
+  plan = plan.filter((s) => byId(s.id));
+  const planUrl = () => `${location.origin}${location.pathname}${location.hash}`;
+  // per night per person: hotel share × destination price index + food + local transport, for the chosen style
+  const perDay = (d) => { const s = A.M.styles[A.state.style]; return s.hotel * (d.priceIndex || 1) + s.food + s.local; };
+  /* legs: arrival gateway → first stop, between stops, last stop → departure gateway */
+  function legs() {
+    const out = [], G = window.GEO; if (!G || !plan.length) return out;
+    const chain = [gwDest(), ...plan.map((s) => byId(s.id)), gwDest2()];
+    for (let i = 1; i < chain.length; i++) { const from = chain[i - 1], to = chain[i]; if (from.id === to.id) { out.push(null); continue; } out.push({ from, to, ...G.leg(from, to, A.state.style, A.state.people) }); }
+    return out; // out[i] is the leg INTO plan[i] (i < plan.length); out[plan.length] is the leg to the departure gateway
+  }
   function planCost() {
-    const s = A.M.styles[A.state.style], o = A.M.origins[A.state.origin];
-    const factor = { budget: .8, comfort: 1, luxury: 1.6 }[A.state.style];
+    const s = A.M.styles[A.state.style];
     const stay = plan.reduce((a, st) => a + st.nights * perDay(byId(st.id)), 0);
-    const transfers = plan.reduce((a, st) => a + byId(st.id).transfer * factor, 0);
+    const transfers = legs().reduce((a, l) => a + (l ? l.cost : 0), 0);
+    const acts = plan.reduce((a, st) => a + (st.id === gwDest().id ? 25 : 45) * s.actFactor * Math.min(st.nights, 4), 0);
     const fixed = A.M.fixed.visa + A.M.fixed.insurance + A.M.fixed.sim;
-    return (s.intl + o.adj + stay + transfers + fixed) * (1 + A.M.bufferPct);
+    return (s.intl + stay + transfers + acts + fixed) * (1 + A.M.bufferPct);
   }
   const nights = () => plan.reduce((a, s) => a + s.nights, 0);
-  const hours = () => plan.reduce((a, s) => a + byId(s.id).hours, 0);
+  const hours = () => legs().reduce((a, l) => a + (l ? l.hours : 0), 0);
+  const legRow = (l) => l ? `<div class="leg">${window.GEO.MODE_ICON[l.mode]} <b>${esc(l.label)}</b> · ${l.hours} ${t('leg.hours')}<span class="leg-cost">${A.fmtNum(l.cost)} pp</span></div>` : '';
   function stopRange(i) {
     const d0 = $('#tripDate').value; if (!d0) return null;
     let start = new Date(d0 + 'T00:00:00'); start.setDate(start.getDate() + 1);
@@ -161,34 +181,42 @@
     const f = (d) => d.toLocaleDateString(A.LANG.cur === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'short' });
     return `${f(r.start)} → ${f(r.end)}`;
   }
-  function savePlan() { store.set('plan', plan); history.replaceState(null, '', planUrl()); emit('planchange', plan); }
+  function savePlan() {
+    store.set('plan', plan);
+    const rest = location.hash.replace(/^#/, '').split('&').filter((p) => p && !p.startsWith('plan='));
+    history.replaceState(null, '', '#' + ['plan=' + plan.map((s) => `${s.id}.${s.nights}`).join('-'), ...rest].join('&'));
+    emit('planchange', plan);
+  }
   function addStop(id, n) { const d = byId(id); plan.push({ id, nights: n ?? (parseInt(d.nights) || 2) }); renderBuilder(); savePlan(); }
   function renderPool(type = poolType) {
     poolType = type;
     $$('.filter', $('#poolFilters')).forEach((b) => b.classList.toggle('active', b.dataset.type === type));
-    $('#builderPool').innerHTML = T.destinations.filter((d) => type === 'all' || d.type === type).map((d) => `<button class="pool-chip" draggable="true" data-id="${d.id}" style="--c:${TYPE_COLORS[d.type]}"><span>${d.emoji}</span><b>${esc(d.name)}</b><small>${esc(d.from)}</small></button>`).join('');
+    const gd = gwDest();
+    $('#builderPool').innerHTML = T.destinations.filter((d) => type === 'all' || d.type === type).map((d) => { const l = d.id !== gd.id && window.GEO ? window.GEO.leg(gd, d, A.state.style, A.state.people) : null; return `<button class="pool-chip" draggable="true" data-id="${d.id}" style="--c:${TYPE_COLORS[d.type]}"><span>${d.emoji}</span><b>${esc(d.name)} ${A.monthBadge ? A.monthBadge(d) : ''}</b><small>${l ? `${window.GEO.MODE_ICON[l.mode]} ${l.hours} h ${t('desk.from')} ${esc(gd.name)}` : (A.LANG.cur === 'de' ? 'Euer Gateway' : 'Your gateway')}</small></button>`; }).join('');
   }
   let poolType = 'all';
   $('#poolFilters').innerHTML = ['all', ...Object.keys(TYPE_COLORS)].map((k) => `<button class="filter small" data-type="${k}">${k === 'all' ? '🧭' : A.TYPES[k].icon}</button>`).join('');
   $('#poolFilters').addEventListener('click', (e) => { const b = e.target.closest('.filter'); if (b) renderPool(b.dataset.type); });
   $('#builderPool').addEventListener('click', (e) => { const b = e.target.closest('.pool-chip'); if (b) { addStop(b.dataset.id); b.classList.add('added'); setTimeout(() => b.classList.remove('added'), 500); } });
   $('#builderPool').addEventListener('dragstart', (e) => { const b = e.target.closest('.pool-chip'); if (b) { e.dataTransfer.setData('text/plain', 'add:' + b.dataset.id); e.dataTransfer.effectAllowed = 'copy'; } });
-  $('#builderPresets').innerHTML = T.routes.map((r) => `<button class="tab small" data-preset="${r.id}">${r.emoji} ${esc(r.name)}</button>`).join('');
+  const renderPresets = () => { $('#builderPresets').innerHTML = (A.routesFor ? A.routesFor() : T.routes).filter((r) => PRESETS[r.id]).map((r) => `<button class="tab small" data-preset="${r.id}">${r.emoji} ${esc(r.name)}</button>`).join(''); };
+  renderPresets();
   $('#builderPresets').addEventListener('click', (e) => { const b = e.target.closest('[data-preset]'); if (b) { plan = PRESETS[b.dataset.preset].map(([id, nights]) => ({ id, nights })); renderBuilder(); savePlan(); } });
 
   const timeline = $('#builderTimeline');
   function renderBuilder() {
+    const L = legs();
     if (!plan.length) timeline.innerHTML = `<div class="drop-empty">${t('builder.empty')}</div>`;
-    else timeline.innerHTML = plan.map((s, i) => { const d = byId(s.id); return `
+    else timeline.innerHTML = plan.map((s, i) => { const d = byId(s.id); return legRow(L[i]) + `
       <div class="stop" draggable="true" data-i="${i}" style="--i:${i};--c:${TYPE_COLORS[d.type]}">
         <div class="stop-cover">${window.sceneSVG(d.id, d.type, d.hue)}<span>${d.emoji}</span></div>
         <div class="stop-body">
-          <div class="stop-title"><b>${esc(d.name)}</b><small>${esc(d.from)}${tripDates(i) ? ' · 📅 ' + tripDates(i) : ''}</small></div>
-          <div class="stop-cost">≈ €${Math.round(s.nights * perDay(d))} ${t('builder.perPerson')}${(() => { const r = stopRange(i), fc = r && window.wxForecast ? window.wxForecast(d.id, r.start, r.end) : null; return fc ? ` <span class="stop-wx">· ${fc.icon} ${fc.min}–${fc.max}°${fc.rain != null ? ' · 🌧 ' + fc.rain + '%' : ''}</span>` : ''; })()}</div>
+          <div class="stop-title"><b>${esc(d.name)}</b><small>${A.monthBadge ? A.monthBadge(d) : ''}${tripDates(i) ? ' 📅 ' + tripDates(i) : ''}</small></div>
+          <div class="stop-cost">≈ ${A.fmtNum(s.nights * perDay(d))} ${t('builder.perPerson')}${(() => { const r = stopRange(i), fc = r && window.wxForecast ? window.wxForecast(d.id, r.start, r.end) : null; return fc ? ` <span class="stop-wx">· ${fc.icon} ${fc.min}–${fc.max}°${fc.rain != null ? ' · 🌧 ' + fc.rain + '%' : ''}</span>` : ''; })()}</div>
         </div>
         <div class="stop-nights"><button data-act="minus" aria-label="fewer nights">−</button><b>${s.nights}</b><span>${t('builder.nights')}</span><button data-act="plus" aria-label="more nights">+</button></div>
         <div class="stop-tools"><button data-act="up" ${i === 0 ? 'disabled' : ''}>↑</button><button data-act="down" ${i === plan.length - 1 ? 'disabled' : ''}>↓</button><button data-act="remove" class="danger">✕</button></div>
-      </div>`; }).join('') + `<div class="drop-target">＋ ${t('builder.pool')}</div>`;
+      </div>`; }).join('') + legRow(L[plan.length]) + `<div class="drop-target">＋ ${t('builder.pool')}</div>`;
     renderSummary();
   }
   function renderSummary() {
@@ -233,13 +261,13 @@
     else if (data.startsWith('move:')) { const from = +data.slice(5); const [item] = plan.splice(from, 1); plan.splice(to > from ? to - 1 : to, 0, item); }
     renderBuilder(); savePlan();
   });
-  $('#clearPlan').addEventListener('click', () => { plan = [{ id: 'bengaluru', nights: 2 }]; renderBuilder(); savePlan(); });
+  $('#clearPlan').addEventListener('click', () => { plan = [{ id: gwDest().id, nights: 2 }]; renderBuilder(); savePlan(); });
   const shareText = () => `${A.LANG.cur === 'de' ? 'Unser Indien-Plan' : 'Our India plan'} (${nights() + 2} ${t('builder.days')}): ${plan.map((s) => `${byId(s.id).name} ${s.nights}n`).join(' → ')} · ≈ ${A.fmtNum(planCost())} ${t('builder.perPerson')}. ${planUrl()}`;
   $('#shareWa').addEventListener('click', () => open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank', 'noopener'));
   $('#copyLink').addEventListener('click', async (e) => { try { await navigator.clipboard.writeText(planUrl()); } catch { prompt('Copy this link', planUrl()); } const b = e.currentTarget, old = b.textContent; b.textContent = '✓ ' + t('builder.copied'); setTimeout(() => { b.textContent = old; }, 1600); });
   $('#printPlan').addEventListener('click', () => {
     const d0 = $('#tripDate').value;
-    $('#printArea').innerHTML = `<h1>🛫 Europe → South India · ${nights() + 2} ${t('builder.days')}</h1><p>${d0 ? 'Departure ' + d0 + ' · ' : ''}${A.state.people} ${A.LANG.cur === 'de' ? 'Reisende' : 'travellers'} · ${A.M.styles[A.state.style].label} · ≈ ${A.fmtNum(planCost())} ${t('builder.perPerson')}</p>
+    $('#printArea').innerHTML = `<h1>🛫 Europe → South India · ${nights() + 2} ${t('builder.days')}</h1><p>${d0 ? 'Departure ' + d0 + ' · ' : ''}${A.state.people} ${A.LANG.cur === 'de' ? 'Reisende' : 'travellers'} · ${A.M.styles[A.state.style].label} ${A.M.styles[A.state.style].stars} · ${A.origin ? A.origin().code : ''} → ${A.state.gateway} · ≈ ${A.fmtNum(planCost())} ${t('builder.perPerson')}</p>
       <table><thead><tr><th>#</th><th>Stop</th><th>Nights</th><th>Dates</th><th>Getting there</th><th>Highlights</th></tr></thead><tbody>${plan.map((s, i) => { const d = byId(s.id); return `<tr><td>${i + 1}</td><td><b>${esc(d.name)}</b><br><small>${esc(d.tag)}</small></td><td>${s.nights}</td><td>${tripDates(i)}</td><td>${esc(d.from)}</td><td>${d.todo.slice(0, 3).map(esc).join(' · ')}</td></tr>`; }).join('')}</tbody></table>
       <h2>Packing list</h2><ul>${packingItems().map((x) => `<li>☐ ${esc(x)}</li>`).join('')}</ul>
       <p class="fine">${location.href}</p>`;
@@ -247,6 +275,11 @@
   });
   renderPool('all'); renderBuilder();
   on('costchange', renderSummary);
+  on('settingschange', (e) => {
+    const gwChanged = e.detail && e.detail.gatewayChanged;
+    if (gwChanged && (plan.length <= 1 || plan.every((s) => T.gateways.some((g) => g.dest === s.id)))) plan = [{ id: gwDest().id, nights: 2 }];
+    renderPresets(); renderPool(); renderBuilder(); if (gwChanged) savePlan(); else emit('planchange', plan);
+  });
   window.addStop = addStop;
 
   /* ---------- Dates: countdown, festivals, packing ---------- */
@@ -298,26 +331,28 @@
     if (!plan.length) return rows;
     const d0 = $('#tripDate').value ? new Date($('#tripDate').value + 'T00:00:00') : null;
     const endD = d0 ? new Date(d0.getTime() + (nights() + 2) * 86400000) : null;
-    const origin = { fra: 'FRA', zrh: 'ZRH', other: 'FRA' }[A.state.origin] || 'FRA';
-    const lastId = plan[plan.length - 1].id, lastAp = G.airports[lastId] || 'BLR';
-    rows.push({ key: 'intl', icon: '✈️', kind: t('desk.intl'), title: `${origin} → BLR${lastAp !== 'BLR' ? ` · ${lastAp} → ${origin}` : ''}`, sub: d0 ? `${dfmt(d0)} → ${dfmt(endD)} · ${A.state.people} 👤` : t('desk.noDate'),
-      links: [{ l: t('desk.google'), u: gflights(origin, 'BLR', d0, lastAp === 'BLR' ? endD : null), p: true }, { l: t('desk.sky'), u: sky(origin, 'BLR', d0, lastAp === 'BLR' ? endD : null) }, ...(lastAp !== 'BLR' ? [{ l: `${t('desk.return')}: ${lastAp} → ${origin}`, u: gflights(lastAp, origin, endD) }] : []), { l: 'Lufthansa', u: 'https://www.lufthansa.com/' }] });
+    const origin = A.origin ? A.origin().code : 'FRA', gwIn = A.state.gateway || 'BLR', gwOut = (A.state.gateway2 || gwIn);
+    const airline = (A.origin && A.origin().nonstop[gwIn] && A.origin().nonstop[gwIn][0]) || 'Lufthansa';
+    rows.push({ key: 'intl', icon: '✈️', kind: t('desk.intl'), title: `${origin} → ${gwIn}${gwOut !== gwIn ? ` · ${gwOut} → ${origin}` : ''}`, sub: d0 ? `${dfmt(d0)} → ${dfmt(endD)} · ${A.state.people} 👤` : t('desk.noDate'),
+      links: [{ l: t('desk.google'), u: gflights(origin, gwIn, d0, gwOut === gwIn ? endD : null), p: true }, { l: t('desk.sky'), u: sky(origin, gwIn, d0, gwOut === gwIn ? endD : null) }, ...(gwOut !== gwIn ? [{ l: `${t('desk.return')}: ${gwOut} → ${origin}`, u: gflights(gwOut, origin, endD) }] : []), { l: airline, u: 'https://www.google.com/search?q=' + encodeURIComponent(airline + ' ' + origin + ' ' + gwIn) }] });
+    const L = legs();
+    const legRowFor = (l, key, dep) => {
+      if (!l) return null;
+      const fromCity = G.searchCity[l.from.id] || l.from.name, toCity = G.searchCity[l.to.id] || l.to.name;
+      if (l.mode === 'flight' || l.mode === 'flight+road') { const toAp = l.to.airport || l.to.via; return { key, icon: '🛫', kind: t('desk.hop'), title: `${l.from.name} → ${l.to.name} · ${t('desk.flight')} ${l.from.airport} → ${toAp}${l.mode === 'flight+road' ? ' + 🚗' : ''}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${l.label} · ${l.hours} ${t('leg.hours')} · ≈ ${A.fmtNum(l.cost)} pp`, links: [{ l: t('desk.google'), u: gflights(l.from.airport, toAp, dep), p: true }, { l: t('desk.sky'), u: sky(l.from.airport, toAp, dep) }, { l: 'IndiGo', u: 'https://www.goindigo.in/' }, { l: 'Air India', u: 'https://www.airindia.com/' }, ...(l.mode === 'flight+road' ? [{ l: t('desk.savaari'), u: 'https://www.savaari.com/' }] : [])] }; }
+      if (l.mode === 'train') return { key, icon: '🚆', kind: t('desk.hop'), title: `${l.from.name} → ${l.to.name} · ${l.label}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${l.hours} ${t('leg.hours')} · ≈ ${A.fmtNum(l.cost)} pp`, links: [{ l: t('desk.irctc'), u: 'https://www.irctc.co.in/', p: true }, { l: t('desk.12go'), u: twelveGo(fromCity, toCity, dep) }, { l: t('desk.savaari'), u: 'https://www.savaari.com/' }] };
+      return { key, icon: '🚗', kind: t('desk.hop'), title: `${l.from.name} → ${l.to.name}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${l.label} · ${l.hours} ${t('leg.hours')} · ≈ ${A.fmtNum(l.cost)} pp`, links: [{ l: t('desk.savaari'), u: 'https://www.savaari.com/', p: true }, { l: t('desk.12go'), u: twelveGo(fromCity, toCity, dep) }] };
+    };
     plan.forEach((s, i) => {
       const d = byId(s.id), r = stopRange(i), city = G.searchCity[s.id] || d.name;
-      if (i > 0) {
-        const prev = byId(plan[i - 1].id), fromAp = G.airports[prev.id] || 'BLR', toAp = G.airports[s.id];
-        const road = G.roadOnly.includes(s.id) || !toAp || toAp === fromAp;
-        const dep = r ? r.start : null;
-        if (!road) rows.push({ key: `hop${i}`, icon: '🛫', kind: t('desk.hop'), title: `${prev.name} → ${d.name} · ${t('desk.flight')} ${fromAp} → ${toAp}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${d.from}`,
-          links: [{ l: t('desk.google'), u: gflights(fromAp, toAp, dep), p: true }, { l: t('desk.sky'), u: sky(fromAp, toAp, dep) }, { l: 'IndiGo', u: 'https://www.goindigo.in/' }, { l: 'Air India', u: 'https://www.airindia.com/' }] });
-        else rows.push({ key: `hop${i}`, icon: '🚗', kind: t('desk.hop'), title: `${prev.name} → ${d.name}`, sub: `${dep ? dfmt(dep) + ' · ' : ''}${d.from}`,
-          links: [{ l: t('desk.savaari'), u: 'https://www.savaari.com/', p: true }, { l: t('desk.12go'), u: twelveGo(G.searchCity[prev.id] || prev.name, city, dep) }, ...(['mysuru', 'hampi', 'ooty', 'hyderabad'].includes(s.id) ? [{ l: t('desk.irctc'), u: 'https://www.irctc.co.in/' }] : []), { l: 'redBus', u: 'https://www.redbus.in/' }] });
-      }
-      if (s.nights > 0) rows.push({ key: `stay${i}-${s.id}`, icon: '🛏️', kind: t('desk.stay'), title: `${d.emoji} ${d.name} · ${s.nights} ${t('desk.nights')}`, sub: `${r ? dfmt(r.start) + ' → ' + dfmt(r.end) + ' · ' : ''}${Math.ceil(A.state.people / 2)} ${t('desk.rooms')} · ${d.perDay}/day`,
+      const hop = legRowFor(L[i], `hop${i}`, r ? (i === 0 ? new Date(r.start.getTime() - 86400000) : r.start) : null); if (hop) rows.push(hop);
+      if (s.nights > 0) rows.push({ key: `stay${i}-${s.id}`, icon: '🛏️', kind: t('desk.stay'), title: `${d.emoji} ${d.name} · ${s.nights} ${s.nights === 1 ? (A.LANG.cur === 'de' ? 'Nacht' : 'night') : t('desk.nights')}`, sub: `${r ? dfmt(r.start) + ' → ' + dfmt(r.end) + ' · ' : ''}${Math.ceil(A.state.people / 2)} ${t('desk.rooms')} · ${d.perDay}/day`,
         links: [{ l: t('desk.booking'), u: bookingUrl(city, r?.start, r?.end), p: true }, { l: t('desk.ghotels'), u: ghotels(city, r?.start, r?.end) }, ...(G.picks[s.id] || []).filter((p) => pickPasses(p.n + ' ' + city)).slice(0, 3).map((p) => ({ l: '★ ' + p.n, u: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(p.n + ' ' + city)}${r ? `&checkin=${ymd(r.start)}&checkout=${ymd(r.end)}` : ''}&group_adults=${A.state.people}&no_rooms=${Math.ceil(A.state.people / 2)}`, c: 'pickchip' }))] });
       (G.ops[s.id] || []).filter((o) => o.kind === 'activity' || o.kind === 'boat' || o.kind === 'train').forEach((o, k) => rows.push({ key: `act${s.id}-${k}`, icon: ({ activity: '🎟️', boat: '⛵', train: '🚆' })[o.kind], kind: t('desk.book'), title: `${d.name} · ${o.n}`, sub: o.why, links: [{ l: o.n + ' ↗', u: o.url, p: true }] }));
     });
-    return rows;
+    const out = legRowFor(L[plan.length], 'hopOut', endD ? new Date(endD.getTime() - 86400000) : null); if (out) rows.push(out);
+    const seen = new Set();
+    return rows.filter((r) => { if (seen.has(r.key)) return false; seen.add(r.key); return true; });
   }
   function renderDesk() {
     const rows = deskRows();
@@ -400,7 +435,7 @@
     if (!now && !last) return '';
     return `${now ? `<span class="wx-now"><b>${now.icon} ${now.temp}°</b> ${t('wx.now')} · ${esc(now.text)}</span>` : ''}
       ${trip ? `<span class="wx-trip"><b>${trip.icon} ${trip.min}–${trip.max}°</b> ${t('wx.trip')}${trip.rain != null ? ` · 🌧 ${trip.rain}% ${t('wx.rain')}` : ''}</span>` : (d0 ? `<span class="wx-soon">📅 ${t('wx.soon')}</span>` : '')}
-      ${last ? `<span class="wx-last">📊 ${t('wx.lastNov')} ${last.year}: ${last.min}–${last.max}° · ${last.rainy} ${t('wx.rainy')}</span>` : ''}`;
+      ${last ? `<span class="wx-last">📊 ${A.LANG.cur === 'de' ? 'Letzter' : 'Last'} ${A.monthName ? A.monthName() : ''} ${last.year}: ${last.min}–${last.max}° · ${last.rainy} ${t('wx.rainy')}</span>` : ''}`;
   }
   function paintWeather() {
     $$('[data-wx]').forEach((el) => { const html = liveHTML(el.dataset.wx); el.innerHTML = html; el.classList.toggle('on', !!html); });
@@ -419,15 +454,17 @@
         store.set('wx', { data: WX.data, at: WX.at });
       } catch { /* keep static notes */ }
     }
-    const hc = wxCache('wxHist', 7 * 24 * 60 * 60 * 1000);
+    const hc = wxCache('wxHist' + (A.state.month || 11), 7 * 24 * 60 * 60 * 1000);
     if (hc) WX.hist = hc.data;
     else {
       try {
-        const y = new Date().getFullYear() - (new Date().getMonth() >= 11 ? 0 : 1); // most recent complete November
-        const r = await fetch(`https://archive-api.open-meteo.com/v1/archive?${locParams}&start_date=${y}-11-01&end_date=${y}-11-30&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Asia%2FKolkata`);
+        const m = A.state.month || 11, now = new Date();
+        const y = now.getFullYear() - (m <= now.getMonth() ? 0 : 1); // most recent complete instance of that month
+        const mm = String(m).padStart(2, '0'), last = new Date(y, m, 0).getDate();
+        const r = await fetch(`https://archive-api.open-meteo.com/v1/archive?${locParams}&start_date=${y}-${mm}-01&end_date=${y}-${mm}-${last}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Asia%2FKolkata`);
         if (!r.ok) throw new Error(r.status);
         const j = await r.json(); WX.hist = Array.isArray(j) ? j : [j];
-        store.set('wxHist', { data: WX.hist, at: Date.now() });
+        store.set('wxHist' + (A.state.month || 11), { data: WX.hist, at: Date.now() });
       } catch { /* optional */ }
     }
     paintWeather(); if (WX.data) renderBuilder();

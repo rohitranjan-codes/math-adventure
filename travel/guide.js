@@ -5,12 +5,31 @@
    tier: budget | mid | lux · kind (ops): cab | car | bus | boat | train | activity
    ------------------------------------------------------------------ */
 window.GUIDE = {
-  airports: { bengaluru: 'BLR', goa: 'GOI', munnar: 'COK', kochi: 'COK', thekkady: 'COK', hyderabad: 'HYD', ooty: 'CJB', varkala: 'TRV', andaman: 'IXZ', madurai: 'IXM', badami: 'HBX', hampi: 'VDY', wayanad: 'CCJ', goldentriangle: 'DEL', rajasthan: 'UDR', varanasi: 'VNS', rishikesh: 'DED', mumbai: 'BOM', pondicherry: 'MAA' },
+  airports: { bengaluru: 'BLR', goa: 'GOI', munnar: 'COK', kochi: 'COK', thekkady: 'COK', hyderabad: 'HYD', ooty: 'CJB', varkala: 'TRV', andaman: 'IXZ', madurai: 'IXM', badami: 'HBX', hampi: 'VDY', wayanad: 'CCJ', goldentriangle: 'DEL', rajasthan: 'UDR', varanasi: 'VNS', rishikesh: 'DED', mumbai: 'BOM', pondicherry: 'MAA', delhi: 'DEL', chennai: 'MAA', kolkata: 'CCU' },
   /* destinations reached by road/train from the previous stop rather than a flight of their own */
   roadOnly: ['mysuru', 'coorg', 'kabini', 'chikmagalur', 'gokarna', 'thekkady', 'munnar', 'badami', 'pondicherry', 'wayanad', 'ooty'],
-  searchCity: { bengaluru: 'Bengaluru', goa: 'Goa', munnar: 'Munnar', kochi: 'Fort Kochi', thekkady: 'Thekkady', mysuru: 'Mysuru', coorg: 'Madikeri', hampi: 'Hampi', hyderabad: 'Hyderabad', ooty: 'Ooty', kabini: 'Kabini', chikmagalur: 'Chikmagalur', gokarna: 'Gokarna', wayanad: 'Wayanad', varkala: 'Varkala', andaman: 'Havelock Island', madurai: 'Madurai', badami: 'Badami', pondicherry: 'Pondicherry', goldentriangle: 'Agra', rajasthan: 'Udaipur', varanasi: 'Varanasi', rishikesh: 'Rishikesh', mumbai: 'Mumbai' },
+  searchCity: { bengaluru: 'Bengaluru', goa: 'Goa', munnar: 'Munnar', kochi: 'Fort Kochi', thekkady: 'Thekkady', mysuru: 'Mysuru', coorg: 'Madikeri', hampi: 'Hampi', hyderabad: 'Hyderabad', ooty: 'Ooty', kabini: 'Kabini', chikmagalur: 'Chikmagalur', gokarna: 'Gokarna', wayanad: 'Wayanad', varkala: 'Varkala', andaman: 'Havelock Island', madurai: 'Madurai', badami: 'Badami', pondicherry: 'Pondicherry', goldentriangle: 'Agra', rajasthan: 'Udaipur', varanasi: 'Varanasi', rishikesh: 'Rishikesh', mumbai: 'Mumbai', delhi: 'New Delhi', chennai: 'Chennai', kolkata: 'Kolkata' },
 
   picks: {
+    delhi: [
+      { n: 'The Oberoi New Delhi', tier: 'lux', area: 'Dr Zakir Hussain Marg', why: 'Golf-course and Humayun\'s Tomb views, flawless service, clean-air rooms.' },
+      { n: 'The Imperial', tier: 'lux', area: 'Janpath', why: 'Art-deco grande dame, superb art collection, central.' },
+      { n: 'The Lodhi', tier: 'lux', area: 'Lodhi Road', why: 'Private plunge pools, next to Indian Accent.' },
+      { n: 'Taj Mahal, New Delhi', tier: 'mid', area: 'Mansingh Road', why: 'Classic Taj in the diplomatic quarter.' },
+      { n: 'Andaz Delhi', tier: 'mid', area: 'Aerocity', why: 'Design hotel 10 min from the airport — ideal for a short stop.' },
+    ],
+    chennai: [
+      { n: 'ITC Grand Chola', tier: 'lux', area: 'Guindy', why: 'Vast Chola-style palace hotel with excellent restaurants.' },
+      { n: 'Taj Fisherman\'s Cove Resort & Spa', tier: 'lux', area: 'Covelong beach (ECR)', why: 'Beach resort between the city and Mahabalipuram.' },
+      { n: 'Taj Club House', tier: 'mid', area: 'Anna Salai', why: 'Central, calm, good pool.' },
+      { n: 'Hyatt Regency Chennai', tier: 'mid', area: 'Teynampet', why: 'Reliable business hotel with a strong spa.' },
+    ],
+    kolkata: [
+      { n: 'The Oberoi Grand', tier: 'lux', area: 'Chowringhee', why: 'The colonial grande dame of the city, an oasis on the Maidan.' },
+      { n: 'ITC Royal Bengal', tier: 'lux', area: 'New Town', why: 'Modern luxury, excellent Bengali restaurant.' },
+      { n: 'Taj Bengal', tier: 'mid', area: 'Alipore', why: 'Classic Taj by the zoo and race course.' },
+      { n: 'The Park Kolkata', tier: 'mid', area: 'Park Street', why: 'On the restaurant street; lively.' },
+    ],
     bengaluru: [
       { n: 'Taj West End', tier: 'lux', area: 'Race Course Road', why: 'Heritage garden hotel since 1887, 20 acres of trees in the city centre.' },
       { n: 'ITC Gardenia', tier: 'lux', area: 'Residency Road', why: 'Reliable luxury, superb breakfast, walk to Cubbon Park.' },
@@ -179,6 +198,25 @@ window.GUIDE = {
 
   /* Restaurants & cafés per destination (rated live through the ratings service) */
   eat: {
+    delhi: [
+      { n: 'Karim\'s', area: 'Jama Masjid', why: 'Mughal kebabs and korma since 1913.' },
+      { n: 'Indian Accent', area: 'The Lodhi', why: 'India\'s most awarded modern restaurant; book weeks ahead.' },
+      { n: 'Bukhara', area: 'ITC Maurya', why: 'Dal Bukhara and tandoori legends.' },
+      { n: 'Saravana Bhavan', area: 'Janpath', why: 'Spotless South-Indian vegetarian.' },
+      { n: 'Bengali Market chaat (Nathu\'s)', area: 'Bengali Market', why: 'Chaat and sweets, a Delhi institution.' },
+    ],
+    chennai: [
+      { n: 'Murugan Idli Shop', area: 'T. Nagar', why: 'Idli, podi dosa, filter coffee.' },
+      { n: 'Anjappar Chettinad', area: 'Nungambakkam', why: 'Chettinad classics done properly.' },
+      { n: 'Bay View, Taj Fisherman\'s Cove', area: 'Covelong', why: 'Seafood on the sand.' },
+    ],
+    kolkata: [
+      { n: 'Nizam\'s', area: 'New Market', why: 'Home of the kathi roll.' },
+      { n: '6 Ballygunge Place', area: 'Ballygunge', why: 'Bengali thali in a heritage house.' },
+      { n: 'Bhojohori Manna', area: 'Ekdalia', why: 'Homely Bengali fish curries.' },
+      { n: 'Balaram Mullick & Radharaman Mullick', area: 'Bhowanipore', why: 'Rosogolla, sandesh, mishti doi since 1885.' },
+      { n: 'Peter Cat', area: 'Park Street', why: 'Chelo kebab, a Park Street ritual.' },
+    ],
     bengaluru: [
       { n: 'Mavalli Tiffin Room (MTR)', area: 'Lalbagh Road', why: 'The 1924 original: masala dosa, rava idli, filter coffee.' },
       { n: 'Vidyarthi Bhavan', area: 'Basavanagudi', why: 'Legendary crisp dosa, queues from 06:30.' },
@@ -303,6 +341,21 @@ window.GUIDE = {
 
   /* Getting around & booking-ahead, per destination */
   ops: {
+    delhi: [
+      { n: 'Uber / Ola & pre-booked hotel cars', kind: 'cab', url: 'https://www.uber.com/in/en/', why: 'Use app cabs or hotel cars; the Metro is excellent by day.' },
+      { n: 'Gatimaan / Vande Bharat to Agra (IRCTC)', kind: 'train', url: 'https://www.irctc.co.in/', why: 'The fastest, most comfortable way to the Taj.' },
+      { n: 'Taj Mahal tickets (ASI)', kind: 'activity', url: 'https://asi.payumoney.com/', why: 'Book a timed slot online; closed Fridays.' },
+      { n: 'Car with driver for the Golden Triangle', kind: 'car', url: 'https://www.savaari.com/', why: 'Multi-day chauffeur hire; hotels also arrange vetted drivers.' },
+    ],
+    chennai: [
+      { n: 'Uber / Ola', kind: 'cab', url: 'https://www.uber.com/in/en/', why: 'Works everywhere; autos are metered by law but negotiate anyway.' },
+      { n: 'Car with driver for the ECR coast', kind: 'car', url: 'https://www.savaari.com/', why: 'Mahabalipuram and Pondicherry are best by private car.' },
+    ],
+    kolkata: [
+      { n: 'Uber / Ola & yellow taxis', kind: 'cab', url: 'https://www.uber.com/in/en/', why: 'App cabs are easiest; the Metro is quick north–south.' },
+      { n: 'Sundarbans boat safari (WBTDC)', kind: 'boat', url: 'https://www.wbtdcl.com/', why: 'Government-run boats and lodges; book ahead.' },
+      { n: 'Darjeeling Himalayan Railway (IRCTC)', kind: 'train', url: 'https://www.irctc.co.in/', why: 'Toy train joyrides from Darjeeling; book early.' },
+    ],
     bengaluru: [
       { n: 'Uber / Ola', kind: 'cab', url: 'https://www.uber.com/in/en/', why: 'Cabs and autos; airport pickup zone is signed. Namma Yatri is the local auto app.' },
       { n: 'BMTC Vayu Vajra airport bus', kind: 'bus', url: 'https://mybmtc.karnataka.gov.in/', why: 'AC buses to MG Road / Indiranagar every 30 min, ₹300.' },

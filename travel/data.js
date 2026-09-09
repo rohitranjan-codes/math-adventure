@@ -12,6 +12,20 @@ window.TRIP = {
   ratingsEndpoint: '',
   ratingFilter: { min: 4.0, minCount: 100 },
 
+  /* Arrival / departure gateways with nonstop links from Europe (see europe.js for the other side) */
+  gateways: [
+    { code: 'BLR', city: 'Bengaluru', dest: 'bengaluru', note: 'Best for the south: Kerala, Goa, Karnataka, Tamil Nadu.' },
+    { code: 'DEL', city: 'Delhi', dest: 'delhi', note: 'Best for the north: Golden Triangle, Rajasthan, Varanasi, Himalaya.' },
+    { code: 'BOM', city: 'Mumbai', dest: 'mumbai', note: 'Best for the west: Goa, Rajasthan by air, Kerala.' },
+    { code: 'MAA', city: 'Chennai', dest: 'chennai', note: 'Tamil temple trail, Pondicherry, Andamans.' },
+    { code: 'HYD', city: 'Hyderabad', dest: 'hyderabad', note: 'Central India; easy hop to Hampi, Goa, Bengaluru.' },
+    { code: 'COK', city: 'Kochi', dest: 'kochi', note: 'Straight into Kerala (one stop via the Gulf).' },
+    { code: 'CCU', city: 'Kolkata', dest: 'kolkata', note: 'East and north-east: Darjeeling, Sikkim, Varanasi.' },
+    { code: 'GOI', city: 'Goa', dest: 'goa', note: 'Beach first (one stop via the Gulf / seasonal charters).' },
+  ],
+  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  regions: { south: 'South India', west: 'West coast', north: 'North India', east: 'East & North-east', central: 'Central India', islands: 'Islands' },
+
   weather: [
     { id: 'bengaluru', place: 'Bengaluru', temp: '18–27 °C', note: 'Mild, breezy, mostly dry. Light showers possible in the first week.', icon: '⛅', rating: 'great' },
     { id: 'goa', place: 'Goa', temp: '23–33 °C', note: 'Dry, sunny, sea calm — the season kicks off in November.', icon: '☀️', rating: 'great' },
@@ -25,44 +39,9 @@ window.TRIP = {
     { id: 'pondicherry', place: 'Pondicherry / Chennai', temp: '24–30 °C', note: 'Peak NE-monsoon rain in November. Better in January.', icon: '🌧️', rating: 'skip' },
   ],
 
-  flights: [
-    {
-      from: 'Frankfurt (FRA)', to: 'Bengaluru (BLR)', type: 'Nonstop',
-      duration: '≈ 9 h', airlines: 'Lufthansa (daily, A350)',
-      price: '€650 – 1,000 return economy · €2,800 – 4,500 business',
-      tip: 'Departs early afternoon, lands BLR around 01:00–02:00 next day. Book 2–4 months ahead for November.'
-    },
-    {
-      from: 'Zurich (ZRH)', to: 'Bengaluru (BLR)', type: '1 stop',
-      duration: '11 – 14 h', airlines: 'Lufthansa via FRA/MUC · Qatar via DOH · Emirates via DXB · Etihad via AUH · Turkish via IST',
-      price: '€600 – 950 return economy · €2,600 – 4,200 business',
-      tip: 'Gulf carriers often price lower than the Lufthansa connection and land BLR early morning. Keep 2 h+ for the connection.'
-    },
-    {
-      from: 'Other Europe', to: 'Bengaluru (BLR)', type: 'Nonstop options',
-      duration: '9 – 10 h', airlines: 'British Airways (LHR) · Air France (CDG) · KLM (AMS)',
-      price: '€600 – 1,000 return economy',
-      tip: 'Handy if part of the group starts from Paris, London or Amsterdam and meets in Bengaluru.'
-    },
-  ],
-
-  domestic: [
-    { route: 'Bengaluru → Goa (GOI Dabolim or GOX Mopa)', time: '1 h 10', price: '€40 – 90', carriers: 'IndiGo · Air India · Air India Express · Akasa', note: 'Mopa (GOX) is closer to North Goa beaches; Dabolim (GOI) to South Goa & Panaji.' },
-    { route: 'Bengaluru → Kochi (COK)', time: '1 h 05', price: '€40 – 90', carriers: 'IndiGo · Air India · Air India Express', note: 'Gateway to Munnar (4 h drive), Alleppey and Fort Kochi.' },
-    { route: 'Goa → Kochi (COK)', time: '1 h 20', price: '€45 – 100', carriers: 'IndiGo', note: 'Lets you combine the Goa and Kerala routes without returning to Bengaluru.' },
-    { route: 'Bengaluru → Mysuru (train)', time: '2 h', price: '€8 – 15', carriers: 'Vande Bharat · Shatabdi Express', note: 'Fast, clean, air-conditioned. Book on IRCTC or 12Go a few weeks ahead.' },
-    { route: 'Bengaluru → Hyderabad (HYD)', time: '1 h', price: '€30 – 70', carriers: 'IndiGo · Air India · Akasa', note: 'Hourly flights; also a comfortable overnight sleeper train.' },
-    { route: 'Bengaluru → Port Blair, Andamans (IXZ)', time: '2 h 30', price: '€70 – 150', carriers: 'IndiGo · Air India', note: 'Nonstop. Book ferries to Havelock/Neil once flights are fixed.' },
-    { route: 'Bengaluru → Trivandrum (TRV) · Madurai (IXM) · Coimbatore (CJB)', time: '1 h – 1 h 15', price: '€35 – 80', carriers: 'IndiGo · Air India Express', note: 'Gateways to Varkala, the temple trail and Ooty respectively.' },
-    { route: 'Bengaluru → Delhi (DEL)', time: '2 h 40', price: '€50 – 120', carriers: 'IndiGo · Air India · Akasa', note: 'For the Golden Triangle; fly back from Jaipur (JAI).' },
-    { route: 'Bengaluru → Udaipur (UDR) · Varanasi (VNS) · Dehradun (DED) · Mumbai (BOM)', time: '1 h 30 – 3 h', price: '€30 – 130', carriers: 'IndiGo · Air India · Akasa', note: 'Nonstop. North India is at its best in November — worth it if you have 5+ spare days.' },
-    { route: 'Bengaluru → Mysuru · Coorg · Kabini · Chikmagalur · Wayanad · Ooty (road)', time: '2 – 7 h', price: '€60 – 90 per car per day', carriers: 'Private car with driver (Savaari, hotel desks) · KSRTC buses', note: 'A 6-seater Innova with driver is the sweet spot for a group of 4–6.' },
-    { route: 'Bengaluru → Hampi (Hosapete)', time: '6 h car · 8 h night train · 1 h flight to Vidyanagar (VDY)', price: '€15 – 120', carriers: 'KSRTC · Hampi Express · Star Air / IndiGo', note: 'Night train (Hampi Express, 2AC) is the classic and cheapest way; hire a car for the return with stops.' },
-  ],
-
   destinations: [
     {
-      id: 'bengaluru', lat: 12.97, lng: 77.59, hours: 0, transfer: 0, type: 'city', from: 'Your arrival airport', nights: '2 nights', name: 'Bengaluru', tag: 'Your gateway city', emoji: '🏙️',
+      id: 'bengaluru', region: 'south', airport: 'BLR', via: null, priceIndex: 1.0, months: [3, 3, 2, 1, 1, 2, 2, 2, 2, 2, 3, 3], comfort: { score: 5, hospital: 'Manipal Hospital (Old Airport Road) · Apollo Bannerghatta', notes: ['Very safe, cosmopolitan city; Uber/Ola reliable at all hours.', 'Traffic is the main hazard — allow double the map time.', 'Air quality moderate; better than Delhi in every month.'] }, lat: 12.97, lng: 77.59, hours: 0, transfer: 0, type: 'city', from: 'Your arrival airport', nights: '2 nights', name: 'Bengaluru', tag: 'Your gateway city', emoji: '🏙️',
       hue: 'linear-gradient(135deg,#6366f1,#a855f7)',
       weather: '18–27 °C · mild & breezy',
       intro: 'India\'s garden city and tech capital. Great coffee, craft breweries, parks and easy first-day pace to shake off the jet lag.',
@@ -73,7 +52,7 @@ window.TRIP = {
       perDay: '€35 – 120',
     },
     {
-      id: 'goa', lat: 15.49, lng: 73.83, hours: 1.2, transfer: 130, type: 'beach', from: '1 h 10 flight', nights: '4–5 nights', name: 'Goa', tag: 'Beaches, forts & Portuguese lanes', emoji: '🏖️',
+      id: 'goa', region: 'west', airport: 'GOI', via: null, priceIndex: 1.2, months: [3, 3, 2, 1, 0, 0, 0, 0, 1, 2, 3, 3], comfort: { score: 4, hospital: 'Manipal Hospital Goa (Panaji) · Victor Hospital (Margao)', notes: ['Use Goa Miles or hotel taxis; avoid scooters after dark and never after drinking.', 'Swim only at lifeguarded beaches (Drishti flags); rip currents are real.', 'Petty theft at beach shacks — leave valuables in the hotel safe.'] }, lat: 15.49, lng: 73.83, hours: 1.2, transfer: 130, type: 'beach', from: '1 h 10 flight', nights: '4–5 nights', name: 'Goa', tag: 'Beaches, forts & Portuguese lanes', emoji: '🏖️',
       hue: 'linear-gradient(135deg,#f59e0b,#ef4444)',
       weather: '23–33 °C · dry & sunny',
       intro: 'Palm-lined beaches, 450 years of Portuguese heritage, night markets and the best seafood on the west coast. November is the sweet spot: dry, warm, not yet crowded.',
@@ -84,7 +63,7 @@ window.TRIP = {
       perDay: '€40 – 150',
     },
     {
-      id: 'munnar', lat: 10.09, lng: 77.06, hours: 5, transfer: 150, type: 'hills', from: '1 h flight to Kochi + 4 h drive', nights: '2–3 nights', name: 'Munnar', tag: 'Tea hills at 1,600 m', emoji: '🍃',
+      id: 'munnar', region: 'south', airport: null, via: 'COK', priceIndex: 1.1, months: [3, 3, 2, 2, 1, 0, 0, 0, 2, 2, 2, 3], comfort: { score: 4, hospital: 'Tata General Hospital Munnar (basic) · Aster Medcity Kochi (4 h)', notes: ['Winding roads: take a car with an experienced hill driver, travel by day.', 'Nearest full hospital is in Kochi — carry any prescription medicine.', 'Cool nights; leeches on forest walks in the wet months.'] }, lat: 10.09, lng: 77.06, hours: 5, transfer: 150, type: 'hills', from: '1 h flight to Kochi + 4 h drive', nights: '2–3 nights', name: 'Munnar', tag: 'Tea hills at 1,600 m', emoji: '🍃',
       hue: 'linear-gradient(135deg,#10b981,#0f766e)',
       weather: '12–22 °C · cool & misty',
       intro: 'Rolling tea estates, cloud forest and cool air — a full change of climate from the coast. Pack a fleece for mornings.',
@@ -95,7 +74,7 @@ window.TRIP = {
       perDay: '€35 – 140',
     },
     {
-      id: 'kochi', lat: 9.93, lng: 76.27, hours: 1.1, transfer: 130, type: 'culture', from: '1 h 05 flight', nights: '2–3 nights', name: 'Kochi & Alleppey', tag: 'Spice port & backwaters', emoji: '⛵',
+      id: 'kochi', region: 'south', airport: 'COK', via: null, priceIndex: 1.2, months: [3, 3, 2, 1, 0, 0, 0, 1, 2, 2, 2, 3], comfort: { score: 5, hospital: 'Aster Medcity · Amrita Hospital (both world-class)', notes: ['Calm, walkable Fort Kochi; safe for evening strolls.', 'Houseboats: book licensed operators with life jackets on board.', 'Humid — hydrate; mosquito repellent at dusk on the backwaters.'] }, lat: 9.93, lng: 76.27, hours: 1.1, transfer: 130, type: 'culture', from: '1 h 05 flight', nights: '2–3 nights', name: 'Kochi & Alleppey', tag: 'Spice port & backwaters', emoji: '⛵',
       hue: 'linear-gradient(135deg,#0ea5e9,#2563eb)',
       weather: '24–31 °C · warm & humid',
       intro: 'Fort Kochi\'s colonial lanes and Chinese fishing nets, then a night on a houseboat gliding through Alleppey\'s palm-fringed canals.',
@@ -106,7 +85,7 @@ window.TRIP = {
       perDay: '€40 – 160',
     },
     {
-      id: 'thekkady', lat: 9.6, lng: 77.16, hours: 8, transfer: 40, type: 'wildlife', from: '3 h from Munnar', nights: '1–2 nights', name: 'Thekkady (Periyar)', tag: 'Wildlife & spice gardens', emoji: '🐘',
+      id: 'thekkady', region: 'south', airport: null, via: 'COK', priceIndex: 1.0, months: [3, 3, 2, 2, 1, 0, 0, 1, 2, 2, 2, 3], comfort: { score: 4, hospital: 'Kumily taluk hospital (basic) · Kottayam / Madurai for anything serious', notes: ['Park treks only with forest-department guides.', 'Wild elephants on the roads at dusk — no night driving.'] }, lat: 9.6, lng: 77.16, hours: 8, transfer: 40, type: 'wildlife', from: '3 h from Munnar', nights: '1–2 nights', name: 'Thekkady (Periyar)', tag: 'Wildlife & spice gardens', emoji: '🐘',
       hue: 'linear-gradient(135deg,#84cc16,#15803d)',
       weather: '18–28 °C · fresh',
       intro: 'A perfect bridge between Munnar and the backwaters: a lake safari in Periyar Tiger Reserve, spice plantations and Kalaripayattu martial-arts shows.',
@@ -117,7 +96,7 @@ window.TRIP = {
       perDay: '€35 – 130',
     },
     {
-      id: 'mysuru', lat: 12.3, lng: 76.65, hours: 2, transfer: 25, type: 'culture', from: '2 h train', nights: '1–2 nights', name: 'Mysuru', tag: 'Palaces, silk & sandalwood', emoji: '🏰',
+      id: 'mysuru', region: 'south', airport: null, via: 'BLR', priceIndex: 0.8, months: [3, 3, 2, 1, 1, 2, 2, 2, 2, 3, 3, 3], comfort: { score: 5, hospital: 'Apollo BGS Hospital · JSS Hospital', notes: ['One of the cleanest, safest cities in India.', 'Palace crowds on Sundays — keep bags in front.'] }, lat: 12.3, lng: 76.65, hours: 2, transfer: 25, type: 'culture', from: '2 h train', nights: '1–2 nights', name: 'Mysuru', tag: 'Palaces, silk & sandalwood', emoji: '🏰',
       hue: 'linear-gradient(135deg,#f43f5e,#be185d)',
       weather: '17–28 °C · pleasant',
       intro: 'Karnataka\'s royal city, 2 h from Bengaluru by fast train. The Maharaja\'s Palace lit by 100,000 bulbs on Sunday evenings is unforgettable.',
@@ -128,7 +107,7 @@ window.TRIP = {
       perDay: '€30 – 100',
     },
     {
-      id: 'coorg', lat: 12.42, lng: 75.74, hours: 5.5, transfer: 60, type: 'hills', from: '5–6 h drive', nights: '2 nights', name: 'Coorg (Kodagu)', tag: 'Coffee estates & waterfalls', emoji: '☕',
+      id: 'coorg', region: 'south', airport: null, via: 'BLR', priceIndex: 1.3, months: [3, 3, 2, 2, 1, 0, 0, 0, 2, 2, 3, 3], comfort: { score: 4, hospital: 'Madikeri district hospital (basic) · Mysuru 3 h for serious care', notes: ['No ride-hailing; use hotel cars. Roads are narrow and unlit at night.', 'Estate stays are remote — good for peace, check driving distances.'] }, lat: 12.42, lng: 75.74, hours: 5.5, transfer: 60, type: 'hills', from: '5–6 h drive', nights: '2 nights', name: 'Coorg (Kodagu)', tag: 'Coffee estates & waterfalls', emoji: '☕',
       hue: 'linear-gradient(135deg,#a16207,#78350f)',
       weather: '15–25 °C · fresh & green',
       intro: 'The "Scotland of India": misty coffee plantations, Kodava culture and estate homestays where the harvest starts in November.',
@@ -139,7 +118,7 @@ window.TRIP = {
       perDay: '€40 – 150',
     },
     {
-      id: 'hampi', lat: 15.34, lng: 76.46, hours: 7, transfer: 60, type: 'culture', from: 'Night train or 1 h flight', nights: '2 nights', name: 'Hampi', tag: 'UNESCO ruins among boulders', emoji: '🪨',
+      id: 'hampi', region: 'south', airport: 'VDY', via: null, priceIndex: 1.1, months: [3, 3, 2, 0, 0, 1, 1, 1, 2, 3, 3, 3], comfort: { score: 3, hospital: 'Hosapete district hospital (basic) · Bengaluru for serious care', notes: ['Ruins are spread out and hot — start at dawn, carry water.', 'Coracle rides: agree price first; life jackets are not always offered.', 'Very limited nightlife and medical care — plan for that.'] }, lat: 15.34, lng: 76.46, hours: 7, transfer: 60, type: 'culture', from: 'Night train or 1 h flight', nights: '2 nights', name: 'Hampi', tag: 'UNESCO ruins among boulders', emoji: '🪨',
       hue: 'linear-gradient(135deg,#f97316,#c2410c)',
       weather: '18–31 °C · dry & clear',
       intro: 'The 14th-century capital of the Vijayanagara empire — temples, royal baths and a stone chariot scattered across a surreal boulder landscape.',
@@ -151,7 +130,7 @@ window.TRIP = {
     },
     /* ---------- More places reachable from Bengaluru ---------- */
     {
-      id: 'hyderabad', lat: 17.39, lng: 78.49, hours: 1, transfer: 110, type: 'city', from: '1 h flight', nights: '2 nights', name: 'Hyderabad', tag: 'Nizams, forts & biryani', emoji: '🕌',
+      id: 'hyderabad', region: 'south', airport: 'HYD', via: null, priceIndex: 1.0, months: [3, 3, 2, 1, 0, 1, 2, 2, 2, 3, 3, 3], comfort: { score: 5, hospital: 'Apollo Jubilee Hills · KIMS · Yashoda', notes: ['Safe, orderly city with excellent hospitals.', 'Old City is crowded at dusk — go with a guide, keep phones secured.'] }, lat: 17.39, lng: 78.49, hours: 1, transfer: 110, type: 'city', from: '1 h flight', nights: '2 nights', name: 'Hyderabad', tag: 'Nizams, forts & biryani', emoji: '🕌',
       hue: 'linear-gradient(135deg,#7c3aed,#4c1d95)',
       weather: '18–30 °C · dry & sunny',
       intro: 'The city of the Nizams: a 16th-century old town around the Charminar, a hilltop fort, palaces full of treasure and the most famous biryani in India — an hour\'s flight from Bengaluru.',
@@ -162,7 +141,7 @@ window.TRIP = {
       perDay: '€35 – 130',
     },
     {
-      id: 'ooty', lat: 11.41, lng: 76.7, hours: 7, transfer: 70, type: 'hills', from: '7 h drive · or 1 h flight to Coimbatore + 3 h', nights: '2–3 nights', name: 'Ooty & Coonoor', tag: 'Nilgiri toy train & tea', emoji: '🚂',
+      id: 'ooty', region: 'south', airport: null, via: 'CJB', priceIndex: 0.9, months: [3, 3, 3, 3, 2, 1, 1, 1, 2, 2, 2, 3], comfort: { score: 4, hospital: 'Government hospital Ooty (basic) · Coimbatore 3 h for serious care', notes: ['Ghat road through Bandipur closes 21:00–06:00; travel by day.', 'Cold nights (5–10 °C in winter); altitude 2,200 m.'] }, lat: 11.41, lng: 76.7, hours: 7, transfer: 70, type: 'hills', from: '7 h drive · or 1 h flight to Coimbatore + 3 h', nights: '2–3 nights', name: 'Ooty & Coonoor', tag: 'Nilgiri toy train & tea', emoji: '🚂',
       hue: 'linear-gradient(135deg,#22c55e,#166534)',
       weather: '8–20 °C · cool, some rain',
       intro: 'The Nilgiri hills at 2,200 m: a UNESCO-listed steam mountain railway, colonial bungalows, eucalyptus forests and quiet tea town Coonoor. Cold nights — bring layers.',
@@ -173,7 +152,7 @@ window.TRIP = {
       perDay: '€35 – 120',
     },
     {
-      id: 'kabini', lat: 12.02, lng: 76.3, hours: 5, transfer: 60, type: 'wildlife', from: '5 h drive', nights: '2 nights', name: 'Kabini & Nagarhole', tag: 'Tigers, leopards & elephants', emoji: '🐆',
+      id: 'kabini', region: 'south', airport: null, via: 'BLR', priceIndex: 1.6, months: [3, 3, 3, 3, 3, 1, 0, 0, 1, 2, 3, 3], comfort: { score: 4, hospital: 'Mysuru hospitals (1.5 h)', notes: ['Lodges are fenced and well run; follow naturalists\' instructions on safari.', 'Malaria risk is low but use repellent at dawn and dusk.'] }, lat: 12.02, lng: 76.3, hours: 5, transfer: 60, type: 'wildlife', from: '5 h drive', nights: '2 nights', name: 'Kabini & Nagarhole', tag: 'Tigers, leopards & elephants', emoji: '🐆',
       hue: 'linear-gradient(135deg,#65a30d,#365314)',
       weather: '17–29 °C · dry, prime season',
       intro: 'One of India\'s best big-cat parks. Jeep and boat safaris on the Kabini backwaters from November, when the water is high and elephant herds gather on the banks.',
@@ -184,7 +163,7 @@ window.TRIP = {
       perDay: '€60 – 250',
     },
     {
-      id: 'chikmagalur', lat: 13.32, lng: 75.77, hours: 4.5, transfer: 60, type: 'hills', from: '4.5 h drive', nights: '2 nights', name: 'Chikmagalur', tag: 'Birthplace of Indian coffee', emoji: '🌄',
+      id: 'chikmagalur', region: 'south', airport: null, via: 'BLR', priceIndex: 1.1, months: [3, 3, 2, 2, 1, 0, 0, 0, 2, 3, 3, 3], comfort: { score: 4, hospital: 'Chikmagalur district hospital (basic) · Bengaluru 4.5 h', notes: ['Estate roads are rough; a car with driver is essential.', 'Cool, quiet, very safe; limited restaurants outside resorts.'] }, lat: 13.32, lng: 75.77, hours: 4.5, transfer: 60, type: 'hills', from: '4.5 h drive', nights: '2 nights', name: 'Chikmagalur', tag: 'Birthplace of Indian coffee', emoji: '🌄',
       hue: 'linear-gradient(135deg,#b45309,#451a03)',
       weather: '15–27 °C · fresh, clear',
       intro: 'Coffee was first planted in India here in the 1600s. Karnataka\'s highest peak, waterfalls, ancient Hoysala temples nearby and quieter than Coorg.',
@@ -195,7 +174,7 @@ window.TRIP = {
       perDay: '€40 – 160',
     },
     {
-      id: 'gokarna', lat: 14.55, lng: 74.32, hours: 8, transfer: 40, type: 'beach', from: '8 h drive · overnight sleeper bus · 1 h flight to Goa + 3 h', nights: '2–3 nights', name: 'Gokarna', tag: 'Goa without the crowds', emoji: '🌊',
+      id: 'gokarna', region: 'west', airport: null, via: 'GOI', priceIndex: 0.9, months: [3, 3, 2, 1, 0, 0, 0, 0, 1, 2, 3, 3], comfort: { score: 3, hospital: 'Gokarna primary care only · Manipal Hospital Goa 3 h', notes: ['Beach paths between coves are rocky — walk them in daylight.', 'Sea can be rough; no lifeguards on the smaller beaches.', 'Simple infrastructure — choose SwaSwara or Kahani for comfort.'] }, lat: 14.55, lng: 74.32, hours: 8, transfer: 40, type: 'beach', from: '8 h drive · overnight sleeper bus · 1 h flight to Goa + 3 h', nights: '2–3 nights', name: 'Gokarna', tag: 'Goa without the crowds', emoji: '🌊',
       hue: 'linear-gradient(135deg,#06b6d4,#0e7490)',
       weather: '22–32 °C · dry & sunny',
       intro: 'A temple town with a string of crescent beaches reached by a cliff-top trail: Kudle, Om, Half Moon and Paradise. Slower and cheaper than Goa; ideal for a few unplanned days.',
@@ -206,7 +185,7 @@ window.TRIP = {
       perDay: '€25 – 120',
     },
     {
-      id: 'wayanad', lat: 11.61, lng: 76.08, hours: 6, transfer: 60, type: 'hills', from: '6 h drive', nights: '2 nights', name: 'Wayanad', tag: 'Rainforest, caves & treehouses', emoji: '🌿',
+      id: 'wayanad', region: 'south', airport: null, via: 'CCJ', priceIndex: 1.1, months: [3, 3, 2, 2, 1, 0, 0, 0, 2, 2, 3, 3], comfort: { score: 4, hospital: 'Kozhikode (Calicut) hospitals 2 h', notes: ['Landslide-prone in the monsoon — avoid June–August.', 'Wildlife on roads at night; stick to daytime transfers.'] }, lat: 11.61, lng: 76.08, hours: 6, transfer: 60, type: 'hills', from: '6 h drive', nights: '2 nights', name: 'Wayanad', tag: 'Rainforest, caves & treehouses', emoji: '🌿',
       hue: 'linear-gradient(135deg,#059669,#064e3b)',
       weather: '18–28 °C · green, some showers',
       intro: 'Kerala\'s green plateau: prehistoric cave art, spice farms, bamboo rafting and resorts built into the forest canopy. A quieter alternative to Munnar closer to Bengaluru.',
@@ -217,7 +196,7 @@ window.TRIP = {
       perDay: '€35 – 140',
     },
     {
-      id: 'varkala', lat: 8.73, lng: 76.72, hours: 2.5, transfer: 150, type: 'beach', from: '1 h 15 flight to Trivandrum + 1 h', nights: '2–3 nights', name: 'Varkala & Kovalam', tag: 'Cliff beaches & Ayurveda', emoji: '🏄',
+      id: 'varkala', region: 'south', airport: null, via: 'TRV', priceIndex: 1.0, months: [3, 3, 2, 1, 0, 0, 0, 1, 2, 2, 3, 3], comfort: { score: 4, hospital: 'KIMS Health Trivandrum (1 h)', notes: ['Cliff path has no railings in places — care at night.', 'Strong currents at Papanasam; swim near lifeguards.'] }, lat: 8.73, lng: 76.72, hours: 2.5, transfer: 150, type: 'beach', from: '1 h 15 flight to Trivandrum + 1 h', nights: '2–3 nights', name: 'Varkala & Kovalam', tag: 'Cliff beaches & Ayurveda', emoji: '🏄',
       hue: 'linear-gradient(135deg,#f472b6,#be185d)',
       weather: '24–31 °C · warm, calming sea',
       intro: 'Kerala\'s red laterite cliff drops straight onto Papanasam beach, lined with cafés and yoga shalas. Perfect for a restorative end to a trip — Ayurvedic massage, surf, sunsets.',
@@ -228,7 +207,7 @@ window.TRIP = {
       perDay: '€30 – 150',
     },
     {
-      id: 'andaman', lat: 11.62, lng: 92.73, hours: 2.5, transfer: 240, type: 'beach', from: '2 h 30 flight to Port Blair', nights: '5–6 nights', name: 'Andaman Islands', tag: 'Turquoise water & coral reefs', emoji: '🐠',
+      id: 'andaman', region: 'islands', airport: 'IXZ', via: null, priceIndex: 1.5, months: [3, 3, 3, 2, 1, 0, 0, 0, 1, 2, 3, 3], comfort: { score: 4, hospital: 'GB Pant Hospital Port Blair (basic); serious cases are flown to Chennai', notes: ['Book only government-registered dive and ferry operators.', 'No decompression chamber on Havelock — dive conservatively and no flying within 24 h.', 'Mobile coverage is patchy; download maps offline.'] }, lat: 11.62, lng: 92.73, hours: 2.5, transfer: 240, type: 'beach', from: '2 h 30 flight to Port Blair', nights: '5–6 nights', name: 'Andaman Islands', tag: 'Turquoise water & coral reefs', emoji: '🐠',
       hue: 'linear-gradient(135deg,#0ea5e9,#0369a1)',
       weather: '24–30 °C · post-monsoon calm seas',
       intro: 'Direct flights from Bengaluru make the Andamans a realistic add-on: white-sand Radhanagar Beach, world-class scuba, mangrove kayaking and the moving Cellular Jail history in Port Blair.',
@@ -239,7 +218,7 @@ window.TRIP = {
       perDay: '€50 – 220',
     },
     {
-      id: 'madurai', lat: 9.93, lng: 78.12, hours: 1, transfer: 130, type: 'culture', from: '1 h flight · 7 h drive', nights: '2–3 nights', name: 'Madurai & Chettinad', tag: 'Living temple city', emoji: '🛕',
+      id: 'madurai', region: 'south', airport: 'IXM', via: null, priceIndex: 0.8, months: [3, 3, 2, 1, 0, 1, 2, 2, 2, 1, 1, 2], comfort: { score: 4, hospital: 'Apollo Speciality Madurai · Meenakshi Mission Hospital', notes: ['Temple lanes are crowded; bags in front, shoes in the paid stand.', 'Hot — sightsee early and late.'] }, lat: 9.93, lng: 78.12, hours: 1, transfer: 130, type: 'culture', from: '1 h flight · 7 h drive', nights: '2–3 nights', name: 'Madurai & Chettinad', tag: 'Living temple city', emoji: '🛕',
       hue: 'linear-gradient(135deg,#f59e0b,#b91c1c)',
       weather: '24–31 °C · warm, NE-monsoon showers',
       intro: 'One of the oldest continuously inhabited cities on earth, built around the towering Meenakshi Amman Temple. Add the crumbling Chettinad mansions and their famous spicy cuisine.',
@@ -250,7 +229,7 @@ window.TRIP = {
       perDay: '€30 – 110',
     },
     {
-      id: 'badami', lat: 15.92, lng: 75.68, hours: 7, transfer: 70, type: 'culture', from: '7 h drive · 1 h flight to Hubli + 2 h', nights: '1–2 nights', name: 'Badami, Aihole & Pattadakal', tag: '6th-century rock-cut temples', emoji: '🏛️',
+      id: 'badami', region: 'south', airport: null, via: 'HBX', priceIndex: 0.7, months: [3, 3, 2, 0, 0, 1, 1, 1, 2, 3, 3, 3], comfort: { score: 3, hospital: 'Bagalkot district hospital (basic) · Hubli 2 h', notes: ['Rural area with few services; combine with Hampi and a good car.', 'Monkeys at the caves — keep food and glasses out of sight.'] }, lat: 15.92, lng: 75.68, hours: 7, transfer: 70, type: 'culture', from: '7 h drive · 1 h flight to Hubli + 2 h', nights: '1–2 nights', name: 'Badami, Aihole & Pattadakal', tag: '6th-century rock-cut temples', emoji: '🏛️',
       hue: 'linear-gradient(135deg,#dc2626,#7f1d1d)',
       weather: '19–31 °C · dry & clear',
       intro: 'The cradle of Indian temple architecture: sandstone cave temples above a green lake at Badami, the UNESCO complex at Pattadakal and 120 experimental temples at Aihole. A natural add-on to Hampi.',
@@ -261,7 +240,7 @@ window.TRIP = {
       perDay: '€30 – 100',
     },
     {
-      id: 'pondicherry', lat: 11.93, lng: 79.83, hours: 6, transfer: 60, type: 'beach', from: '6 h drive · 1 h flight to Chennai + 3 h', nights: '2 nights', name: 'Pondicherry', tag: 'French Quarter by the sea', emoji: '🇫🇷',
+      id: 'pondicherry', region: 'south', airport: null, via: 'MAA', priceIndex: 1.0, months: [3, 3, 2, 1, 0, 1, 1, 1, 2, 0, 0, 2], comfort: { score: 4, hospital: 'JIPMER (excellent teaching hospital)', notes: ['Cyclone season Oct–Dec — check IMD warnings before driving down.', 'White Town is calm and safe on foot at night.'] }, lat: 11.93, lng: 79.83, hours: 6, transfer: 60, type: 'beach', from: '6 h drive · 1 h flight to Chennai + 3 h', nights: '2 nights', name: 'Pondicherry', tag: 'French Quarter by the sea', emoji: '🇫🇷',
       hue: 'linear-gradient(135deg,#fbbf24,#f97316)',
       weather: '24–30 °C · rainiest month — late Nov onwards only',
       intro: 'Mustard-yellow colonial villas, bougainvillea, croissants and a seaside promenade — plus the experimental township of Auroville. Charming, but November is the wettest month here; go in the last week or save it for another trip.',
@@ -272,7 +251,7 @@ window.TRIP = {
       perDay: '€30 – 120',
     },
     {
-      id: 'goldentriangle', lat: 27.18, lng: 78.01, hours: 2.7, transfer: 260, type: 'far', from: '2 h 40 flight to Delhi', nights: '5–6 nights', name: 'Delhi, Agra & Jaipur', tag: 'The Golden Triangle', emoji: '🕌',
+      id: 'goldentriangle', region: 'north', airport: 'AGR', via: null, priceIndex: 1.4, months: [2, 3, 3, 1, 0, 0, 1, 1, 2, 3, 2, 2], comfort: { score: 4, hospital: 'Medanta Gurugram · Max Saket (Delhi); Apollo Jaipur', notes: ['Touts at the Taj and Amber Fort: book official guides only.', 'Delhi air quality is severe Nov–Jan — masks, and limit Delhi nights.', 'Use pre-booked cars; avoid unmetered taxis at stations.'] }, lat: 27.18, lng: 78.01, hours: 2.7, transfer: 260, type: 'far', from: '2 h 40 flight to Delhi', nights: '5–6 nights', name: 'Delhi, Agra & Jaipur', tag: 'The Golden Triangle', emoji: '🕌',
       hue: 'linear-gradient(135deg,#ef4444,#9a3412)',
       weather: '12–28 °C · perfect season, Delhi smog risk',
       intro: 'If the group has 6 spare days, North India in November is at its best: Taj Mahal at dawn, Mughal Delhi, Rajasthan\'s pink city. Caveat: Delhi\'s air quality is often very poor in November — keep Delhi short and spend nights in Agra and Jaipur.',
@@ -283,7 +262,7 @@ window.TRIP = {
       perDay: '€45 – 250',
     },
     {
-      id: 'rajasthan', lat: 24.58, lng: 73.71, hours: 2.5, transfer: 250, type: 'far', from: '2 h 30 flight to Udaipur', nights: '5–6 nights', name: 'Udaipur & Jodhpur', tag: 'Lake palaces & the blue city', emoji: '🏯',
+      id: 'rajasthan', region: 'north', airport: 'UDR', via: null, priceIndex: 1.5, months: [3, 3, 2, 1, 0, 0, 1, 1, 2, 3, 3, 3], comfort: { score: 4, hospital: 'Apollo Jaipur · GBH American Hospital Udaipur', notes: ['Well-worn tourist circuit with excellent hotels and drivers.', 'Bargain firmly but politely; ignore “government emporium” claims.', 'Dry heat in Mar–Apr; carry water.'] }, lat: 24.58, lng: 73.71, hours: 2.5, transfer: 250, type: 'far', from: '2 h 30 flight to Udaipur', nights: '5–6 nights', name: 'Udaipur & Jodhpur', tag: 'Lake palaces & the blue city', emoji: '🏯',
       hue: 'linear-gradient(135deg,#f59e0b,#7c2d12)',
       weather: '12–30 °C · dry, ideal',
       intro: 'Rajasthan in November is close to perfect: cool mornings, golden light on Udaipur\'s lake palaces, the towering Mehrangarh Fort above Jodhpur\'s blue houses, and the Jain marble temples of Ranakpur in between.',
@@ -294,7 +273,7 @@ window.TRIP = {
       perDay: '€45 – 300',
     },
     {
-      id: 'varanasi', lat: 25.32, lng: 83.01, hours: 2.5, transfer: 220, type: 'far', from: '2 h 30 flight', nights: '2–3 nights', name: 'Varanasi', tag: 'Ghats, fire & the Ganges', emoji: '🪔',
+      id: 'varanasi', region: 'north', airport: 'VNS', via: null, priceIndex: 1.1, months: [2, 3, 3, 1, 0, 0, 1, 1, 2, 3, 3, 3], comfort: { score: 3, hospital: 'Heritage Hospital · BHU Sir Sunderlal Hospital', notes: ['Intense crowds at the ghats; hire a licensed boatman via the hotel.', 'Do not drink or swim in the river; keep valuables minimal.', 'Stay on the riverfront in a heritage hotel for a calm base.'] }, lat: 25.32, lng: 83.01, hours: 2.5, transfer: 220, type: 'far', from: '2 h 30 flight', nights: '2–3 nights', name: 'Varanasi', tag: 'Ghats, fire & the Ganges', emoji: '🪔',
       hue: 'linear-gradient(135deg,#fb923c,#7f1d1d)',
       weather: '14–29 °C · pleasant, misty dawns',
       intro: 'The oldest living city in the world, and the most intense. A sunrise rowing boat past the ghats, the evening Ganga aarti fire ceremony, silk lanes and Buddhist Sarnath. In late November 2026 it hosts Dev Deepawali, when a million lamps light the ghats.',
@@ -305,7 +284,7 @@ window.TRIP = {
       perDay: '€30 – 180',
     },
     {
-      id: 'rishikesh', lat: 30.09, lng: 78.27, hours: 3.5, transfer: 230, type: 'far', from: '3 h flight to Dehradun + 45 min', nights: '3 nights', name: 'Rishikesh', tag: 'Yoga, rafting & the Himalayan foothills', emoji: '🧘',
+      id: 'rishikesh', region: 'north', airport: null, via: 'DED', priceIndex: 1.2, months: [2, 3, 3, 3, 2, 0, 0, 0, 2, 3, 3, 2], comfort: { score: 4, hospital: 'AIIMS Rishikesh (major hospital)', notes: ['Rafting only with licensed operators, helmets and life jackets.', 'Vegetarian and alcohol-free town — plan expectations.', 'Monkeys on the bridges: hold on to bags and glasses.'] }, lat: 30.09, lng: 78.27, hours: 3.5, transfer: 230, type: 'far', from: '3 h flight to Dehradun + 45 min', nights: '3 nights', name: 'Rishikesh', tag: 'Yoga, rafting & the Himalayan foothills', emoji: '🧘',
       hue: 'linear-gradient(135deg,#34d399,#1e3a8a)',
       weather: '10–26 °C · crisp, clear, rafting season',
       intro: 'Where the Ganges leaves the Himalayas. Yoga ashrams, white-water rafting at its best in November, suspension bridges, the graffiti-covered Beatles Ashram and the great evening aarti at Haridwar down the road.',
@@ -316,7 +295,7 @@ window.TRIP = {
       perDay: '€30 – 250',
     },
     {
-      id: 'mumbai', lat: 19.08, lng: 72.88, hours: 1.5, transfer: 130, type: 'city', from: '1 h 30 flight', nights: '2–3 nights', name: 'Mumbai', tag: 'Art-deco seafront & street food', emoji: '🌆',
+      id: 'mumbai', region: 'west', airport: 'BOM', via: null, priceIndex: 1.4, months: [3, 3, 2, 1, 0, 0, 0, 0, 1, 2, 3, 3], comfort: { score: 5, hospital: 'Breach Candy · Lilavati · Jaslok (all excellent)', notes: ['Safe, busy city; Uber and metered taxis reliable at any hour.', 'Avoid local trains at rush hour; use cabs.', 'Monsoon flooding in July–August disrupts everything.'] }, lat: 19.08, lng: 72.88, hours: 1.5, transfer: 130, type: 'city', from: '1 h 30 flight', nights: '2–3 nights', name: 'Mumbai', tag: 'Art-deco seafront & street food', emoji: '🌆',
       hue: 'linear-gradient(135deg,#f43f5e,#1e293b)',
       weather: '22–33 °C · dry, humid evenings',
       intro: 'India\'s biggest, fastest city: the Gateway of India, sunset on Marine Drive, Elephanta\'s cave temples by ferry, Bandra\'s cafés and the best street food in the country. Also a smart place to end the trip — Mumbai has many nonstop flights to Europe.',
@@ -326,11 +305,44 @@ window.TRIP = {
       area: 'Flights BLR → BOM every 30 min (1.5 h, €30–80). Use Uber; local trains are an experience but avoid rush hour. Lufthansa and SWISS fly Mumbai → Frankfurt / Zurich nonstop.',
       perDay: '€40 – 220',
     },
+    {
+      id: 'delhi', region: 'north', airport: 'DEL', via: null, priceIndex: 1.2, months: [2,3,3,1,0,0,1,1,2,3,2,2], comfort: { score: 4, hospital: 'Medanta Gurugram · Max Saket · Apollo Indraprastha', notes: ['Use hotel cars or Uber; never accept “your hotel is closed” stories.', 'Air quality is severe Nov–Jan: masks, short stays, indoor evenings.', 'Women: prefer pre-booked cars after dark; the Metro has women\'s carriages.'] }, lat: 28.61, lng: 77.21, hours: 2.7, transfer: 130, type: 'city', from: '2 h 40 flight', nights: '2 nights', name: 'Delhi', tag: 'Mughal capital & modern metropolis', emoji: '🕌',
+      hue: 'linear-gradient(135deg,#dc2626,#4c1d95)',
+      weather: '12–28 °C in Nov · smog season',
+      intro: 'Seven cities layered on one another: Mughal tombs, Lutyens\' boulevards, the spice lanes of Old Delhi and India\'s best restaurants. The gateway to the north — keep it to two nights in winter because of the air.',
+      todo: ['Humayun\'s Tomb & Lodhi Garden at sunrise', 'Old Delhi walk: Jama Masjid, Chandni Chowk, spice market', 'Qutb Minar complex', 'India Gate & the Rajpath at dusk', 'Hauz Khas village & Khan Market shopping', 'National Museum or the Crafts Museum'],
+      food: ['Karim\'s kebabs and nihari', 'Chaat at Bengali Market', 'Indian Accent or Bukhara for a big night out'],
+      stay: { budget: '—', mid: 'The Lodhi, Taj Mahal Delhi · €150–300', lux: 'The Oberoi New Delhi, The Imperial, Leela Palace · €300–600' },
+      area: 'Stay in Lutyens\' Delhi (Chanakyapuri, Lodhi Road) or Aerocity by the airport for a short stop. Metro is clean and fast; cars for the old city.',
+      perDay: '€60 – 300',
+    },
+    {
+      id: 'chennai', region: 'south', airport: 'MAA', via: null, priceIndex: 0.9, months: [3,2,1,0,0,0,1,1,2,1,0,2], comfort: { score: 4, hospital: 'Apollo Greams Road (India\'s best-known hospital) · MIOT', notes: ['Hot and humid most of the year; November brings heavy northeast-monsoon rain.', 'Safe, conservative city; dress modestly at temples and beaches.'] }, lat: 13.08, lng: 80.27, hours: 1, transfer: 110, type: 'city', from: '1 h flight', nights: '1–2 nights', name: 'Chennai', tag: 'Tamil culture & the Coromandel coast', emoji: '🏛️',
+      hue: 'linear-gradient(135deg,#0ea5e9,#7c2d12)',
+      weather: '24–30 °C in Nov · rainy',
+      intro: 'The cultural capital of Tamil Nadu: Carnatic music, silk, Dravidian temples and a 13-km beach. Best as a gateway to Mahabalipuram, Pondicherry and the temple trail — outside the Oct–Dec monsoon.',
+      todo: ['Mahabalipuram shore temples (UNESCO, 1.5 h)', 'Kapaleeshwarar Temple & Mylapore lanes', 'Marina Beach at dawn', 'Kanchipuram silk weavers (day trip)', 'DakshinaChitra heritage village', 'Music season concerts (Dec–Jan)'],
+      food: ['Filter coffee and idli at Murugan Idli or Saravana Bhavan', 'Chettinad at Anjappar', 'Seafood at Bay View, Taj Fisherman\'s Cove'],
+      stay: { budget: '—', mid: 'Hyatt Regency, Taj Club House · €100–180', lux: 'ITC Grand Chola, Taj Fisherman\'s Cove (beach) · €180–400' },
+      area: 'British Airways flies nonstop from London. Stay in Nungambakkam or on the ECR coast; use Uber.',
+      perDay: '€50 – 250',
+    },
+    {
+      id: 'kolkata', region: 'east', airport: 'CCU', via: null, priceIndex: 0.9, months: [3,3,2,1,0,0,0,1,1,3,3,3], comfort: { score: 4, hospital: 'Apollo Gleneagles · AMRI · Fortis Anandapur', notes: ['Friendly, intellectual city; safe by Indian big-city standards.', 'Durga Puja (Oct) is magical but crowds and traffic are extreme — book far ahead.', 'Humid; the Oct–Feb window is the comfortable one.'] }, lat: 22.57, lng: 88.36, hours: 2.5, transfer: 150, type: 'city', from: '2 h 30 flight', nights: '2–3 nights', name: 'Kolkata', tag: 'Colonial grandeur & Bengali culture', emoji: '🎭',
+      hue: 'linear-gradient(135deg,#f59e0b,#1e3a8a)',
+      weather: '18–29 °C in Nov · pleasant',
+      intro: 'The former capital of British India: crumbling colonial palaces, Victoria Memorial, the world\'s busiest bridge, sweet shops and a fierce love of books, film and football. Gateway to Darjeeling and the north-east.',
+      todo: ['Victoria Memorial & the Maidan', 'Kumartuli idol-makers\' quarter', 'Howrah Bridge at dawn & Mullick Ghat flower market', 'College Street bookshops & the Indian Coffee House', 'Park Street dinner and jazz', 'Sundarbans mangrove day trip (tigers, boats)'],
+      food: ['Kathi rolls at Nizam\'s', 'Bengali thali at 6 Ballygunge Place or Bhojohori Manna', 'Rosogolla and mishti doi at Balaram Mullick'],
+      stay: { budget: '—', mid: 'The Park, Taj Bengal · €90–180', lux: 'The Oberoi Grand, ITC Royal Bengal, Glenburn Penthouse · €180–400' },
+      area: 'Fly via a Gulf hub or from Delhi/Mumbai. Yellow Ambassador taxis are an experience; Uber is easier.',
+      perDay: '€45 – 220',
+    },
   ],
 
   routes: [
     {
-      id: 'goa', name: 'Sun & Spice', subtitle: 'Bengaluru → Goa', days: 10,
+      id: 'goa', gateway: 'BLR', months: [10, 11, 12, 1, 2, 3], name: 'Sun & Spice', subtitle: 'Bengaluru → Goa', days: 10,
       emoji: '🏖️', accent: '#f59e0b',
       summary: 'The easy, sociable itinerary: two days to settle in Bengaluru, then a short flight to Goa for beaches, Portuguese history, seafood and markets.',
       stats: { flights: '2 domestic', pace: 'Relaxed', cost: '€1,250 – 2,100 pp' },
@@ -348,7 +360,7 @@ window.TRIP = {
       ],
     },
     {
-      id: 'kerala', name: 'Tea Hills & Backwaters', subtitle: 'Bengaluru → Munnar → Alleppey → Kochi', days: 11,
+      id: 'kerala', gateway: 'BLR', months: [9, 10, 11, 12, 1, 2, 3], name: 'Tea Hills & Backwaters', subtitle: 'Bengaluru → Munnar → Alleppey → Kochi', days: 11,
       emoji: '🍃', accent: '#10b981',
       summary: 'The scenic itinerary: cool tea mountains in Munnar, a wildlife lake in Thekkady, a night on a houseboat and the old spice port of Fort Kochi.',
       stats: { flights: '2 domestic', pace: 'Moderate', cost: '€1,450 – 2,500 pp' },
@@ -367,7 +379,7 @@ window.TRIP = {
       ],
     },
     {
-      id: 'heritage', name: 'Heritage & Coffee', subtitle: 'Bengaluru → Mysuru → Coorg → Hampi', days: 12,
+      id: 'heritage', gateway: 'BLR', months: [10, 11, 12, 1, 2, 3], name: 'Heritage & Coffee', subtitle: 'Bengaluru → Mysuru → Coorg → Hampi', days: 12,
       emoji: '🏰', accent: '#f43f5e',
       summary: 'The Karnataka loop for culture lovers: royal Mysuru by fast train, coffee-estate living in Coorg and the surreal ruins of Hampi.',
       stats: { flights: '0–1 domestic', pace: 'Active', cost: '€1,300 – 2,200 pp' },
@@ -386,30 +398,68 @@ window.TRIP = {
         { day: 12, place: 'Bengaluru → Europe', title: 'Fly home', text: 'Early morning departure.', tags: ['✈️ Long-haul'] },
       ],
     },
+    {
+      id: 'golden', gateway: 'DEL', months: [10, 11, 12, 1, 2, 3], name: 'Golden Triangle & Ganges', subtitle: 'Delhi → Agra → Jaipur → Varanasi', days: 10,
+      emoji: '🕌', accent: '#dc2626',
+      summary: 'The classic north: Mughal Delhi, the Taj at dawn, Jaipur\'s forts, then a flight to Varanasi for the Ganges at sunrise. Private driver throughout, heritage hotels.',
+      stats: { flights: '1 domestic', pace: 'Moderate', cost: '€1,900 – 3,200 pp' },
+      itinerary: [
+        { day: 1, place: 'Europe', title: 'Fly to Delhi', text: 'Nonstop from London, Paris, Frankfurt, Munich, Zurich, Vienna, Helsinki, Warsaw or Milan; overnight flight.', tags: ['✈️ Long-haul'] },
+        { day: 2, place: 'Delhi', title: 'Land & settle', text: 'Airport meet-and-greet, hotel in Lutyens\' Delhi. Afternoon Humayun\'s Tomb and Lodhi Garden; dinner at Indian Accent.', tags: ['🛬 Arrival'] },
+        { day: 3, place: 'Delhi', title: 'Old & New Delhi', text: 'Jama Masjid, spice market by rickshaw, Qutb Minar, India Gate at dusk.', tags: ['🕌 Heritage'] },
+        { day: 4, place: 'Agra', title: 'Taj Mahal', text: 'Gatimaan Express to Agra (1 h 40). Agra Fort, then Taj Mahal at sunset from Mehtab Bagh.', tags: ['🚆 Train', '🏛️ UNESCO'] },
+        { day: 5, place: 'Jaipur', title: 'Sunrise Taj, then Rajasthan', text: 'Taj at dawn, then drive to Jaipur via Fatehpur Sikri (5 h with driver).', tags: ['🌄 Sunrise', '🚗 Drive'] },
+        { day: 6, place: 'Jaipur', title: 'Forts & bazaars', text: 'Amber Fort early, City Palace, Hawa Mahal, block-printing workshop, rooftop dinner.', tags: ['🏰 Forts'] },
+        { day: 7, place: 'Varanasi', title: 'Fly to the Ganges', text: 'Flight JAI → VNS (1 h 20). Evening Ganga aarti from a boat.', tags: ['✈️ Domestic', '🪔 Aarti'] },
+        { day: 8, place: 'Varanasi', title: 'Ghats & Sarnath', text: 'Sunrise boat, old-city walk, Sarnath, silk weavers.', tags: ['🌅 Sunrise'] },
+        { day: 9, place: 'Delhi', title: 'Return', text: 'Flight VNS → DEL. Last shopping at Khan Market, farewell dinner.', tags: ['✈️ Domestic', '🍽️ Farewell'] },
+        { day: 10, place: 'Delhi → Europe', title: 'Fly home', text: 'Morning departure.', tags: ['✈️ Long-haul'] },
+      ],
+    },
+    {
+      id: 'rajasthan', gateway: 'DEL', months: [10, 11, 12, 1, 2, 3], name: 'Palaces of Rajasthan', subtitle: 'Delhi → Jaipur → Jodhpur → Udaipur', days: 11,
+      emoji: '🏯', accent: '#b45309',
+      summary: 'Pink, blue and white cities with a private driver and palace hotels: Jaipur, Jodhpur, Ranakpur and Udaipur, flying home from Udaipur or via Mumbai.',
+      stats: { flights: '1 domestic', pace: 'Relaxed', cost: '€2,200 – 4,000 pp' },
+      itinerary: [
+        { day: 1, place: 'Europe', title: 'Fly to Delhi', text: 'Overnight nonstop or one-stop flight.', tags: ['✈️ Long-haul'] },
+        { day: 2, place: 'Delhi', title: 'Land & rest', text: 'Meet-and-greet, calm hotel, Humayun\'s Tomb at golden hour.', tags: ['🛬 Arrival'] },
+        { day: 3, place: 'Jaipur', title: 'To the pink city', text: 'Drive 5 h with driver (or Vande Bharat). Evening at a rooftop over the old city.', tags: ['🚗 Drive'] },
+        { day: 4, place: 'Jaipur', title: 'Amber & the bazaars', text: 'Amber Fort, City Palace, Jantar Mantar, block printing.', tags: ['🏰 Forts'] },
+        { day: 5, place: 'Jodhpur', title: 'The blue city', text: 'Flight or 6 h drive. Mehrangarh Fort at sunset, dinner under the fort.', tags: ['✈️ Domestic', '🌇 Sunset'] },
+        { day: 6, place: 'Jodhpur', title: 'Fort & old town', text: 'Fort museum, zip line, clock-tower market, Umaid Bhawan.', tags: ['🏯 Palace'] },
+        { day: 7, place: 'Udaipur', title: 'Via Ranakpur', text: 'Drive 5 h with a stop at Ranakpur Jain temple and Kumbhalgarh.', tags: ['🚗 Drive', '🛕 Temple'] },
+        { day: 8, place: 'Udaipur', title: 'Lakes & palaces', text: 'City Palace, boat on Lake Pichola, Bagore ki Haveli dance show.', tags: ['⛵ Lake'] },
+        { day: 9, place: 'Udaipur', title: 'Slow day', text: 'Spa, Monsoon Palace sunset, rooftop dinner.', tags: ['🧘 Rest'] },
+        { day: 10, place: 'Udaipur / Delhi', title: 'Return', text: 'Fly UDR → DEL (or Mumbai). Farewell dinner.', tags: ['✈️ Domestic'] },
+        { day: 11, place: 'Delhi → Europe', title: 'Fly home', text: 'Morning departure.', tags: ['✈️ Long-haul'] },
+      ],
+    },
   ],
 
-  /* Cost model — per person, EUR, by travel style */
+  /* Cost model — per person, EUR, by travel style. No budget tier: comfort is the floor. */
   costModel: {
     styles: {
-      budget:  { label: 'Backpacker', intl: 700, hotel: 20, food: 12, local: 8,  actFactor: 0.7 },
-      comfort: { label: 'Comfort',    intl: 850, hotel: 55, food: 25, local: 15, actFactor: 1.0 },
-      luxury:  { label: 'Luxury',     intl: 3300, hotel: 180, food: 55, local: 35, actFactor: 1.6 },
+      comfort: { label: 'Comfort',  stars: '4★', intl: 900,  hotel: 65,  food: 30, local: 22, actFactor: 1.0, desc: 'Good 4-star hotels and boutique stays, economy flights with reputable airlines, private car with driver in the hills, well-reviewed restaurants.' },
+      premium: { label: 'Premium',  stars: '5★', intl: 1500, hotel: 140, food: 55, local: 35, actFactor: 1.3, desc: 'Five-star hotels (Taj, ITC, Marriott, Hyatt), premium-economy long-haul, private driver throughout, guided visits, airport meet-and-greet.' },
+      luxury:  { label: 'Luxury',   stars: '5★+', intl: 3300, hotel: 300, food: 90, local: 60, actFactor: 1.8, desc: 'Business class, palace hotels and Oberoi / Taj / Aman-level resorts, domestic business class, chauffeur and private guides everywhere.' },
     },
-    origins: { fra: { label: 'Frankfurt (nonstop)', adj: 0 }, zrh: { label: 'Zurich (1 stop)', adj: -30 }, other: { label: 'Other Europe', adj: 0 } },
     routes: {
       goa:      { transport: 150, activities: 110 },
       kerala:   { transport: 270, activities: 190 },
       heritage: { transport: 190, activities: 90 },
+      golden:   { transport: 260, activities: 160 },
+      rajasthan:{ transport: 300, activities: 170 },
     },
-    fixed: { visa: 40, insurance: 45, sim: 8 },
+    fixed: { visa: 40, insurance: 60, sim: 8 },
     bufferPct: 0.10,
   },
 
   safety: [
-    { icon: '🛂', title: 'e-Visa before you fly', text: 'Germans and Swiss are eligible for the Indian e-Tourist Visa (30 days, 1 year or 5 years). Apply only on the official site, at least 7 days before departure. Print the approval.', link: { label: 'indianvisaonline.gov.in/evisa', url: 'https://indianvisaonline.gov.in/evisa/' } },
+    { icon: '🛂', title: 'e-Visa before you fly', text: 'All EU, UK and Swiss citizens are eligible for the Indian e-Tourist Visa (30 days, 1 year or 5 years). Apply only on the official site, at least 7 days before departure. Print the approval.', link: { label: 'indianvisaonline.gov.in/evisa', url: 'https://indianvisaonline.gov.in/evisa/' } },
     { icon: '🩺', title: 'Health & vaccinations', text: 'Routine vaccines plus Hepatitis A and Typhoid are usually recommended; talk to a travel clinic 6 weeks out. Drink only sealed bottled or filtered water, and carry oral rehydration salts and a basic kit.', link: { label: 'CRM / Tropeninstitut travel advice', url: 'https://www.crm.de/' } },
-    { icon: '🛡️', title: 'Travel insurance', text: 'Take a policy that covers medical evacuation and adventure activities. Private hospitals in Bengaluru and Kochi (Manipal, Apollo, Aster) are excellent — insurance makes them stress-free.', link: { label: 'Compare on Check24', url: 'https://www.check24.de/reiseversicherung/' } },
-    { icon: '🚨', title: 'Emergency numbers', text: '112 — all emergencies (police, fire, ambulance). 1363 — 24 h multilingual tourist helpline (German supported). Save your consulate: Germany and Switzerland both have Consulates General in Bengaluru.', link: { label: 'German missions in India', url: 'https://india.diplo.de/' } },
+    { icon: '🛡️', title: 'Travel insurance', text: 'Take a policy that covers medical evacuation and adventure activities. Private hospitals in the big cities (Apollo, Manipal, Max, Medanta, Aster) are excellent — insurance makes them stress-free. Every destination guide names the nearest good hospital.', link: { label: 'Compare on Check24', url: 'https://www.check24.de/reiseversicherung/' } },
+    { icon: '🚨', title: 'Emergency numbers', text: '112 — all emergencies (police, fire, ambulance). 1363 — 24 h multilingual tourist helpline (German, French, Spanish, Italian and more). Save your embassy and nearest consulate from the card above.', link: { label: 'Incredible India helpline 1363', url: 'https://www.incredibleindia.gov.in/' } },
     { icon: '🚕', title: 'Getting around safely', text: 'Use Uber, Ola or the airport\'s prepaid taxi counter instead of street hawkers. Trains: book 2AC/3AC or Vande Bharat. For hill roads hire a car with driver — don\'t self-drive.', link: { label: 'Uber India', url: 'https://www.uber.com/in/en/' } },
     { icon: '💳', title: 'Money', text: 'ATMs are everywhere (SBI, HDFC, ICICI). Wise or Revolut cards give the best rates. Foreign tourists can activate UPI (QR payments) via "UPI One World" at BLR airport — very handy for cafés and autos.', link: { label: 'Wise', url: 'https://wise.com/' } },
     { icon: '📱', title: 'SIM & connectivity', text: 'Buy an Airtel or Jio tourist SIM at BLR arrivals (passport + visa needed, ~€8 for 28 days), or install an eSIM (Airalo, Holafly) before you fly. WhatsApp is how everyone communicates.', link: { label: 'Airalo India eSIM', url: 'https://www.airalo.com/india-esim' } },
