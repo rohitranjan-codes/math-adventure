@@ -1,10 +1,10 @@
-# Namaste, India 🛫 — Europe → India travel planner
+# Plan India 🛫 — Europe → India travel planner
 
 **A safe, comfortable, single-page trip planner from any European airport to all of India.**
 Pick your origin, home country, arrival and departure gateway, month, group size, style and
 currency — every section adapts.
 
-Live site (once GitHub Pages is enabled): `https://rohitranjan-codes.github.io/europe-india-travel-planner/`
+Live site (once GitHub Pages is enabled): **https://rohitranjan-codes.github.io/plan-india/**
 
 ## What's inside
 
