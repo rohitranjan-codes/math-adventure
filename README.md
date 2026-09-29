@@ -67,3 +67,9 @@ Open `index.html` and look inside the `<script>`:
 - **German words** — edit the `NOUNS_DE` list (`w` = word, `a` = der/die/das, `tr` = English, `e` = emoji).
 - **English words** — edit the `NOUNS_EN` list (`a` = a/an, `tr` = German meaning).
 - **Text/labels** — edit the `T` object to change any English or German wording.
+
+## Also in this repo: `workflow-agent/`
+
+A separate project: **bizagent**, an AI agent (Claude API + Python) that manages a small
+business's day-to-day workflow: customers, tasks, invoices, appointments and customer messages,
+with owner approval on anything outbound. See [`workflow-agent/README.md`](workflow-agent/README.md).
